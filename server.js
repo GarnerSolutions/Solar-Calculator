@@ -81,15 +81,15 @@ async function getSolarIrradiance(city, state) {
 
 /** ✅ Fixed Efficiency Adjustments for Different Panel Directions */
 function calculateSolarSize(kwhPerMonth, solarIrradiance, panelDirection) {
-    const adjustmentFactor = {
-        "S": 1.0, "SE": 0.95, "SW": 0.95,
-        "E": 0.85, "W": 0.85,
-        "NE": 0.75, "NW": 0.75,
-        "N": 0.65, "MIX": 0.85
+    let adjustmentFactor = {
+        "S": 1.0, "SE": 0.90, "SW": 0.90,  
+        "E": 0.80, "W": 0.80,
+        "NE": 0.70, "NW": 0.70,
+        "N": 0.60, "MIX": 0.85
     }[panelDirection] || 1.0;
 
-    const kwhPerDay = kwhPerMonth / 30;
-    return kwhPerDay / (solarIrradiance * 0.85 * adjustmentFactor);
+    const kwhPerDay = (kwhPerMonth / 30) * 1.07;  // ✅ 7% extra generation target
+    return kwhPerDay / (solarIrradiance * 0.85 * adjustmentFactor * 0.78);  
 }
 
 /** ✅ Fixed Floating Point Precision Issues */
