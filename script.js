@@ -26,7 +26,7 @@ async function generatePresentation() {
     }
 
     try {
-        const response = await fetch("https://localhost:3000/api/process", {
+        const response = await fetch("https://solar-calculator-zb73.onrender.com", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ kwhPerMonth, panelDirection, city, state })
@@ -80,7 +80,7 @@ async function generatePresentation() {
     }
 
     try {
-        const response = await fetch("https://localhost:3000/api/process", {
+        const response = await fetch("https://solar-calculator-zb73.onrender.com", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ kwhPerMonth, panelDirection, batteryModifier, city, state })
