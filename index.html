@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solar System Generator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Solar System Generator</h1>
+
+        <!-- kWh Input Field -->
+        <label for="energyUsage">Enter Energy Usage (kWh):</label>
+        <input type="number" id="energyUsage" placeholder="e.g., 2500" />
+
+        <!-- Usage Type (Now on One Line) -->
+        <label>Usage Type:</label>
+        <div class="usage-type-container">
+            <label>
+                <input type="radio" name="kWhType" value="monthly" checked> Monthly
+            </label>
+            <label>
+                <input type="radio" name="kWhType" value="annual"> Annual
+            </label>
+        </div>
+
+        <!-- Panel Direction -->
+        <label for="panelDirection">Panel Direction:</label>
+        <select id="panelDirection">
+            <option value="S">South</option>
+            <option value="N">North</option>
+            <option value="E">East</option>
+            <option value="W">West</option>
+            <option value="NE">Northeast</option>
+            <option value="NW">Northwest</option>
+            <option value="SE">Southeast</option>
+            <option value="SW">Southwest</option>
+            <option value="MIX">Multiple Directions</option>
+        </select>
+
+        <!-- Battery Modifier Input -->
+        <label for="batteryModifier">Battery Modifier:</label>
+        <select id="batteryModifier">
+            <option value="-2">-2 Batteries (-32 kW)</option>
+            <option value="-1">-1 Battery (-16 kW)</option>
+            <option value="0" selected>Standard</option>
+            <option value="1">+1 Battery (+16 kW)</option>
+            <option value="2">+2 Batteries (+32 kW)</option>
+        </select>
+
+        <!-- City & State Inputs -->
+        <label for="city">City:</label>
+        <input type="text" id="city" placeholder="e.g., Fresno" />
+
+        <label for="state">State:</label>
+        <input type="text" id="state" placeholder="e.g., CA" />
+
+        <!-- Generate Button -->
+        <button onclick="generatePresentation()">Generate Presentation</button>
+
+        <!-- Results & Download Section -->
+        <div id="results"></div> 
+        <div id="downloadLink"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

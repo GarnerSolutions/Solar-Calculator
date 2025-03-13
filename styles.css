@@ -1,0 +1,115 @@
+/* ===== General Page Styling ===== */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* ===== Container Styling ===== */
+.container {
+    width: 50%;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* ===== Headings ===== */
+h1 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* ===== Input Fields & Select Dropdowns ===== */
+label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+    text-align: left;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+/* ===== Usage Type: Make Monthly/Annual Appear in One Line ===== */
+.usage-type-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.usage-type-container label {
+    font-weight: normal;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* ===== Buttons ===== */
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+/* ===== Results Box ===== */
+#results {
+    margin-top: 20px;
+    padding: 15px;
+    background: #eef;
+    border-radius: 8px;
+    text-align: left;
+}
+
+#results h3 {
+    color: #444;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+#results p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+/* ===== Download Link Styling ===== */
+#downloadLink a {
+    display: inline-block;
+    margin-top: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    font-size: 18px;
+}
+
+#downloadLink a:hover {
+    text-decoration: underline;
+}
