@@ -26,7 +26,7 @@ async function generatePresentation() {
     }
 
     try {
-        const response = await fetch("https://solar-calculator-zb73.onrender.com", {
+        const response = await fetch("https://solar-calculator-zb73.onrender.com/api/process", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ kwhPerMonth, panelDirection, city, state })
@@ -80,17 +80,17 @@ async function generatePresentation() {
     }
 
     try {
-        const response = await fetch("https://solar-calculator-zb73.onrender.com", {
+        const response = await fetch("https://solar-calculator-zb73.onrender.com/api/process", { // ✅ Correct API path
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ kwhPerMonth, panelDirection, batteryModifier, city, state })
         });
-
+    
         if (!response.ok) {
             const errorData = await response.json();
             throw new Error(errorData.error || "Server error");
         }
-
+    
         const result = await response.json();
         resultsDiv.innerHTML = `
             <h3>Your Solar System Details:</h3>
@@ -106,10 +106,11 @@ async function generatePresentation() {
             <p>Battery Cost: <strong>$${Number(result.params.batteryCost).toLocaleString()}</strong></p>
             <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
         `;
-
+    
         downloadLinkDiv.innerHTML = `<a href="${result.pptUrl}" download>Download Your Presentation</a>`;
+    
     } catch (error) {
         resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
         downloadLinkDiv.innerHTML = "";
-    }
+    }    
 }

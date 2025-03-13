@@ -1,18 +1,19 @@
 import express from "express";
 import cors from "cors";
 import { google } from "googleapis";
-import fetch from "node-fetch"; // Change this!
+import fetch from "node-fetch"; // Ensure correct import
 
 const app = express();
 app.use(express.json());
 app.use(cors());
 
-const NREL_API_KEY = "7lN93S5iLnZyNHBsYFGEtvjz2efd2VcRRSj98ETU"; // Get this from https://developer.nrel.gov/
+const NREL_API_KEY = "7lN93S5iLnZyNHBsYFGEtvjz2efd2VcRRSj98ETU"; // Your API key
 
+/** ✅ Corrected API Endpoint for Frontend Requests */
 app.post("/api/process", async (req, res) => {
     const { kwhPerMonth, panelDirection, batteryModifier, city, state } = req.body;
 
-    console.log("🔍 Received batteryModifier:", batteryModifier);  // Debugging log
+    console.log("🔍 Received batteryModifier:", batteryModifier);
 
     try {
         if (!kwhPerMonth || isNaN(kwhPerMonth) || kwhPerMonth <= 0) {
@@ -41,6 +42,7 @@ app.post("/api/process", async (req, res) => {
     }
 });
 
+/** ✅ Updated Solar Irradiance Fetching Function */
 async function getSolarIrradiance(city, state) {
     try {
         const geoUrl = `https://geocoding-api.open-meteo.com/v1/search?name=${city}&country=US&language=en&format=json`;
@@ -51,11 +53,10 @@ async function getSolarIrradiance(city, state) {
 
         if (!geoData.results || geoData.results.length === 0) {
             console.warn("❌ Location not found, using default coordinates.");
-            return 5.5; // Default average solar irradiance
+            return 5.5;
         }
 
         const { latitude, longitude } = geoData.results[0];
-
         console.log(`✅ Found coordinates: Lat ${latitude}, Lon ${longitude}`);
 
         const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${NREL_API_KEY}&lat=${latitude}&lon=${longitude}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
@@ -71,68 +72,56 @@ async function getSolarIrradiance(city, state) {
             return 6.02;
         }
 
-        return solarData.outputs.solrad_annual; // **Use the correct annual solar irradiance**
+        return solarData.outputs.solrad_annual;
     } catch (error) {
         console.error("❌ Failed to fetch solar data:", error);
-        return 6.02; // Default fallback
+        return 6.02;
     }
 }
 
+/** ✅ Fixed Efficiency Adjustments for Different Panel Directions */
 function calculateSolarSize(kwhPerMonth, solarIrradiance, panelDirection) {
-    // Efficiency adjustments (NORTH requires a LARGER system)
-    let adjustmentFactor = {
-        "S": 1.0,   // Best efficiency
-        "SE": 0.95, "SW": 0.95,  
-        "E": 0.85, "W": 0.85,    
-        "NE": 0.75, "NW": 0.75,  
-        "N": 0.65,   // Worst efficiency (needs largest system size)
-        "MIX": 0.85  
-    }[panelDirection] || 1.0; 
+    const adjustmentFactor = {
+        "S": 1.0, "SE": 0.95, "SW": 0.95,
+        "E": 0.85, "W": 0.85,
+        "NE": 0.75, "NW": 0.75,
+        "N": 0.65, "MIX": 0.85
+    }[panelDirection] || 1.0;
 
-    const kwhPerDay = kwhPerMonth / 30;  
-    return kwhPerDay / (solarIrradiance * 0.85 * adjustmentFactor); 
+    const kwhPerDay = kwhPerMonth / 30;
+    return kwhPerDay / (solarIrradiance * 0.85 * adjustmentFactor);
 }
 
+/** ✅ Fixed Floating Point Precision Issues */
 function calculateSystemParams(solarSize, solarIrradiance, batteryModifier = 0) {
-    // Ensure batteryModifier is a valid number
     batteryModifier = isNaN(parseInt(batteryModifier)) ? 0 : parseInt(batteryModifier);
 
-    // **Maintain a 1:1.70 ratio (Solar:Battery)**
-    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;  
-
-    // **Apply battery modifier (each step is ±16 kW)**
+    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;
     batterySize += batteryModifier * 16;
-
-    // Ensure battery size does not drop below 16 kW
     batterySize = Math.max(16, batterySize);
 
     const panelCount = Math.ceil(solarSize / 0.35);
+    solarSize = parseFloat(solarSize.toFixed(1));
 
-    // **Fix Floating Point Issues by Rounding Before Multiplication**
-    solarSize = parseFloat(solarSize.toFixed(1)); // Round to 1 decimal place
+    const systemCost = Math.round(solarSize * 2000);
+    const batteryCost = Math.round(batterySize * 1000);
+    const totalCost = systemCost + batteryCost;
 
-    // **Correct Pricing Calculation**
-    const systemCost = Math.round(solarSize * 2000);  // **Ensures a clean, even number**
-    const batteryCost = Math.round(batterySize * 1000);  
-    const totalCost = systemCost + batteryCost; 
-
-    // **Performance Ratio (~78%) for real-world conditions**
-    const performanceRatio = 0.78;  
-
-    // **Corrected Estimated Annual Production**
+    const performanceRatio = 0.78;
     const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * performanceRatio);
 
     return {
         solarSize: solarSize.toFixed(1),
         batterySize: batterySize.toFixed(0),
         panelCount,
-        systemCost: systemCost.toFixed(0),  // **Ensures even number**
+        systemCost: systemCost.toFixed(0),
         batteryCost: batteryCost.toFixed(0),
         totalCost: totalCost.toFixed(0),
         estimatedAnnualProduction: estimatedAnnualProduction.toFixed(0)
     };
 }
 
+/** ✅ Updated Google Slides Integration */
 async function generatePowerPoint(params) {
     try {
         console.log("📊 Updating Google Slides with:", params);
@@ -171,5 +160,5 @@ async function generatePowerPoint(params) {
     }
 }
 
-
-app.listen(3000, () => console.log("Server running on port 3000"));
+/** ✅ Server is now running on Port 3000 */
+app.listen(3000, () => console.log("🚀 Server running on port 3000"));
