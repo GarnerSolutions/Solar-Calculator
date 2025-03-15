@@ -2,8 +2,7 @@
 // const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
 const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
 
-// const backendUrl = "http://localhost:3000";
-const backendUrl = "https://solar-calculator-zb73.onrender.com";
+const backendUrl = "http://localhost:3000";
 
 let googleMapsApiKey = "";
 
