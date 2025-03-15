@@ -30,49 +30,69 @@ app.get("/api/getGoogleMapsApiKey", (req, res) => {
 
 // ✅ Corrected API Endpoint for Frontend Requests
 app.post("/api/process", async (req, res) => {
-    const { desiredProduction, panelDirection, batteryModifier, fullAddress } = req.body;
-
-    console.log("🔍 Received Address:", fullAddress);
-
     try {
+        console.log("🔍 Received Request Body:", req.body); // Debugging incoming request
+
+        const { desiredProduction, currentConsumption, panelDirection, batteryModifier, fullAddress, currentMonthlyAverageBill } = req.body;
+
+        // ✅ Basic Validations
         if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
             return res.status(400).json({ error: "Invalid desired annual kWh production." });
-        }        
+        }
+        if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
+            return res.status(400).json({ error: "Invalid current annual kWh consumption." });
+        }
+        if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
+            return res.status(400).json({ error: "Invalid current monthly average bill." });
+        }
         if (!fullAddress) {
             return res.status(400).json({ error: "Full address is required." });
+        }
+        if (!googleMapsApiKey) {
+            return res.status(500).json({ error: "Google Maps API Key is missing." });
         }
 
         // ✅ Convert Address to Lat/Lon
         const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${googleMapsApiKey}`;
+        console.log("📡 Fetching Geocoding Data:", geoUrl);
+
         const geoResponse = await fetch(geoUrl);
         const geoData = await geoResponse.json();
 
-        if (geoData.status !== "OK") {
+        if (!geoData.results || geoData.results.length === 0 || geoData.status !== "OK") {
+            console.warn("⚠️ Invalid or Unrecognized Address.");
             return res.status(400).json({ error: "Invalid address. Please enter a valid one." });
         }
 
         const { lat, lng } = geoData.results[0].geometry.location;
-        console.log(`✅ Address Geocoded: ${lat}, ${lng}`);
+        console.log(`✅ Address Geocoded: Lat ${lat}, Lon ${lng}`);
 
-        // ✅ Proceed with Solar Calculations
+        // ✅ Get Solar Irradiance
         const solarIrradiance = await getSolarIrradiance(lat, lng);
         if (!solarIrradiance) {
             return res.status(400).json({ error: "Could not retrieve solar data." });
         }
 
-        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance, panelDirection);
-        const params = calculateSystemParams(solarSize, solarIrradiance, batteryModifier);
+        // ✅ Calculate Solar System Size
+        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance);
+        console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
 
+        // ✅ Calculate System Parameters, including Energy Offset
+        const params = calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill);
         console.log("✅ Final System Parameters:", params);
 
+        // ✅ Generate PowerPoint
         const pptUrl = await generatePowerPoint(params);
+        console.log("📄 PowerPoint URL:", pptUrl);
 
         res.json({ pptUrl, params });
+
     } catch (error) {
         console.error("❌ Server Error:", error);
         res.status(500).json({ error: `Failed to process the request: ${error.message}` });
     }
 });
+
 // ✅ New Route to Handle Places API Autocomplete Requests
 app.post("/api/getPlacesAutocomplete", async (req, res) => {
     const { input } = req.body;
@@ -133,7 +153,7 @@ async function getSolarIrradiance(lat, lng) {
     }
 }
 
-function calculateSystemParams(solarSize, solarIrradiance, batteryModifier = 0) {
+function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
     batteryModifier = isNaN(parseInt(batteryModifier)) ? 0 : parseInt(batteryModifier);
 
     let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;  
@@ -145,17 +165,25 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryModifier = 0) 
     const batteryCost = Math.round(batterySize * 1000);
     const totalCost = systemCost + batteryCost;
 
-    const batteryCount = batterySize / 16;
-    const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * performanceRatio);
+    const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * 0.70);
+
+    // ✅ Fix: Ensure `currentConsumption` is valid before division
+    let energyOffset = "N/A";
+    if (!isNaN(currentConsumption) && currentConsumption > 0) {
+        energyOffset = ((desiredProduction / currentConsumption) * 100).toFixed(1) + "%";
+    }
 
     return {
         solarSize: solarSize.toFixed(1),
-        batterySize: `${batterySize} kWh (${batteryCount}x 16 kWh)`,
+        batterySize: `${batterySize} kWh (${batterySize / 16}x 16 kWh)`,
         panelCount,
         systemCost: systemCost.toFixed(0),
         batteryCost: batteryCost.toFixed(0),
         totalCost: totalCost.toFixed(0),
-        estimatedAnnualProduction: estimatedAnnualProduction.toFixed(0)
+        currentMonthlyBill: currentMonthlyAverageBill,
+        monthlyWithSolar: Math.round(totalCost / 300),
+        estimatedAnnualProduction,
+        energyOffset
     };
 }
 
@@ -185,7 +213,7 @@ async function generatePowerPoint(params) {
         });
 
         const slides = google.slides({ version: "v1", auth });
-        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";  // Change this to your actual Google Slides ID
+        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
 
         console.log("🔄 Sending API request to update slides...");
 
@@ -193,14 +221,126 @@ async function generatePowerPoint(params) {
             presentationId: presentationId,
             requestBody: {
                 requests: [
+                    // ✅ Update Slide 4
                     { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i4",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    
                     { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i7",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+
+                    { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i10", text: `$${Number(params.totalCost).toLocaleString()}` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i10",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    
+        
+                    // ✅ Update Slide 5
+                    { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i6",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+        
+                    { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i7",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+        
+                    { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i8",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+        
+                    // ✅ Update Slide 6 (p6_i5 - Current Monthly Bill)
+                    { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
+                    { updateTextStyle: {
+                        objectId: "p6_i5",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 21.5, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+        
+                    // ✅ Update Slide 6 (p6_i10 - Monthly With Solar)
+                    { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
+                    { updateTextStyle: {
+                        objectId: "p6_i10",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 21.5, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }}
                 ],
             },
         });
-
+        
         console.log("✅ Google Slides updated successfully!");
         return `https://docs.google.com/presentation/d/${presentationId}/edit?usp=sharing`;
     } catch (error) {

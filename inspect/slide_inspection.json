@@ -1,0 +1,4519 @@
+[
+  {
+    "slideNumber": 1,
+    "slideId": "p1",
+    "elements": [
+      {
+        "elementId": "p1_i2",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p1_i3",
+        "textContent": "Brighthouse\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p1_i4",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p1_i5",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p1_i6",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p1_i7",
+        "textContent": "by Thomas Davenport\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 24,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 24,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 2,
+    "slideId": "p2",
+    "elements": [
+      {
+        "elementId": "p2_i2",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p2_i3",
+        "textContent": "Why Brighthouse\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i4",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p2_i5",
+        "textContent": "1\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i6",
+        "textContent": "Local Contractor\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i7",
+        "textContent": "Fast servicing with in-house team\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i8",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p2_i9",
+        "textContent": "2\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i10",
+        "textContent": "30-Year Warranty\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i11",
+        "textContent": "Complete coverage for three decades\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i12",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p2_i13",
+        "textContent": "3\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i14",
+        "textContent": "Lifetime Monitoring\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i15",
+        "textContent": "Per-panel system tracking\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i16",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p2_i17",
+        "textContent": "4\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 25.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i18",
+        "textContent": "Financing\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p2_i19",
+        "textContent": "$0 down with 60-day installation\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 3,
+    "slideId": "p3",
+    "elements": [
+      {
+        "elementId": "p3_i2",
+        "textContent": "Monitoring & Warranty\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i3",
+        "textContent": "Real-Time Updates\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i4",
+        "textContent": "Per-panel monitoring shows system performance\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i5",
+        "textContent": "Issue Alerts\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i6",
+        "textContent": "Immediate notification of any problems\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i7",
+        "textContent": "30-Year Coverage\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p3_i8",
+        "textContent": "Parts, labor, and performance guaranteed\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 4,
+    "slideId": "p4",
+    "elements": [
+      {
+        "elementId": "p4_i2",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p4_i3",
+        "textContent": "System Overview\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 34.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 34.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i4",
+        "textContent": "10.4 kW\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i5",
+        "textContent": "System Size\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i6",
+        "textContent": "kW solar system\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i7",
+        "textContent": "32 kWh (2x 16 kWh)\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i8",
+        "textContent": "Battery Size\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i9",
+        "textContent": "kWh capacity\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i10",
+        "textContent": "46750\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 51,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i11",
+        "textContent": "System Cost\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p4_i12",
+        "textContent": "Total investment\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 15.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 5,
+    "slideId": "p5",
+    "elements": [
+      {
+        "elementId": "p5_i2",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p5_i3",
+        "textContent": "Proposal Details\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 42,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 42,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i4",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p5_i5",
+        "textContent": "Solar Details\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i6",
+        "textContent": "10.4 kW system size\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i7",
+        "textContent": "133.3% Energy Offset\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i8",
+        "textContent": "24 Jinko Solar panels\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i9",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p5_i10",
+        "textContent": "Battery Details\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i11",
+        "textContent": "LG Prime battery\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i12",
+        "textContent": "32 kWh capacity\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i13",
+        "textContent": "Backup capability\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i14",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p5_i15",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p5_i16",
+        "textContent": "Financing Details\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i17",
+        "textContent": "7.5% APR for 30 years\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i18",
+        "textContent": "$0 down payment\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i19",
+        "textContent": "$46750 financed\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p5_i20",
+        "textContent": "$334 monthly payments\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 6,
+    "slideId": "p6",
+    "elements": [
+      {
+        "elementId": "p6_i2",
+        "textContent": "Your Energy Costs\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i3",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p6_i4",
+        "textContent": "1\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 27,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 27,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i5",
+        "textContent": "$176\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i6",
+        "textContent": "Monthly with solar\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i7",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p6_i8",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p6_i9",
+        "textContent": "2\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 27,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 27,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i10",
+        "textContent": "$300\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i11",
+        "textContent": "Current monthly bill\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p6_i12",
+        "textContent": "Pacific Gas & Electric Co E-TOU-C-EH Residential - Time of Use - Electric Heat Baseline Region R\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 7,
+    "slideId": "p7",
+    "elements": [
+      {
+        "elementId": "p7_i2",
+        "textContent": "Installation Process\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 38,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 38,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i3",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i4",
+        "textContent": "Energy Home Audit\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i5",
+        "textContent": "Assess your current usage\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i6",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i7",
+        "textContent": "Solar Design & Proposal\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i8",
+        "textContent": "Custom system planning\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i9",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i10",
+        "textContent": "Credit Approval & Site Survey\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i11",
+        "textContent": "Financial and technical assessment\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i12",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i13",
+        "textContent": "Plans & Permitting\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i14",
+        "textContent": "Handle all paperwork\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i15",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i16",
+        "textContent": "Installation & Inspection\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i17",
+        "textContent": "Professional setup and verification\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i18",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p7_i19",
+        "textContent": "System Activation (PTO)\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p7_i20",
+        "textContent": "Start generating clean energy\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 17,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "slideNumber": 8,
+    "slideId": "p8",
+    "elements": [
+      {
+        "elementId": "p8_i2",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p8_i3",
+        "textContent": "Contact Us\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 1,
+                  "green": 0.88235295,
+                  "blue": 0.3019608
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 43,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i4",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p8_i5",
+        "textContent": "Address\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i6",
+        "textContent": "4644 W Jennifer Ave, Fresno, CA 93722\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i7",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p8_i8",
+        "textContent": "Phone\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i9",
+        "textContent": "(559) 758-2430\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i10",
+        "textContent": "",
+        "styles": []
+      },
+      {
+        "elementId": "p8_i11",
+        "textContent": "Website\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": true,
+            "italic": false,
+            "fontFamily": "Comfortaa",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Comfortaa",
+              "weight": 700
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 21.5,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i12",
+        "textContent": "www.brighthouse.solar\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "themeColor": "HYPERLINK"
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "link": {
+              "url": "http://www.brighthouse.solar"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": true,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      },
+      {
+        "elementId": "p8_i13",
+        "textContent": "Go Solar : Go Brighthouse!\n",
+        "styles": [
+          null,
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {
+                  "red": 0.84313726,
+                  "green": 0.83137256,
+                  "blue": 0.8
+                }
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Raleway",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Raleway",
+              "weight": 400
+            }
+          },
+          {
+            "backgroundColor": {},
+            "foregroundColor": {
+              "opaqueColor": {
+                "rgbColor": {}
+              }
+            },
+            "bold": false,
+            "italic": false,
+            "fontFamily": "Arial",
+            "fontSize": {
+              "magnitude": 19,
+              "unit": "PT"
+            },
+            "baselineOffset": "NONE",
+            "smallCaps": false,
+            "strikethrough": false,
+            "underline": false,
+            "weightedFontFamily": {
+              "fontFamily": "Arial",
+              "weight": 400
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

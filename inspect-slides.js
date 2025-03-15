@@ -1,4 +1,5 @@
-const { google } = require("googleapis");
+import fs from "fs";
+import { google } from "googleapis";
 
 async function inspectSlides() {
     try {
@@ -11,55 +12,82 @@ async function inspectSlides() {
             keyFile: "credentials.json",
             scopes: ["https://www.googleapis.com/auth/presentations"],
         });
+
         const slides = google.slides({ version: "v1", auth });
 
         const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
-
         const presentation = await slides.presentations.get({
             presentationId: presentationId,
         });
 
         const slidesData = presentation.data.slides;
-        console.log(`Total slides in presentation: ${slidesData.length}`);
+        console.log(`📊 Total slides in presentation: ${slidesData.length}`);
 
-        const targetSlides = [3, 4]; // Slide 4 and Slide 5 (0-indexed)
-        const targetElementIds = ["p4_i4", "p4_i7", "p5_i6", "p5_i8"]; // Elements to inspect
+        const inspectionResults = [];
+        const textContents = [];
 
-        for (const slideIndex of targetSlides) {
-            if (slideIndex >= slidesData.length) {
-                console.log(`Slide ${slideIndex + 1} does not exist in the presentation.`);
-                continue;
-            }
+        for (let slideIndex = 0; slideIndex < slidesData.length; slideIndex++) {
             const slide = slidesData[slideIndex];
-            console.log(`Slide ${slideIndex + 1} ID: ${slide.objectId}`);
-            console.log(`Slide ${slideIndex + 1} Page Elements (Targeted):`);
+            const slideInfo = {
+                slideNumber: slideIndex + 1,
+                slideId: slide.objectId,
+                elements: [],
+            };
+            console.log(`🖼 Slide ${slideIndex + 1} ID: ${slide.objectId}`);
 
             if (!slide.pageElements) {
-                console.log("No page elements found on this slide.");
+                console.log("⚠️ No page elements found.");
                 continue;
             }
 
-            slide.pageElements.forEach((element) => {
-                if (targetElementIds.includes(element.objectId)) {
-                    console.log(`Element ID: ${element.objectId}`);
-                    if (element.shape && element.shape.text) {
-                        const textContent = element.shape.text.textElements
-                            .map(te => te.textRun?.content)
-                            .filter(content => content)
-                            .join("");
-                        console.log("Text Content:", textContent);
+            for (const element of slide.pageElements) {
+                const elementId = element.objectId;
+                let textContent = "";
 
-                        element.shape.text.textElements.forEach((textElement, teIndex) => {
-                            if (textElement.textRun && textElement.textRun.style) {
-                                console.log(`Text Element ${teIndex} Style:`, JSON.stringify(textElement.textRun.style, null, 2));
-                            }
-                        });
-                    }
+                if (element.shape && element.shape.text) {
+                    textContent = element.shape.text.textElements
+                        .map(te => te.textRun?.content)
+                        .filter(content => content)
+                        .join("");
                 }
-            });
+
+                const elementInfo = {
+                    elementId: elementId,
+                    textContent: textContent,
+                    styles: element.shape?.text?.textElements?.map(te => te.textRun?.style) || [],
+                };
+
+                slideInfo.elements.push(elementInfo);
+
+                // Store text content separately for the second file
+                if (textContent.trim()) {
+                    textContents.push(`Slide ${slideIndex + 1}, Element ID: ${elementId}\n${textContent}\n`);
+                }
+
+                console.log(`🔹 Element ID: ${elementId}`);
+                if (textContent.trim()) {
+                    console.log(`📄 Text Content: ${textContent}`);
+                }
+            }
+
+            inspectionResults.push(slideInfo);
         }
+
+        // Ensure "inspect" folder exists
+        if (!fs.existsSync("./inspect")) {
+            fs.mkdirSync("./inspect", { recursive: true });
+        }
+
+        // Save full inspection data as JSON
+        fs.writeFileSync("./inspect/slide_inspection.json", JSON.stringify(inspectionResults, null, 2), "utf8");
+        console.log("✅ Full slide inspection data saved to: inspect/slide_inspection.json");
+
+        // Save extracted text content as a simple text file
+        fs.writeFileSync("./inspect/slide_text_content.txt", textContents.join("\n"), "utf8");
+        console.log("✅ Slide text content saved to: inspect/slide_text_content.txt");
+
     } catch (error) {
-        console.error("Error inspecting slides:", error);
+        console.error("❌ Error inspecting slides:", error);
     }
 }
 

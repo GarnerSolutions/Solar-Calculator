@@ -1,0 +1,299 @@
+Slide 1, Element ID: p1_i3
+Brighthouse
+
+
+Slide 1, Element ID: p1_i7
+by Thomas Davenport
+
+
+Slide 2, Element ID: p2_i3
+Why Brighthouse
+
+
+Slide 2, Element ID: p2_i5
+1
+
+
+Slide 2, Element ID: p2_i6
+Local Contractor
+
+
+Slide 2, Element ID: p2_i7
+Fast servicing with in-house team
+
+
+Slide 2, Element ID: p2_i9
+2
+
+
+Slide 2, Element ID: p2_i10
+30-Year Warranty
+
+
+Slide 2, Element ID: p2_i11
+Complete coverage for three decades
+
+
+Slide 2, Element ID: p2_i13
+3
+
+
+Slide 2, Element ID: p2_i14
+Lifetime Monitoring
+
+
+Slide 2, Element ID: p2_i15
+Per-panel system tracking
+
+
+Slide 2, Element ID: p2_i17
+4
+
+
+Slide 2, Element ID: p2_i18
+Financing
+
+
+Slide 2, Element ID: p2_i19
+$0 down with 60-day installation
+
+
+Slide 3, Element ID: p3_i2
+Monitoring & Warranty
+
+
+Slide 3, Element ID: p3_i3
+Real-Time Updates
+
+
+Slide 3, Element ID: p3_i4
+Per-panel monitoring shows system performance
+
+
+Slide 3, Element ID: p3_i5
+Issue Alerts
+
+
+Slide 3, Element ID: p3_i6
+Immediate notification of any problems
+
+
+Slide 3, Element ID: p3_i7
+30-Year Coverage
+
+
+Slide 3, Element ID: p3_i8
+Parts, labor, and performance guaranteed
+
+
+Slide 4, Element ID: p4_i3
+System Overview
+
+
+Slide 4, Element ID: p4_i4
+10.4 kW
+
+
+Slide 4, Element ID: p4_i5
+System Size
+
+
+Slide 4, Element ID: p4_i6
+kW solar system
+
+
+Slide 4, Element ID: p4_i7
+32 kWh (2x 16 kWh)
+
+
+Slide 4, Element ID: p4_i8
+Battery Size
+
+
+Slide 4, Element ID: p4_i9
+kWh capacity
+
+
+Slide 4, Element ID: p4_i10
+46750
+
+
+Slide 4, Element ID: p4_i11
+System Cost
+
+
+Slide 4, Element ID: p4_i12
+Total investment
+
+
+Slide 5, Element ID: p5_i3
+Proposal Details
+
+
+Slide 5, Element ID: p5_i5
+Solar Details
+
+
+Slide 5, Element ID: p5_i6
+10.4 kW system size
+
+
+Slide 5, Element ID: p5_i7
+133.3% Energy Offset
+
+
+Slide 5, Element ID: p5_i8
+24 Jinko Solar panels
+
+
+Slide 5, Element ID: p5_i10
+Battery Details
+
+
+Slide 5, Element ID: p5_i11
+LG Prime battery
+
+
+Slide 5, Element ID: p5_i12
+32 kWh capacity
+
+
+Slide 5, Element ID: p5_i13
+Backup capability
+
+
+Slide 5, Element ID: p5_i16
+Financing Details
+
+
+Slide 5, Element ID: p5_i17
+7.5% APR for 30 years
+
+
+Slide 5, Element ID: p5_i18
+$0 down payment
+
+
+Slide 5, Element ID: p5_i19
+$46750 financed
+
+
+Slide 5, Element ID: p5_i20
+$334 monthly payments
+
+
+Slide 6, Element ID: p6_i2
+Your Energy Costs
+
+
+Slide 6, Element ID: p6_i4
+1
+
+
+Slide 6, Element ID: p6_i5
+$176
+
+
+Slide 6, Element ID: p6_i6
+Monthly with solar
+
+
+Slide 6, Element ID: p6_i9
+2
+
+
+Slide 6, Element ID: p6_i10
+$300
+
+
+Slide 6, Element ID: p6_i11
+Current monthly bill
+
+
+Slide 6, Element ID: p6_i12
+Pacific Gas & Electric Co E-TOU-C-EH Residential - Time of Use - Electric Heat Baseline Region R
+
+
+Slide 7, Element ID: p7_i2
+Installation Process
+
+
+Slide 7, Element ID: p7_i4
+Energy Home Audit
+
+
+Slide 7, Element ID: p7_i5
+Assess your current usage
+
+
+Slide 7, Element ID: p7_i7
+Solar Design & Proposal
+
+
+Slide 7, Element ID: p7_i8
+Custom system planning
+
+
+Slide 7, Element ID: p7_i10
+Credit Approval & Site Survey
+
+
+Slide 7, Element ID: p7_i11
+Financial and technical assessment
+
+
+Slide 7, Element ID: p7_i13
+Plans & Permitting
+
+
+Slide 7, Element ID: p7_i14
+Handle all paperwork
+
+
+Slide 7, Element ID: p7_i16
+Installation & Inspection
+
+
+Slide 7, Element ID: p7_i17
+Professional setup and verification
+
+
+Slide 7, Element ID: p7_i19
+System Activation (PTO)
+
+
+Slide 7, Element ID: p7_i20
+Start generating clean energy
+
+
+Slide 8, Element ID: p8_i3
+Contact Us
+
+
+Slide 8, Element ID: p8_i5
+Address
+
+
+Slide 8, Element ID: p8_i6
+4644 W Jennifer Ave, Fresno, CA 93722
+
+
+Slide 8, Element ID: p8_i8
+Phone
+
+
+Slide 8, Element ID: p8_i9
+(559) 758-2430
+
+
+Slide 8, Element ID: p8_i11
+Website
+
+
+Slide 8, Element ID: p8_i12
+www.brighthouse.solar
+
+
+Slide 8, Element ID: p8_i13
+Go Solar : Go Brighthouse!
+

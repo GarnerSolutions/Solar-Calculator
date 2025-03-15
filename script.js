@@ -1,8 +1,9 @@
 // 🌍 Switch between local and live backend by commenting/uncommenting the correct line:
-const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
-// const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
+// const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
+const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
 
-const backendUrl = "http://localhost:3000";
+// const backendUrl = "http://localhost:3000";
+const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
 let googleMapsApiKey = "";
 
@@ -59,31 +60,49 @@ window.onload = function () {
 
 // ✅ Fetch Data and Generate Presentation
 async function generatePresentation() {
-    const desiredProduction = document.getElementById("desiredProduction")?.value;
-    const panelDirection = document.getElementById("panelDirection")?.value;
+    const currentConsumption = document.getElementById("currentConsumption").value;
+    const desiredProduction = document.getElementById("desiredProduction").value;
+    const panelDirection = document.getElementById("panelDirection").value;
+    const currentMonthlyAverageBill = document.getElementById("currentMonthlyAverageBill").value; // 🆕 New Input
     const batteryModifier = parseInt(document.getElementById("batteryModifier")?.value) || 0;
-    const fullAddress = document.getElementById("fullAddress")?.value.trim();
+    const fullAddress = document.getElementById("fullAddress").value.trim();
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
 
     resultsDiv.innerHTML = "<p>Loading...</p>";
     downloadLinkDiv.innerHTML = "";
 
+    if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid current annual consumption.</p>`;
+        return;
+    }
     if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid desired annual kWh production.</p>`;
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid desired annual production.</p>`;
         return;
     }
     if (!fullAddress) {
         resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid address.</p>`;
         return;
     }
+    if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
+        alert("Please enter a valid Current Monthly Average Bill.");
+        return;
+    }
+
+    console.log("🚀 Sending request:", { currentConsumption, desiredProduction, panelDirection, batteryModifier, fullAddress });
 
     try {
-        console.log(`🚀 Sending request to: ${apiUrl}`);
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ desiredProduction, panelDirection, batteryModifier, fullAddress })
+            body: JSON.stringify({
+                currentConsumption,
+                desiredProduction,
+                panelDirection,
+                batteryModifier,
+                currentMonthlyAverageBill,
+                fullAddress
+            })
         });
 
         if (!response.ok) {
@@ -102,6 +121,9 @@ async function generatePresentation() {
             <hr>
             <h3>Estimated Annual Production:</h3>
             <p><strong>${Number(result.params.estimatedAnnualProduction).toLocaleString()} kWh</strong></p>
+            <hr>
+            <h3>Energy Offset:</h3>
+            <p><strong>${result.params.energyOffset} Energy Offset</strong></p>
             <hr>
             <h3>Pricing Breakdown:</h3>
             <p>Solar System Cost: <strong>$${Number(result.params.systemCost).toLocaleString()}</strong></p>
