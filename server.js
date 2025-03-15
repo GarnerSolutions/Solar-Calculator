@@ -32,6 +32,7 @@ const allowedOrigins = [
     "https://cool-yeot-0785e3.netlify.app",  // ✅ Netlify Frontend
     "https://solar-calculator-zb73.onrender.com",  // ✅ Render Backend
     "http://localhost:3000",  // ✅ Allow local testing
+    "http://127.0.0.1:5500"   // ✅ Allow local front-end (Live Server port)
 ];
 
 app.use(cors({
