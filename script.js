@@ -25,6 +25,21 @@ async function loadGoogleMapsApiKey() {
     }
 }
 
+fetch('/api/process', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(userInputData)
+})
+.then(response => response.json())
+.then(data => {
+    if (data.pdfUrl) {
+        window.location.href = data.pdfUrl;  // ✅ Correctly use the provided PDF URL
+    } else {
+        console.error("❌ No PDF URL returned from server.");
+    }
+})
+.catch(error => console.error("❌ Error generating PDF:", error));
+
 // ✅ Call this function when the page loads
 loadGoogleMapsApiKey();
 

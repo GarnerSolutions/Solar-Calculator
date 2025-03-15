@@ -143,6 +143,14 @@ app.post("/api/process", async (req, res) => {
         const fileId = uuidv4();
         const pdfPath = path.join(tempDir, `${fileId}.pdf`);
         await fs.promises.writeFile(pdfPath, pdfBuffer);
+        fs.access(pdfPath, fs.constants.F_OK, (err) => {
+            if (err) {
+                console.error("❌ PDF file not found:", pdfPath);
+            } else {
+                console.log("✅ PDF successfully saved:", pdfPath);
+            }
+        });
+        
 
         // Construct the full PDF download URL
         const pdfUrl = `${req.protocol}://${req.get("host")}/download/pdf?fileId=${fileId}`;
