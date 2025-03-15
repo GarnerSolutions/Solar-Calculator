@@ -14,7 +14,13 @@ import { dirname } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const tempDir = path.join(__dirname, 'temp');
+const tempDir = path.join(__dirname, "temp");
+
+// ✅ Ensure the temp directory exists before saving files
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+    console.log("📂 Created missing temp directory:", tempDir);
+}
 
 console.log(tempDir); // Use tempDir as needed
 // ✅ Initialize Express App First
