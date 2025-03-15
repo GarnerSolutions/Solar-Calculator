@@ -289,6 +289,7 @@ async function generatePowerPoint(params) {
     try {
         console.log("📊 Updating Google Slides with:", params);
 
+        // 🔐 Authenticate with Google Slides API
         const auth = new google.auth.GoogleAuth({
             keyFile: "credentials.json",
             scopes: ["https://www.googleapis.com/auth/presentations"],
@@ -303,110 +304,171 @@ async function generatePowerPoint(params) {
             presentationId: presentationId,
             requestBody: {
                 requests: [
+                    // 📜 Slide 4: System Overview
+                    // p4_i4: Solar System Size (e.g., "X.X kW")
                     { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
-                    { updateTextStyle: {
-                        objectId: "p4_i4",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: true,
-                            fontFamily: "Comfortaa",
-                            fontSize: { magnitude: 51, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i4",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p4_i7: Battery Size (e.g., "X kWh (Yx 16 kWh)")
                     { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
-                    { updateTextStyle: {
-                        objectId: "p4_i7",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: true,
-                            fontFamily: "Comfortaa",
-                            fontSize: { magnitude: 51, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i7",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p4_i10: Total Cost (e.g., "$XX,XXX")
                     { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i10", text: `$${Number(params.totalCost).toLocaleString()}` } },
-                    { updateTextStyle: {
-                        objectId: "p4_i10",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: true,
-                            fontFamily: "Comfortaa",
-                            fontSize: { magnitude: 51, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i10",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+
+                    // 📜 Slide 5: System Details
+                    // p5_i6: System Size (e.g., "X.X kW system size")
                     { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
-                    { updateTextStyle: {
-                        objectId: "p5_i6",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: false,
-                            fontFamily: "Raleway",
-                            fontSize: { magnitude: 19, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i6",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p5_i7: Energy Offset (e.g., "XX.X% Energy Offset")
                     { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
-                    { updateTextStyle: {
-                        objectId: "p5_i7",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: false,
-                            fontFamily: "Raleway",
-                            fontSize: { magnitude: 19, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i7",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p5_i8: Panel Count (e.g., "XX Jinko Solar panels")
                     { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
-                    { updateTextStyle: {
-                        objectId: "p5_i8",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: false,
-                            fontFamily: "Raleway",
-                            fontSize: { magnitude: 19, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i8",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p5_i19: Financed Amount (e.g., "$XX,XXX financed")
+                    { deleteText: { objectId: "p5_i19", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i19", text: `$${Number(params.totalCost).toLocaleString()} financed` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i19",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    // p5_i20: Monthly Payments (e.g., "$XXX monthly payments")
+                    { deleteText: { objectId: "p5_i20", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i20", text: `$${params.monthlyWithSolar} monthly payments` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i20",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+
+                    // 📜 Slide 6: Cost Comparison
+                    // p6_i5: Monthly Cost with Solar (e.g., "$XXX")
                     { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
-                    { updateTextStyle: {
-                        objectId: "p6_i5",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: true,
-                            fontFamily: "Comfortaa",
-                            fontSize: { magnitude: 21.5, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p6_i5",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 21.5, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }},
+                    },
+                    // p6_i10: Current Monthly Bill (e.g., "$XXX")
                     { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
-                    { updateTextStyle: {
-                        objectId: "p6_i10",
-                        textRange: { type: "ALL" },
-                        style: {
-                            bold: true,
-                            fontFamily: "Comfortaa",
-                            fontSize: { magnitude: 21.5, unit: "PT" },
-                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                    {
+                        updateTextStyle: {
+                            objectId: "p6_i10",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 21.5, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
-                        fields: "bold,fontFamily,fontSize,foregroundColor"
-                    }}
+                    },
                 ],
             },
         });
