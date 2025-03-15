@@ -25,6 +25,14 @@ async function loadGoogleMapsApiKey() {
     }
 }
 
+const userInputData = {
+    currentConsumption: Number(document.getElementById("currentConsumption").value),
+    desiredProduction: Number(document.getElementById("desiredProduction").value),
+    panelDirection: document.getElementById("panelDirection").value,
+    batteryModifier: parseInt(document.getElementById("batteryModifier")?.value) || 0,
+    fullAddress: document.getElementById("fullAddress").value.trim()
+};
+
 fetch('/api/process', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -75,19 +83,19 @@ window.onload = function () {
 
 // ✅ Fetch Data and Generate Presentation
 async function generatePresentation() {
-    const currentConsumption = document.getElementById("currentConsumption").value;
-    const desiredProduction = document.getElementById("desiredProduction").value;
-    const panelDirection = document.getElementById("panelDirection").value;
-    const currentMonthlyAverageBill = document.getElementById("currentMonthlyAverageBill").value; // 🆕 New Input
+    const currentConsumption = Number(document.getElementById("currentConsumption")?.value);
+    const desiredProduction = Number(document.getElementById("desiredProduction")?.value);
+    const panelDirection = document.getElementById("panelDirection")?.value;
+    const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value); // 🆕 New Input
     const batteryModifier = parseInt(document.getElementById("batteryModifier")?.value) || 0;
-    const fullAddress = document.getElementById("fullAddress").value.trim();
+    const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
 
     resultsDiv.innerHTML = "<p>Loading...</p>";
     downloadLinkDiv.innerHTML = "";
 
-    // Input Validation
+    // **✅ Input Validation - Convert Inputs to Numbers**
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
         resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid current annual consumption.</p>`;
         return;
@@ -101,35 +109,39 @@ async function generatePresentation() {
         return;
     }
     if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
-        alert("Please enter a valid Current Monthly Average Bill.");
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid Current Monthly Average Bill.</p>`;
         return;
     }
 
-    console.log("🚀 Sending request:", { currentConsumption, desiredProduction, panelDirection, batteryModifier, fullAddress });
+    // ✅ **Debugging: Log the request payload before sending**
+    const requestBody = {
+        currentConsumption,
+        desiredProduction,
+        panelDirection,
+        batteryModifier,
+        currentMonthlyAverageBill,
+        fullAddress
+    };
+    console.log("🚀 Sending Request Payload:", requestBody);
 
     try {
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                currentConsumption,
-                desiredProduction,
-                panelDirection,
-                batteryModifier,
-                currentMonthlyAverageBill,
-                fullAddress
-            })
+            body: JSON.stringify(requestBody),
         });
 
+        // ✅ **Check if Response is OK, Otherwise Log & Throw Error**
         if (!response.ok) {
             const errorData = await response.json();
+            console.error("❌ Server Error Response:", errorData);
             throw new Error(errorData.error || "Server error");
         }
 
         const result = await response.json();
         console.log("✅ Server Response:", result);
 
-        // Display Results
+        // **🖥️ Display Results on Page**
         resultsDiv.innerHTML = `
             <h3>Your Solar System Details:</h3>
             <p>Solar System Size: ${result.params.solarSize} kW</p>
@@ -148,8 +160,13 @@ async function generatePresentation() {
             <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
         `;
 
-        // Provide PDF Download Link
-        downloadLinkDiv.innerHTML = `<a href="${result.pdfUrl}" download>Download Your Presentation PDF</a>`;
+        // ✅ **Provide PDF Download Link**
+        if (result.pdfUrl) {
+            downloadLinkDiv.innerHTML = `<a href="${result.pdfUrl}" download>Download Your Presentation PDF</a>`;
+        } else {
+            console.error("❌ PDF URL Not Found in Response.");
+            downloadLinkDiv.innerHTML = `<p style="color: red;">Error: PDF file could not be generated.</p>`;
+        }
 
     } catch (error) {
         console.error("❌ Error:", error);

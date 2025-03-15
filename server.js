@@ -131,14 +131,13 @@ app.post("/api/process", async (req, res) => {
         const drive = google.drive({ version: "v3", auth });
         const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
 
-        // Export the updated presentation as a PDF
-        const pdfStream = await drive.files.export({
+        const pdfResponse = await drive.files.export({
             fileId: presentationId,
             mimeType: "application/pdf",
-            alt: "media",
-        });
-        const pdfBuffer = await streamToBuffer(pdfStream.data);
-
+        }, { responseType: "arraybuffer" }); // ✅ Ensures we get a buffer
+        
+        const pdfBuffer = Buffer.from(pdfResponse.data); // ✅ Convert the arraybuffer to a buffer
+        
         // Save the PDF to a temporary file
         const fileId = uuidv4();
         const pdfPath = path.join(tempDir, `${fileId}.pdf`);
