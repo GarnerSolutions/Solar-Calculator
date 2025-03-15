@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Solar Calculator</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyp3bPbVmleaQmGT0DlPpuZqpwMIUfz04&libraries=places" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=places" async defer></script>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -17,8 +17,8 @@
         <label for="desiredProduction">Desired Annual Production (kWh):</label>
         <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh" required>
 
-        <label for="currentMonthlyAverageBill">Current Monthly Average Bill ($):</label>
-        <input type="number" id="currentMonthlyAverageBill" placeholder="Enter average bill amount" required>
+        <label for="monthlyBill">Current Monthly Average Bill ($):</label>
+        <input type="number" id="monthlyBill" placeholder="Enter current monthly bill" required>
 
         <label for="panelDirection">Panel Direction:</label>
         <select id="panelDirection">
