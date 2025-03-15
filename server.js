@@ -31,6 +31,7 @@ app.use(express.json());
 const allowedOrigins = [
     "https://cool-yeot-0785e3.netlify.app",  // ✅ Netlify Frontend
     "https://solar-calculator-zb73.onrender.com",  // ✅ Render Backend
+    "http://localhost:3000",  // ✅ Allow local testing
 ];
 
 app.use(cors({
@@ -136,10 +137,17 @@ app.post("/api/process", async (req, res) => {
         const fileId = uuidv4();
         const pdfPath = path.join(tempDir, `${fileId}.pdf`);
         await fs.promises.writeFile(pdfPath, pdfBuffer);
-        console.log("✅ PDF successfully saved:", pdfPath);
+        console.log("✅ PDF saved to:", pdfPath);
+
+        // Verify the file exists
+        if (!fs.existsSync(pdfPath)) {
+            console.error("❌ PDF file not found at:", pdfPath);
+            return res.status(500).json({ error: "Failed to save PDF file." });
+        }
 
         // Construct the full PDF view URL
-        const pdfViewUrl = `https://${req.get("host")}/view/pdf?fileId=${fileId}`;
+        const pdfViewUrl = `http://${req.get("host")}/view/pdf?fileId=${fileId}`; // Use http for local testing
+        console.log("✅ PDF View URL:", pdfViewUrl);
 
         // Send response with the PDF view URL
         res.json({ pptUrl, pdfViewUrl, params });
@@ -156,7 +164,10 @@ app.get("/view/pdf", (req, res) => {
         return res.status(400).send("Missing fileId");
     }
     const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+    console.log("Attempting to serve PDF from:", pdfPath);
+
     if (!fs.existsSync(pdfPath)) {
+        console.error("❌ PDF file not found at:", pdfPath);
         return res.status(404).send("File not found");
     }
 
@@ -166,12 +177,18 @@ app.get("/view/pdf", (req, res) => {
     const fileStream = fs.createReadStream(pdfPath);
     fileStream.pipe(res);
 
-    // Clean up the file after streaming (optional, to save space)
+    // Log successful streaming
+    fileStream.on("data", (chunk) => console.log("Streaming PDF chunk:", chunk.length, "bytes"));
     fileStream.on("end", () => {
+        console.log("✅ PDF streaming completed");
         fs.unlink(pdfPath, (err) => {
             if (err) console.error("Error deleting file:", err);
             else console.log("✅ PDF file deleted after viewing:", pdfPath);
         });
+    });
+    fileStream.on("error", (err) => {
+        console.error("❌ Error streaming PDF:", err);
+        res.status(500).send("Error streaming PDF");
     });
 });
 
