@@ -5,7 +5,10 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import { google } from "googleapis";
-import fetch from "node-fetch"; // Ensure correct import
+import fetch from "node-fetch";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 // ✅ Initialize Express App First
 const app = express();
@@ -45,6 +48,22 @@ app.get("/api/getGoogleMapsApiKey", (req, res) => {
     }
     res.json({ apiKey: googleMapsApiKey });
 });
+
+// Create a temporary directory for PDFs if it doesn’t exist
+const tempDir = path.join(__dirname, "temp");
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir);
+}
+
+// Helper function to convert a stream to a buffer
+async function streamToBuffer(stream) {
+    return new Promise((resolve, reject) => {
+        const chunks = [];
+        stream.on("data", (chunk) => chunks.push(chunk));
+        stream.on("end", () => resolve(Buffer.concat(chunks)));
+        stream.on("error", reject);
+    });
+}
 
 // ✅ Corrected API Endpoint for Frontend Requests
 app.post("/api/process", async (req, res) => {
@@ -92,7 +111,7 @@ app.post("/api/process", async (req, res) => {
         }
 
         // ✅ Calculate Solar System Size
-        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance);
+        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance, panelDirection);
         console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
 
         // ✅ Calculate System Parameters, including Energy Offset
@@ -103,8 +122,32 @@ app.post("/api/process", async (req, res) => {
         const pptUrl = await generatePowerPoint(params);
         console.log("📄 PowerPoint URL:", pptUrl);
 
-        res.json({ pptUrl, params });
+        // Initialize Google Drive API for PDF export
+        const auth = new google.auth.GoogleAuth({
+            keyFile: "credentials.json",
+            scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+        });
+        const drive = google.drive({ version: "v3", auth });
+        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
 
+        // Export the updated presentation as a PDF
+        const pdfStream = await drive.files.export({
+            fileId: presentationId,
+            mimeType: "application/pdf",
+            alt: "media",
+        });
+        const pdfBuffer = await streamToBuffer(pdfStream.data);
+
+        // Save the PDF to a temporary file
+        const fileId = uuidv4();
+        const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+        await fs.promises.writeFile(pdfPath, pdfBuffer);
+
+        // Construct the full PDF download URL
+        const pdfUrl = `${req.protocol}://${req.get("host")}/download/pdf?fileId=${fileId}`;
+
+        // Send response with both URLs (optional pptUrl for flexibility)
+        res.json({ pptUrl, pdfUrl, params });
     } catch (error) {
         console.error("❌ Server Error:", error);
         res.status(500).json({ error: `Failed to process the request: ${error.message}` });
@@ -149,6 +192,29 @@ app.post("/api/getPlacesAutocomplete", async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
+// New endpoint to serve the PDF file
+app.get("/download/pdf", (req, res) => {
+    const fileId = req.query.fileId;
+    if (!fileId) {
+        return res.status(400).send("Missing fileId");
+    }
+    const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+    if (!fs.existsSync(pdfPath)) {
+        return res.status(404).send("File not found");
+    }
+
+    // Send the file for download and clean up afterward
+    res.download(pdfPath, "presentation.pdf", (err) => {
+        if (err) {
+            console.error("Error downloading file:", err);
+        }
+        fs.unlink(pdfPath, (err) => {
+            if (err) console.error("Error deleting file:", err);
+        });
+    });
+});
+
 async function getSolarIrradiance(lat, lng) {
     try {
         const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${nrelApiKey}&lat=${lat}&lon=${lng}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
@@ -282,7 +348,6 @@ async function generatePowerPoint(params) {
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
                     
-        
                     // ✅ Update Slide 5
                     { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
@@ -326,7 +391,7 @@ async function generatePowerPoint(params) {
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
         
-                    // ✅ Update Slide 6 (p6_i5 - Current Monthly Bill)
+                    // ✅ Update Slide 6 (p6_i5 - Monthly With Solar)
                     { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
                     { updateTextStyle: {
@@ -341,7 +406,7 @@ async function generatePowerPoint(params) {
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
         
-                    // ✅ Update Slide 6 (p6_i10 - Monthly With Solar)
+                    // ✅ Update Slide 6 (p6_i10 - Current Monthly Bill)
                     { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
                     { updateTextStyle: {

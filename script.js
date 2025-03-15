@@ -5,7 +5,6 @@ const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // �
 // const backendUrl = "http://localhost:3000";
 const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
-
 let googleMapsApiKey = "";
 
 // ✅ Fetch Google Maps API Key from Backend
@@ -73,6 +72,7 @@ async function generatePresentation() {
     resultsDiv.innerHTML = "<p>Loading...</p>";
     downloadLinkDiv.innerHTML = "";
 
+    // Input Validation
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
         resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid current annual consumption.</p>`;
         return;
@@ -114,6 +114,7 @@ async function generatePresentation() {
         const result = await response.json();
         console.log("✅ Server Response:", result);
 
+        // Display Results
         resultsDiv.innerHTML = `
             <h3>Your Solar System Details:</h3>
             <p>Solar System Size: ${result.params.solarSize} kW</p>
@@ -132,7 +133,8 @@ async function generatePresentation() {
             <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
         `;
 
-        downloadLinkDiv.innerHTML = `<a href="${result.pptUrl}" download>Download Your Presentation</a>`;
+        // Provide PDF Download Link
+        downloadLinkDiv.innerHTML = `<a href="${result.pdfUrl}" download>Download Your Presentation PDF</a>`;
 
     } catch (error) {
         console.error("❌ Error:", error);
