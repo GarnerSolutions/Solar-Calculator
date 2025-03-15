@@ -7,11 +7,17 @@ import cors from "cors";
 import { google } from "googleapis";
 import fetch from "node-fetch"; // Ensure correct import
 
+// ✅ Initialize Express App First
+const app = express();
+app.use(express.json());
+
+// ✅ Define Allowed Origins
 const allowedOrigins = [
     "https://cool-yeot-0785e3.netlify.app", // ✅ Your Netlify frontend
     "https://solar-calculator-zb73.onrender.com", // ✅ Your Render backend
 ];
 
+// ✅ Apply CORS Middleware
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin || allowedOrigins.includes(origin)) {
@@ -22,10 +28,6 @@ app.use(cors({
     },
     credentials: true,
 }));
-
-const app = express();
-app.use(express.json());
-app.use(cors({ origin: "http://127.0.0.1:5500" })); // ✅ Allow Live Server frontend
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 const googlePlacesApiKey = process.env.GOOGLE_MAPS_API_KEY; // New Places API Key
