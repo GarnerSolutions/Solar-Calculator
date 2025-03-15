@@ -56,12 +56,6 @@ app.get("/api/getGoogleMapsApiKey", (req, res) => {
     res.json({ apiKey: googleMapsApiKey });
 });
 
-// Create a temporary directory for PDFs if it doesn’t exist
-const tempDir = path.join(__dirname, "temp");
-if (!fs.existsSync(tempDir)) {
-    fs.mkdirSync(tempDir);
-}
-
 // Helper function to convert a stream to a buffer
 async function streamToBuffer(stream) {
     return new Promise((resolve, reject) => {
