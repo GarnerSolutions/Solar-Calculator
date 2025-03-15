@@ -9,7 +9,15 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import path from 'path';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const tempDir = path.join(__dirname, 'temp');
+
+console.log(tempDir); // Use tempDir as needed
 // ✅ Initialize Express App First
 const app = express();
 app.use(express.json());
