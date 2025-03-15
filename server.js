@@ -158,7 +158,7 @@ app.post("/api/process", async (req, res) => {
         
 
         // Construct the full PDF download URL
-        const pdfUrl = `${req.protocol}://${req.get("host")}/download/pdf?fileId=${fileId}`;
+        const pdfUrl = `https://${req.get("host")}/download/pdf?fileId=${fileId}`;
 
         // Send response with both URLs (optional pptUrl for flexibility)
         res.json({ pptUrl, pdfUrl, params });
