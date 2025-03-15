@@ -1,9 +1,9 @@
 // 🌍 Switch between local and live backend by commenting/uncommenting the correct line:
-// const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
-const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
+const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
+// const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
 
-// const backendUrl = "http://localhost:3000";
-const backendUrl = "https://solar-calculator-zb73.onrender.com";
+const backendUrl = "http://localhost:3000";
+// const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
 let googleMapsApiKey = "";
 
@@ -24,29 +24,6 @@ async function loadGoogleMapsApiKey() {
         console.error("❌ Failed to load API Key:", error);
     }
 }
-
-const userInputData = {
-    currentConsumption: Number(document.getElementById("currentConsumption").value),
-    desiredProduction: Number(document.getElementById("desiredProduction").value),
-    panelDirection: document.getElementById("panelDirection").value,
-    batteryModifier: parseInt(document.getElementById("batteryModifier")?.value) || 0,
-    fullAddress: document.getElementById("fullAddress").value.trim()
-};
-
-fetch('/api/process', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userInputData)
-})
-.then(response => response.json())
-.then(data => {
-    if (data.pdfUrl) {
-        window.location.href = data.pdfUrl;  // ✅ Correctly use the provided PDF URL
-    } else {
-        console.error("❌ No PDF URL returned from server.");
-    }
-})
-.catch(error => console.error("❌ Error generating PDF:", error));
 
 // ✅ Call this function when the page loads
 loadGoogleMapsApiKey();
@@ -160,12 +137,13 @@ async function generatePresentation() {
             <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
         `;
 
-        // ✅ **Provide PDF Download Link**
-        if (result.pdfUrl) {
-            downloadLinkDiv.innerHTML = `<a href="${result.pdfUrl}" download>Download Your Presentation PDF</a>`;
+        // ✅ **Open Presentation in New Tab**
+        if (result.pptUrl) {
+            window.open(result.pptUrl, "_blank");
+            downloadLinkDiv.innerHTML = `<p>Presentation opened in a new tab. Download as PDF from there if needed.</p>`;
         } else {
-            console.error("❌ PDF URL Not Found in Response.");
-            downloadLinkDiv.innerHTML = `<p style="color: red;">Error: PDF file could not be generated.</p>`;
+            console.error("❌ PPT URL Not Found in Response.");
+            downloadLinkDiv.innerHTML = `<p style="color: red;">Error: Presentation could not be opened.</p>`;
         }
 
     } catch (error) {
