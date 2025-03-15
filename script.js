@@ -1,154 +1,405 @@
-// 🌍 Switch between local and live backend by commenting/uncommenting the correct line:
-const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
-// const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
+// 🌍 Load environment variables from .env FIRST
+import "dotenv/config";
 
-const backendUrl = "http://localhost:3000";
-// const backendUrl = "https://solar-calculator-zb73.onrender.com";
+// ✅ Import dependencies
+import express from "express";
+import cors from "cors";
+import { google } from "googleapis";
+import fetch from "node-fetch";
+import fs from "fs";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
-let googleMapsApiKey = "";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+const tempDir = path.join(__dirname, "temp");
 
-// ✅ Fetch Google Maps API Key from Backend
-async function loadGoogleMapsApiKey() {
+// ✅ Ensure the temp directory exists before saving files
+if (!fs.existsSync(tempDir)) {
+    fs.mkdirSync(tempDir, { recursive: true });
+    console.log("📂 Created missing temp directory:", tempDir);
+}
+
+console.log(tempDir);
+// ✅ Initialize Express App First
+const app = express();
+app.use(express.json());
+
+// ✅ Define Allowed Origins
+const allowedOrigins = [
+    "https://cool-yeot-0785e3.netlify.app",  // ✅ Netlify Frontend
+    "https://solar-calculator-zb73.onrender.com",  // ✅ Render Backend
+];
+
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            console.error("❌ CORS Blocked Request from:", origin);
+            callback(new Error("Not allowed by CORS"));
+        }
+    },
+    credentials: true,
+}));
+
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+const googlePlacesApiKey = process.env.GOOGLE_MAPS_API_KEY;
+const nrelApiKey = process.env.NREL_API_KEY;
+const performanceRatio = 0.70;
+
+console.log("🔑 GOOGLE_MAPS_API_KEY:", googleMapsApiKey ? "Loaded ✅" : "❌ NOT FOUND");
+console.log("🔑 GOOGLE_PLACES_API_KEY:", googlePlacesApiKey ? "Loaded ✅" : "❌ NOT FOUND");
+console.log("🔑 NREL_API_KEY:", nrelApiKey ? "Loaded ✅" : "❌ NOT FOUND");
+
+// ✅ Provide the Google Maps API Key Securely to the Frontend
+app.get("/api/getGoogleMapsApiKey", (req, res) => {
+    if (!googleMapsApiKey) {
+        return res.status(500).json({ error: "Google Maps API Key not found" });
+    }
+    res.json({ apiKey: googleMapsApiKey });
+});
+
+// ✅ Corrected API Endpoint for Frontend Requests
+app.post("/api/process", async (req, res) => {
     try {
-        const response = await fetch(`${backendUrl}/api/getGoogleMapsApiKey`);
-        if (!response.ok) {
-            throw new Error(`Server responded with ${response.status}`);
+        console.log("🔍 Received Request Body:", req.body);
+
+        const { desiredProduction, currentConsumption, panelDirection, batteryModifier, fullAddress, currentMonthlyAverageBill } = req.body;
+
+        // ✅ Basic Validations
+        if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
+            return res.status(400).json({ error: "Invalid desired annual kWh production." });
+        }
+        if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
+            return res.status(400).json({ error: "Invalid current annual kWh consumption." });
+        }
+        if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
+            return res.status(400).json({ error: "Invalid current monthly average bill." });
+        }
+        if (!fullAddress) {
+            return res.status(400).json({ error: "Full address is required." });
+        }
+        if (!googleMapsApiKey) {
+            return res.status(500).json({ error: "Google Maps API Key is missing." });
         }
 
-        const data = await response.json();
-        if (!data.apiKey) throw new Error("Google Maps API Key not found.");
+        // ✅ Convert Address to Lat/Lon
+        const geoUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(fullAddress)}&key=${googleMapsApiKey}`;
+        console.log("📡 Fetching Geocoding Data:", geoUrl);
 
-        googleMapsApiKey = data.apiKey;
-        console.log("✅ Google Maps API Key Loaded:", googleMapsApiKey);
+        const geoResponse = await fetch(geoUrl);
+        const geoData = await geoResponse.json();
+
+        if (!geoData.results || geoData.results.length === 0 || geoData.status !== "OK") {
+            console.warn("⚠️ Invalid or Unrecognized Address.");
+            return res.status(400).json({ error: "Invalid address. Please enter a valid one." });
+        }
+
+        const { lat, lng } = geoData.results[0].geometry.location;
+        console.log(`✅ Address Geocoded: Lat ${lat}, Lon ${lng}`);
+
+        // ✅ Get Solar Irradiance
+        const solarIrradiance = await getSolarIrradiance(lat, lng);
+        if (!solarIrradiance) {
+            return res.status(400).json({ error: "Could not retrieve solar data." });
+        }
+
+        // ✅ Calculate Solar System Size
+        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance, panelDirection);
+        console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
+
+        // ✅ Calculate System Parameters
+        const params = calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill);
+        console.log("✅ Final System Parameters:", params);
+
+        // ✅ Generate PowerPoint
+        const pptUrl = await generatePowerPoint(params);
+        console.log("📄 PowerPoint URL:", pptUrl);
+
+        // Initialize Google Drive API for PDF export
+        const auth = new google.auth.GoogleAuth({
+            keyFile: "credentials.json",
+            scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+        });
+        const drive = google.drive({ version: "v3", auth });
+        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
+
+        const pdfResponse = await drive.files.export({
+            fileId: presentationId,
+            mimeType: "application/pdf",
+        }, { responseType: "arraybuffer" });
+
+        const pdfBuffer = Buffer.from(pdfResponse.data);
+        const fileId = uuidv4();
+        const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+        await fs.promises.writeFile(pdfPath, pdfBuffer);
+        console.log("✅ PDF successfully saved:", pdfPath);
+
+        // Construct the full PDF view URL
+        const pdfViewUrl = `https://${req.get("host")}/view/pdf?fileId=${fileId}`;
+
+        // Send response with the PDF view URL
+        res.json({ pptUrl, pdfViewUrl, params });
     } catch (error) {
-        console.error("❌ Failed to load API Key:", error);
+        console.error("❌ Server Error:", error);
+        res.status(500).json({ error: `Failed to process the request: ${error.message}` });
     }
-}
+});
 
-// ✅ Call this function when the page loads
-loadGoogleMapsApiKey();
-
-// ✅ Google Places Autocomplete for Address Input
-function initializeAutocomplete() {
-    const addressInput = document.getElementById("fullAddress");
-    if (!addressInput) {
-        console.error("Address input field not found!");
-        return;
+// ✅ New Endpoint to Serve PDF Inline (Viewable in Browser)
+app.get("/view/pdf", (req, res) => {
+    const fileId = req.query.fileId;
+    if (!fileId) {
+        return res.status(400).send("Missing fileId");
+    }
+    const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+    if (!fs.existsSync(pdfPath)) {
+        return res.status(404).send("File not found");
     }
 
-    const autocomplete = new google.maps.places.Autocomplete(addressInput, {
-        types: ["geocode"],
-        componentRestrictions: { country: "us" }
+    // Serve the PDF inline for browser viewing
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "inline; filename=presentation.pdf");
+    const fileStream = fs.createReadStream(pdfPath);
+    fileStream.pipe(res);
+
+    // Clean up the file after streaming (optional, to save space)
+    fileStream.on("end", () => {
+        fs.unlink(pdfPath, (err) => {
+            if (err) console.error("Error deleting file:", err);
+            else console.log("✅ PDF file deleted after viewing:", pdfPath);
+        });
     });
+});
 
-    autocomplete.addListener("place_changed", function () {
-        const place = autocomplete.getPlace();
-        if (!place.geometry) {
-            console.error("No details available for input:", place);
-            return;
+// Existing /download/pdf endpoint (unchanged, kept for flexibility)
+app.get("/download/pdf", (req, res) => {
+    const fileId = req.query.fileId;
+    if (!fileId) {
+        return res.status(400).send("Missing fileId");
+    }
+    const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+    if (!fs.existsSync(pdfPath)) {
+        return res.status(404).send("File not found");
+    }
+
+    res.download(pdfPath, "presentation.pdf", (err) => {
+        if (err) {
+            console.error("Error downloading file:", err);
         }
-        console.log("📍 Selected Address:", place.formatted_address);
+        fs.unlink(pdfPath, (err) => {
+            if (err) console.error("Error deleting file:", err);
+        });
     });
+});
+
+// Existing helper functions (unchanged)
+async function getSolarIrradiance(lat, lng) {
+    try {
+        const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${nrelApiKey}&lat=${lat}&lon=${lng}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
+        console.log("Fetching solar data from:", nrelUrl);
+        const solarResponse = await fetch(nrelUrl);
+        const solarData = await solarResponse.json();
+
+        console.log("🌞 NREL API Response:", JSON.stringify(solarData, null, 2));
+
+        if (!solarData.outputs?.solrad_annual) {
+            console.warn("⚠️ No annual solar data found, using default irradiance of 6.02");
+            return 6.02;
+        }
+
+        return solarData.outputs.solrad_annual;
+    } catch (error) {
+        console.error("❌ Failed to fetch solar data:", error);
+        return 6.02; // Default irradiance
+    }
 }
 
-// ✅ Initialize Autocomplete on Page Load
-window.onload = function () {
-    loadGoogleMapsApiKey().then(() => {
-        initializeAutocomplete();
-    });
-};
+function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
+    batteryModifier = isNaN(parseInt(batteryModifier)) ? 0 : parseInt(batteryModifier);
 
-// ✅ Fetch Data and Generate Presentation
-async function generatePresentation() {
-    const currentConsumption = Number(document.getElementById("currentConsumption")?.value);
-    const desiredProduction = Number(document.getElementById("desiredProduction")?.value);
-    const panelDirection = document.getElementById("panelDirection")?.value;
-    const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value); // 🆕 New Input
-    const batteryModifier = parseInt(document.getElementById("batteryModifier")?.value) || 0;
-    const fullAddress = document.getElementById("fullAddress")?.value.trim();
-    const resultsDiv = document.getElementById("results");
-    const downloadLinkDiv = document.getElementById("downloadLink");
+    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;
+    batterySize += batteryModifier * 16;
+    batterySize = Math.max(16, batterySize);
 
-    resultsDiv.innerHTML = "<p>Loading...</p>";
-    downloadLinkDiv.innerHTML = "";
+    const panelCount = Math.ceil(solarSize / 0.44);
+    const systemCost = Math.round(solarSize * 2000);
+    const batteryCost = Math.round(batterySize * 1000);
+    const totalCost = systemCost + batteryCost;
 
-    // **✅ Input Validation - Convert Inputs to Numbers**
-    if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid current annual consumption.</p>`;
-        return;
-    }
-    if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid desired annual production.</p>`;
-        return;
-    }
-    if (!fullAddress) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid address.</p>`;
-        return;
-    }
-    if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid Current Monthly Average Bill.</p>`;
-        return;
+    const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * 0.70);
+
+    let energyOffset = "N/A";
+    if (!isNaN(currentConsumption) && currentConsumption > 0) {
+        energyOffset = ((desiredProduction / currentConsumption) * 100).toFixed(1) + "%";
     }
 
-    // ✅ **Debugging: Log the request payload before sending**
-    const requestBody = {
-        currentConsumption,
-        desiredProduction,
-        panelDirection,
-        batteryModifier,
-        currentMonthlyAverageBill,
-        fullAddress
+    return {
+        solarSize: solarSize.toFixed(1),
+        batterySize: `${batterySize} kWh (${batterySize / 16}x 16 kWh)`,
+        panelCount,
+        systemCost: systemCost.toFixed(0),
+        batteryCost: batteryCost.toFixed(0),
+        totalCost: totalCost.toFixed(0),
+        currentMonthlyBill: currentMonthlyAverageBill,
+        monthlyWithSolar: Math.round(totalCost / 300),
+        estimatedAnnualProduction,
+        energyOffset
     };
-    console.log("🚀 Sending Request Payload:", requestBody);
+}
 
+function calculateSolarSize(desiredProduction, solarIrradiance, panelDirection) {
+    const adjustmentFactor = {
+        "S": 1.0, "SE": 0.90, "SW": 0.90,
+        "E": 0.80, "W": 0.80,
+        "NE": 0.70, "NW": 0.70,
+        "N": 0.60, "MIX": 0.85
+    }[panelDirection] || 1.0;
+
+    let solarSize = desiredProduction / (solarIrradiance * 365 * performanceRatio * adjustmentFactor);
+
+    console.log(`⚡ Debug: Desired Production = ${desiredProduction}, Solar Irradiance = ${solarIrradiance}, Performance Ratio = ${performanceRatio}`);
+    console.log(`⚡ Debug: Calculated Solar Size = ${solarSize.toFixed(2)} kW`);
+
+    return solarSize;
+}
+
+async function generatePowerPoint(params) {
     try {
-        const response = await fetch(apiUrl, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(requestBody),
+        console.log("📊 Updating Google Slides with:", params);
+
+        const auth = new google.auth.GoogleAuth({
+            keyFile: "credentials.json",
+            scopes: ["https://www.googleapis.com/auth/presentations"],
         });
 
-        // ✅ **Check if Response is OK, Otherwise Log & Throw Error**
-        if (!response.ok) {
-            const errorData = await response.json();
-            console.error("❌ Server Error Response:", errorData);
-            throw new Error(errorData.error || "Server error");
-        }
+        const slides = google.slides({ version: "v1", auth });
+        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
 
-        const result = await response.json();
-        console.log("✅ Server Response:", result);
+        console.log("🔄 Sending API request to update slides...");
 
-        // **🖥️ Display Results on Page**
-        resultsDiv.innerHTML = `
-            <h3>Your Solar System Details:</h3>
-            <p>Solar System Size: ${result.params.solarSize} kW</p>
-            <p>Battery Size: ${result.params.batterySize}</p>
-            <p>Number of Panels: ${result.params.panelCount}</p>
-            <hr>
-            <h3>Estimated Annual Production:</h3>
-            <p><strong>${Number(result.params.estimatedAnnualProduction).toLocaleString()} kWh</strong></p>
-            <hr>
-            <h3>Energy Offset:</h3>
-            <p><strong>${result.params.energyOffset} Energy Offset</strong></p>
-            <hr>
-            <h3>Pricing Breakdown:</h3>
-            <p>Solar System Cost: <strong>$${Number(result.params.systemCost).toLocaleString()}</strong></p>
-            <p>Battery Cost: <strong>$${Number(result.params.batteryCost).toLocaleString()}</strong></p>
-            <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
-        `;
+        await slides.presentations.batchUpdate({
+            presentationId: presentationId,
+            requestBody: {
+                requests: [
+                    { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i4",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i7",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i10", text: `$${Number(params.totalCost).toLocaleString()}` } },
+                    { updateTextStyle: {
+                        objectId: "p4_i10",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 51, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i6",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i7",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
+                    { updateTextStyle: {
+                        objectId: "p5_i8",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: false,
+                            fontFamily: "Raleway",
+                            fontSize: { magnitude: 19, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
+                    { updateTextStyle: {
+                        objectId: "p6_i5",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 21.5, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }},
+                    { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
+                    { updateTextStyle: {
+                        objectId: "p6_i10",
+                        textRange: { type: "ALL" },
+                        style: {
+                            bold: true,
+                            fontFamily: "Comfortaa",
+                            fontSize: { magnitude: 21.5, unit: "PT" },
+                            foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } }
+                        },
+                        fields: "bold,fontFamily,fontSize,foregroundColor"
+                    }}
+                ],
+            },
+        });
 
-        // ✅ **Open Presentation in New Tab**
-        if (result.pptUrl) {
-            window.open(result.pptUrl, "_blank");
-            downloadLinkDiv.innerHTML = `<p>Presentation opened in a new tab. Download as PDF from there if needed.</p>`;
-        } else {
-            console.error("❌ PPT URL Not Found in Response.");
-            downloadLinkDiv.innerHTML = `<p style="color: red;">Error: Presentation could not be opened.</p>`;
-        }
-
+        console.log("✅ Google Slides updated successfully!");
+        return `https://docs.google.com/presentation/d/${presentationId}/edit?usp=sharing`;
     } catch (error) {
-        console.error("❌ Error:", error);
-        resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
-        downloadLinkDiv.innerHTML = "";
+        console.error("❌ Google Slides Error:", error);
+        throw new Error("Failed to generate PowerPoint");
     }
 }
+
+// ✅ Start the Server
+app.listen(3000, () => console.log("🚀 Server running on port 3000"));

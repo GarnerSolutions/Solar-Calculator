@@ -22,7 +22,7 @@ if (!fs.existsSync(tempDir)) {
     console.log("📂 Created missing temp directory:", tempDir);
 }
 
-console.log(tempDir); // Use tempDir as needed
+console.log(tempDir);
 // ✅ Initialize Express App First
 const app = express();
 app.use(express.json());
@@ -46,9 +46,9 @@ app.use(cors({
 }));
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
-const googlePlacesApiKey = process.env.GOOGLE_MAPS_API_KEY; // New Places API Key
+const googlePlacesApiKey = process.env.GOOGLE_MAPS_API_KEY;
 const nrelApiKey = process.env.NREL_API_KEY;
-const performanceRatio = 0.70; // Adjust to fine-tune production estimates
+const performanceRatio = 0.70;
 
 console.log("🔑 GOOGLE_MAPS_API_KEY:", googleMapsApiKey ? "Loaded ✅" : "❌ NOT FOUND");
 console.log("🔑 GOOGLE_PLACES_API_KEY:", googlePlacesApiKey ? "Loaded ✅" : "❌ NOT FOUND");
@@ -62,20 +62,10 @@ app.get("/api/getGoogleMapsApiKey", (req, res) => {
     res.json({ apiKey: googleMapsApiKey });
 });
 
-// Helper function to convert a stream to a buffer
-async function streamToBuffer(stream) {
-    return new Promise((resolve, reject) => {
-        const chunks = [];
-        stream.on("data", (chunk) => chunks.push(chunk));
-        stream.on("end", () => resolve(Buffer.concat(chunks)));
-        stream.on("error", reject);
-    });
-}
-
 // ✅ Corrected API Endpoint for Frontend Requests
 app.post("/api/process", async (req, res) => {
     try {
-        console.log("🔍 Received Request Body:", req.body); // Debugging incoming request
+        console.log("🔍 Received Request Body:", req.body);
 
         const { desiredProduction, currentConsumption, panelDirection, batteryModifier, fullAddress, currentMonthlyAverageBill } = req.body;
 
@@ -121,7 +111,7 @@ app.post("/api/process", async (req, res) => {
         const solarSize = calculateSolarSize(desiredProduction, solarIrradiance, panelDirection);
         console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
 
-        // ✅ Calculate System Parameters, including Energy Offset
+        // ✅ Calculate System Parameters
         const params = calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill);
         console.log("✅ Final System Parameters:", params);
 
@@ -140,74 +130,52 @@ app.post("/api/process", async (req, res) => {
         const pdfResponse = await drive.files.export({
             fileId: presentationId,
             mimeType: "application/pdf",
-        }, { responseType: "arraybuffer" }); // ✅ Ensures we get a buffer
-        
-        const pdfBuffer = Buffer.from(pdfResponse.data); // ✅ Convert the arraybuffer to a buffer
-        
-        // Save the PDF to a temporary file
+        }, { responseType: "arraybuffer" });
+
+        const pdfBuffer = Buffer.from(pdfResponse.data);
         const fileId = uuidv4();
         const pdfPath = path.join(tempDir, `${fileId}.pdf`);
         await fs.promises.writeFile(pdfPath, pdfBuffer);
-        fs.access(pdfPath, fs.constants.F_OK, (err) => {
-            if (err) {
-                console.error("❌ PDF file not found:", pdfPath);
-            } else {
-                console.log("✅ PDF successfully saved:", pdfPath);
-            }
-        });
-        
+        console.log("✅ PDF successfully saved:", pdfPath);
 
-        // Construct the full PDF download URL
-        const pdfUrl = `https://${req.get("host")}/download/pdf?fileId=${fileId}`;
+        // Construct the full PDF view URL
+        const pdfViewUrl = `https://${req.get("host")}/view/pdf?fileId=${fileId}`;
 
-        // Send response with both URLs (optional pptUrl for flexibility)
-        res.json({ pptUrl, pdfUrl, params });
+        // Send response with the PDF view URL
+        res.json({ pptUrl, pdfViewUrl, params });
     } catch (error) {
         console.error("❌ Server Error:", error);
         res.status(500).json({ error: `Failed to process the request: ${error.message}` });
     }
 });
 
-// ✅ New Route to Handle Places API Autocomplete Requests
-app.post("/api/getPlacesAutocomplete", async (req, res) => {
-    const { input } = req.body;
-
-    if (!input) {
-        return res.status(400).json({ error: "Missing search input" });
+// ✅ New Endpoint to Serve PDF Inline (Viewable in Browser)
+app.get("/view/pdf", (req, res) => {
+    const fileId = req.query.fileId;
+    if (!fileId) {
+        return res.status(400).send("Missing fileId");
+    }
+    const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+    if (!fs.existsSync(pdfPath)) {
+        return res.status(404).send("File not found");
     }
 
-    try {
-        const response = await fetch("https://places.googleapis.com/v1/places:autocomplete", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${googlePlacesApiKey}`, // 🔑 Secure Token
-            },
-            body: JSON.stringify({
-                input: input,
-                locationBias: {
-                    circle: {
-                        center: { latitude: 36.82523, longitude: -119.70292 }, // Adjust for region biasing
-                        radius: 50000,
-                    },
-                },
-            }),
+    // Serve the PDF inline for browser viewing
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader("Content-Disposition", "inline; filename=presentation.pdf");
+    const fileStream = fs.createReadStream(pdfPath);
+    fileStream.pipe(res);
+
+    // Clean up the file after streaming (optional, to save space)
+    fileStream.on("end", () => {
+        fs.unlink(pdfPath, (err) => {
+            if (err) console.error("Error deleting file:", err);
+            else console.log("✅ PDF file deleted after viewing:", pdfPath);
         });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-            throw new Error(data.error?.message || "Failed to fetch autocomplete suggestions");
-        }
-
-        res.json({ predictions: data.predictions || [] });
-    } catch (error) {
-        console.error("❌ Places API Error:", error);
-        res.status(500).json({ error: error.message });
-    }
+    });
 });
 
-// New endpoint to serve the PDF file
+// Existing /download/pdf endpoint (unchanged, kept for flexibility)
 app.get("/download/pdf", (req, res) => {
     const fileId = req.query.fileId;
     if (!fileId) {
@@ -218,7 +186,6 @@ app.get("/download/pdf", (req, res) => {
         return res.status(404).send("File not found");
     }
 
-    // Send the file for download and clean up afterward
     res.download(pdfPath, "presentation.pdf", (err) => {
         if (err) {
             console.error("Error downloading file:", err);
@@ -229,10 +196,10 @@ app.get("/download/pdf", (req, res) => {
     });
 });
 
+// Existing helper functions (unchanged)
 async function getSolarIrradiance(lat, lng) {
     try {
         const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${nrelApiKey}&lat=${lat}&lon=${lng}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
-        
         console.log("Fetching solar data from:", nrelUrl);
         const solarResponse = await fetch(nrelUrl);
         const solarData = await solarResponse.json();
@@ -254,7 +221,7 @@ async function getSolarIrradiance(lat, lng) {
 function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
     batteryModifier = isNaN(parseInt(batteryModifier)) ? 0 : parseInt(batteryModifier);
 
-    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;  
+    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;
     batterySize += batteryModifier * 16;
     batterySize = Math.max(16, batterySize);
 
@@ -265,7 +232,6 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, curr
 
     const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * 0.70);
 
-    // ✅ Fix: Ensure `currentConsumption` is valid before division
     let energyOffset = "N/A";
     if (!isNaN(currentConsumption) && currentConsumption > 0) {
         energyOffset = ((desiredProduction / currentConsumption) * 100).toFixed(1) + "%";
@@ -319,7 +285,6 @@ async function generatePowerPoint(params) {
             presentationId: presentationId,
             requestBody: {
                 requests: [
-                    // ✅ Update Slide 4
                     { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
                     { updateTextStyle: {
@@ -333,7 +298,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-                    
                     { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
                     { updateTextStyle: {
@@ -347,7 +311,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-
                     { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p4_i10", text: `$${Number(params.totalCost).toLocaleString()}` } },
                     { updateTextStyle: {
@@ -361,8 +324,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-                    
-                    // ✅ Update Slide 5
                     { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
                     { updateTextStyle: {
@@ -376,7 +337,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-        
                     { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
                     { updateTextStyle: {
@@ -390,7 +350,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-        
                     { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
                     { updateTextStyle: {
@@ -404,8 +363,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-        
-                    // ✅ Update Slide 6 (p6_i5 - Monthly With Solar)
                     { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
                     { updateTextStyle: {
@@ -419,8 +376,6 @@ async function generatePowerPoint(params) {
                         },
                         fields: "bold,fontFamily,fontSize,foregroundColor"
                     }},
-        
-                    // ✅ Update Slide 6 (p6_i10 - Current Monthly Bill)
                     { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
                     { updateTextStyle: {
@@ -437,7 +392,7 @@ async function generatePowerPoint(params) {
                 ],
             },
         });
-        
+
         console.log("✅ Google Slides updated successfully!");
         return `https://docs.google.com/presentation/d/${presentationId}/edit?usp=sharing`;
     } catch (error) {
