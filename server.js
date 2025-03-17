@@ -93,9 +93,11 @@ app.post("/api/process", async (req, res) => {
         if (isNaN(monthlyCost) || monthlyCost < 0) {
             return res.status(400).json({ error: "Monthly cost with solar must be a non-negative number." });
         }
-        if (!shading || !["light", "medium", "heavy"].includes(shading)) {
-            return res.status(400).json({ error: "Invalid shading value. Must be 'light', 'medium', or 'heavy'." });
-        }
+
+        // Fallback for shading value
+        const validatedShading = shading && ["none", "light", "medium", "heavy"].includes(shading) ? shading : "none";
+        console.log("🔍 Validated Shading Value:", validatedShading);
+
         if (!googleMapsApiKey) {
             return res.status(500).json({ error: "Google Maps API Key is missing." });
         }
@@ -124,13 +126,14 @@ app.post("/api/process", async (req, res) => {
 
         // ✅ Apply Shading Modifier to Solar Irradiance
         const shadingFactors = {
+            "none": 1.0,      // 100% - 0% = 100%
             "light": 0.95,    // 100% - 5% = 95%
             "medium": 0.875,  // 100% - 12.5% = 87.5%
             "heavy": 0.80     // 100% - 20% = 80%
         };
-        const shadingFactor = shadingFactors[shading];
+        const shadingFactor = shadingFactors[validatedShading];
         const adjustedSolarIrradiance = originalSolarIrradiance * shadingFactor;
-        console.log(`🌞 Adjusted Solar Irradiance after ${shading} shading (${(1 - shadingFactor) * 100}% reduction): ${adjustedSolarIrradiance.toFixed(2)} kWh/m²/day`);
+        console.log(`🌞 Adjusted Solar Irradiance after ${validatedShading} shading (${(1 - shadingFactor) * 100}% reduction): ${adjustedSolarIrradiance.toFixed(2)} kWh/m²/day`);
 
         // ✅ Calculate Solar System Size
         const solarSize = calculateSolarSize(desiredProduction, adjustedSolarIrradiance, panelDirection);

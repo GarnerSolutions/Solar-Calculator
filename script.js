@@ -35,7 +35,8 @@ async function generatePresentation() {
     const panelDirection = document.getElementById("panelDirection")?.value;
     const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value);
     const batteryCount = Number(document.getElementById("batteryCount")?.value) || 0;
-    const shading = document.getElementById("shading")?.value;
+    const shadingElement = document.getElementById("shading");
+    const shading = shadingElement ? shadingElement.value : "none"; // Fallback to "none" if undefined
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const systemCost = Number(document.getElementById("systemCost")?.value) || 0;
     const monthlyCost = Number(document.getElementById("monthlyCost")?.value) || 0;
@@ -74,7 +75,12 @@ async function generatePresentation() {
         resultsDiv.innerHTML = `<p class="error">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
         return;
     }
-    if (!shading || !["light", "medium", "heavy"].includes(shading)) {
+
+    // Debug: Log the shading value before validation
+    console.log("🔍 Shading Value Retrieved:", shading);
+
+    if (!shading || !["none", "light", "medium", "heavy"].includes(shading)) {
+        console.error("❌ Invalid shading value:", shading);
         resultsDiv.innerHTML = `<p class="error">Please select a valid shading option.</p>`;
         return;
     }
@@ -86,7 +92,7 @@ async function generatePresentation() {
         panelDirection,
         batteryCount,
         currentMonthlyAverageBill,
-        shading, // New parameter
+        shading,
         fullAddress,
         systemCost,
         monthlyCost
