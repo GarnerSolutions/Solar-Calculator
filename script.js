@@ -1,9 +1,8 @@
-// Testing URLs (swap between top two and bottom two)
+// 🌍 Switch between local and live backend by commenting/uncommenting the correct line:
 // const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
-// const backendUrl = "http://localhost:3000";
-
-// Live URLs
 const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
+
+// const backendUrl = "http://localhost:3000";
 const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
 let googleMapsApiKey = "";
@@ -61,7 +60,9 @@ async function generatePresentation() {
     const downloadLinkDiv = document.getElementById("downloadLink");
 
     resultsDiv.innerHTML = "<p>Loading...</p>";
-    downloadLinkDiv.innerHTML = "";
+    downloadLinkDiv.innerHTML = `
+    <p><a href="${result.pdfViewUrl}" target="_blank" class="download-proposal">Download Proposal</a></p>
+`;
 
     // **✅ Input Validation - Convert Inputs to Numbers**
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
@@ -127,10 +128,11 @@ async function generatePresentation() {
             <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
         `;
 
-        // ✅ **Open PDF View in New Tab**
+        // ✅ **Add Download Proposal Link**
         if (result.pdfViewUrl) {
-            window.open(result.pdfViewUrl, "_blank");
-            downloadLinkDiv.innerHTML = `<p>PDF opened in a new tab for viewing.</p>`;
+            downloadLinkDiv.innerHTML = `
+                <p><a href="${result.pdfViewUrl}" target="_blank" style="color: #007bff; text-decoration: underline;">Download Proposal</a></p>
+            `;
         } else {
             console.error("❌ PDF View URL Not Found in Response.");
             downloadLinkDiv.innerHTML = `<p style="color: red;">Error: PDF could not be opened.</p>`;
