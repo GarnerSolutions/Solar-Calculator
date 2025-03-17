@@ -54,7 +54,7 @@ async function generatePresentation() {
     const desiredProduction = Number(document.getElementById("desiredProduction")?.value);
     const panelDirection = document.getElementById("panelDirection")?.value;
     const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value);
-    const batteryModifier = parseInt(document.getElementById("batteryModifier")?.value) || 0;
+    const batteryCount = Number(document.getElementById("batteryCount")?.value) || 0;
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
@@ -79,13 +79,17 @@ async function generatePresentation() {
         resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid Current Monthly Average Bill.</p>`;
         return;
     }
+    if (isNaN(batteryCount) || batteryCount < 0) {
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid battery count (must be a non-negative number).</p>`;
+        return;
+    }
 
     // ✅ **Debugging: Log the request payload before sending**
     const requestBody = {
         currentConsumption,
         desiredProduction,
         panelDirection,
-        batteryModifier,
+        batteryCount,
         currentMonthlyAverageBill,
         fullAddress
     };
@@ -129,7 +133,7 @@ async function generatePresentation() {
         // ✅ **Add Download Proposal Link**
         if (result.pdfViewUrl) {
             downloadLinkDiv.innerHTML = `
-                <p><a href="${result.pdfViewUrl}" target="_blank" style="color: #007bff; text-decoration: underline;">Download Proposal</a></p>
+                <p><a href="${result.pdfViewUrl}" target="_blank" class="download-proposal">Download Proposal</a></p>
             `;
         } else {
             console.error("❌ PDF View URL Not Found in Response.");

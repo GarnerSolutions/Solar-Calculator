@@ -69,7 +69,7 @@ app.post("/api/process", async (req, res) => {
     try {
         console.log("🔍 Received Request Body:", req.body);
 
-        const { desiredProduction, currentConsumption, panelDirection, batteryModifier, fullAddress, currentMonthlyAverageBill } = req.body;
+        const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill } = req.body;
 
         // ✅ Basic Validations
         if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
@@ -83,6 +83,9 @@ app.post("/api/process", async (req, res) => {
         }
         if (!fullAddress) {
             return res.status(400).json({ error: "Full address is required." });
+        }
+        if (isNaN(batteryCount) || batteryCount < 0) {
+            return res.status(400).json({ error: "Battery count must be a non-negative number." });
         }
         if (!googleMapsApiKey) {
             return res.status(500).json({ error: "Google Maps API Key is missing." });
@@ -114,7 +117,7 @@ app.post("/api/process", async (req, res) => {
         console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
 
         // ✅ Calculate System Parameters
-        const params = calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill);
+        const params = calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill);
         console.log("✅ Final System Parameters:", params);
 
         // ✅ Generate PowerPoint
@@ -236,12 +239,13 @@ async function getSolarIrradiance(lat, lng) {
     }
 }
 
-function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
-    batteryModifier = isNaN(parseInt(batteryModifier)) ? 0 : parseInt(batteryModifier);
+function calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
+    // Ensure batteryCount is a non-negative integer
+    batteryCount = isNaN(parseInt(batteryCount)) ? 0 : parseInt(batteryCount);
+    batteryCount = Math.max(0, batteryCount); // Prevent negative values
 
-    let batterySize = Math.ceil((solarSize * 1.70) / 16) * 16;
-    batterySize += batteryModifier * 16;
-    batterySize = Math.max(16, batterySize);
+    // Calculate batterySize directly from batteryCount (each battery is 16 kWh)
+    const batterySize = batteryCount * 16;
 
     const panelCount = Math.ceil(solarSize / 0.44);
     const systemCost = Math.round(solarSize * 2000);
@@ -257,7 +261,7 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryModifier, curr
 
     return {
         solarSize: solarSize.toFixed(1),
-        batterySize: `${batterySize} kWh (${batterySize / 16}x 16 kWh)`,
+        batterySize: `${batterySize} kWh (${batteryCount}x 16 kWh)`,
         panelCount,
         systemCost: systemCost.toFixed(0),
         batteryCost: batteryCost.toFixed(0),
