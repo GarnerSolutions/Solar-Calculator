@@ -4,13 +4,13 @@
 /* ===== General Page Styling ===== */
 body {
     font-family: 'Montserrat', sans-serif;
-    background-color: #ffffff; /* White background to match website */
+    background: linear-gradient(135deg, #e6f0fa 0%, #ffffff 100%); /* Soft light blue to white gradient */
     margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Align to top for better spacing */
+    justify-content: flex-start;
     min-height: 100vh;
 }
 

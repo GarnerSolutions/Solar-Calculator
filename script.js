@@ -56,6 +56,8 @@ async function generatePresentation() {
     const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value);
     const batteryCount = Number(document.getElementById("batteryCount")?.value) || 0;
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
+    const systemCost = Number(document.getElementById("systemCost")?.value) || 0; // New input
+    const monthlyCost = Number(document.getElementById("monthlyCost")?.value) || 0; // New input
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
 
@@ -83,6 +85,14 @@ async function generatePresentation() {
         resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid battery count (must be a non-negative number).</p>`;
         return;
     }
+    if (isNaN(systemCost) || systemCost < 0) {
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid system cost (must be a non-negative number).</p>`;
+        return;
+    }
+    if (isNaN(monthlyCost) || monthlyCost < 0) {
+        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
+        return;
+    }
 
     // ✅ **Debugging: Log the request payload before sending**
     const requestBody = {
@@ -91,7 +101,9 @@ async function generatePresentation() {
         panelDirection,
         batteryCount,
         currentMonthlyAverageBill,
-        fullAddress
+        fullAddress,
+        systemCost, // New parameter
+        monthlyCost // New parameter
     };
     console.log("🚀 Sending Request Payload:", requestBody);
 
@@ -127,7 +139,8 @@ async function generatePresentation() {
             <h3>Pricing Breakdown:</h3>
             <p>Solar System Cost: <strong>$${Number(result.params.systemCost).toLocaleString()}</strong></p>
             <p>Battery Cost: <strong>$${Number(result.params.batteryCost).toLocaleString()}</strong></p>
-            <p><strong>Total Cost: $${Number(result.params.totalCost).toLocaleString()}</strong></p>
+            <p><strong>Total Cost: $${Number(systemCost).toLocaleString()}</strong></p> <!-- Updated to use user input -->
+            <p><strong>Monthly Cost with Solar: $${Number(monthlyCost).toLocaleString()}</strong></p> <!-- New result -->
         `;
 
         // ✅ **Add Download Proposal Link**

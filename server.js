@@ -69,7 +69,7 @@ app.post("/api/process", async (req, res) => {
     try {
         console.log("🔍 Received Request Body:", req.body);
 
-        const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill } = req.body;
+        const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill, systemCost, monthlyCost } = req.body;
 
         // ✅ Basic Validations
         if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
@@ -86,6 +86,12 @@ app.post("/api/process", async (req, res) => {
         }
         if (isNaN(batteryCount) || batteryCount < 0) {
             return res.status(400).json({ error: "Battery count must be a non-negative number." });
+        }
+        if (isNaN(systemCost) || systemCost < 0) {
+            return res.status(400).json({ error: "System cost must be a non-negative number." });
+        }
+        if (isNaN(monthlyCost) || monthlyCost < 0) {
+            return res.status(400).json({ error: "Monthly cost with solar must be a non-negative number." });
         }
         if (!googleMapsApiKey) {
             return res.status(500).json({ error: "Google Maps API Key is missing." });
@@ -117,7 +123,7 @@ app.post("/api/process", async (req, res) => {
         console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
 
         // ✅ Calculate System Parameters
-        const params = calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill);
+        const params = calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost);
         console.log("✅ Final System Parameters:", params);
 
         // ✅ Generate PowerPoint
@@ -217,7 +223,7 @@ app.get("/download/pdf", (req, res) => {
     });
 });
 
-// Existing helper functions (unchanged)
+// Existing helper functions (updated)
 async function getSolarIrradiance(lat, lng) {
     try {
         const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${nrelApiKey}&lat=${lat}&lon=${lng}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
@@ -239,7 +245,7 @@ async function getSolarIrradiance(lat, lng) {
     }
 }
 
-function calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill) {
+function calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost) {
     // Ensure batteryCount is a non-negative integer
     batteryCount = isNaN(parseInt(batteryCount)) ? 0 : parseInt(batteryCount);
     batteryCount = Math.max(0, batteryCount); // Prevent negative values
@@ -248,9 +254,11 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryCount, current
     const batterySize = batteryCount * 16;
 
     const panelCount = Math.ceil(solarSize / 0.44);
-    const systemCost = Math.round(solarSize * 2000);
+    // Override systemCost with user-provided value if provided, otherwise use calculated value
+    const calculatedSystemCost = Math.round(solarSize * 2000);
+    const finalSystemCost = systemCost > 0 ? systemCost : calculatedSystemCost;
     const batteryCost = Math.round(batterySize * 1000);
-    const totalCost = systemCost + batteryCost;
+    const totalCost = finalSystemCost + batteryCost; // Use calculated total if no user input, otherwise use user-provided systemCost
 
     const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * 0.70);
 
@@ -259,15 +267,19 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryCount, current
         energyOffset = ((desiredProduction / currentConsumption) * 100).toFixed(1) + "%";
     }
 
+    // Override monthlyWithSolar with user-provided value if provided, otherwise use a default calculation
+    const calculatedMonthlyWithSolar = Math.round(totalCost / 300);
+    const finalMonthlyWithSolar = monthlyCost > 0 ? monthlyCost : calculatedMonthlyWithSolar;
+
     return {
         solarSize: solarSize.toFixed(1),
         batterySize: `${batterySize} kWh (${batteryCount}x 16 kWh)`,
         panelCount,
-        systemCost: systemCost.toFixed(0),
+        systemCost: finalSystemCost.toFixed(0),
         batteryCost: batteryCost.toFixed(0),
         totalCost: totalCost.toFixed(0),
         currentMonthlyBill: currentMonthlyAverageBill,
-        monthlyWithSolar: Math.round(totalCost / 300),
+        monthlyWithSolar: finalMonthlyWithSolar.toFixed(0),
         estimatedAnnualProduction,
         energyOffset
     };
@@ -341,9 +353,9 @@ async function generatePowerPoint(params) {
                             fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
                     },
-                    // p4_i10: Total Cost (e.g., "$XX,XXX")
+                    // p4_i10: Total Cost (e.g., "$XX,XXX") - Updated to use user-provided systemCost
                     { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p4_i10", text: `$${Number(params.totalCost).toLocaleString()}` } },
+                    { insertText: { objectId: "p4_i10", text: `$${Number(params.systemCost).toLocaleString()}` } },
                     {
                         updateTextStyle: {
                             objectId: "p4_i10",
@@ -409,7 +421,7 @@ async function generatePowerPoint(params) {
                     },
                     // p5_i19: Financed Amount (e.g., "$XX,XXX financed")
                     { deleteText: { objectId: "p5_i19", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i19", text: `$${Number(params.totalCost).toLocaleString()} financed` } },
+                    { insertText: { objectId: "p5_i19", text: `$${Number(params.systemCost).toLocaleString()} financed` } },
                     {
                         updateTextStyle: {
                             objectId: "p5_i19",
@@ -423,7 +435,7 @@ async function generatePowerPoint(params) {
                             fields: "bold,fontFamily,fontSize,foregroundColor",
                         },
                     },
-                    // p5_i20: Monthly Payments (e.g., "$XXX monthly payments")
+                    // p5_i20: Monthly Payments (e.g., "$XXX monthly payments") - Updated to use user-provided monthlyCost
                     { deleteText: { objectId: "p5_i20", textRange: { type: "ALL" } } },
                     { insertText: { objectId: "p5_i20", text: `$${params.monthlyWithSolar} monthly payments` } },
                     {
