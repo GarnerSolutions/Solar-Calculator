@@ -22,13 +22,13 @@
         <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh">
 
         <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
-        <input type="number" id="monthlyBill" name="monthlyBill" min="0" step="0.01" required>
+        <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
 
         <label for="systemCost">Total System Cost ($):</label>
-        <input type="number" id="systemCost" name="systemCost" min="0" step="0.01" required>
+        <input type="number" id="systemCost" placeholder="Enter total system cost" min="0" step="0.01" required>
 
         <label for="monthlyCost">Monthly Cost with Solar ($):</label>
-        <input type="number" id="monthlyCost" name="monthlyCost" min="0" step="0.01" required>
+        <input type="number" id="monthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01" required>
 
         <label for="batteryCount">Battery Count:</label>
         <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0">
@@ -46,7 +46,6 @@
             <option value="MIX">Mixed</option>
         </select>
 
-        
         <label for="fullAddress">Address:</label>
         <input type="text" id="fullAddress" placeholder="Start typing address...">
 
@@ -56,7 +55,7 @@
         <div id="downloadLink"></div>
     </div>
 
-    <!-- Google Maps API Script -->
+    <!-- Google Maps API Script with Hardcoded Key -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyp3bPbVmleaQmGT0DlPpuZqpwMIUfz04&libraries=places"></script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'921d8565af59b0e1',t:'MTc0MjIyNTMxNi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

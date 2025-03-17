@@ -7,25 +7,7 @@ const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
 let googleMapsApiKey = "";
 
-// ✅ Fetch Google Maps API Key from Backend
-async function loadGoogleMapsApiKey() {
-    try {
-        const response = await fetch(`${backendUrl}/api/getGoogleMapsApiKey`);
-        if (!response.ok) {
-            throw new Error(`Server responded with ${response.status}`);
-        }
-
-        const data = await response.json();
-        if (!data.apiKey) throw new Error("Google Maps API Key not found.");
-
-        googleMapsApiKey = data.apiKey;
-        console.log("✅ Google Maps API Key Loaded:", googleMapsApiKey);
-    } catch (error) {
-        console.error("❌ Failed to load API Key:", error);
-    }
-}
-
-// ✅ Google Places Autocomplete for Address Input
+// ✅ Google Places Autocomplete for Address Input (No API key fetch needed)
 function initializeAutocomplete() {
     const addressInput = document.getElementById("fullAddress");
     if (!addressInput) {
@@ -66,31 +48,31 @@ async function generatePresentation() {
 
     // **✅ Input Validation - Convert Inputs to Numbers**
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid current annual consumption.</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid current annual consumption.</p>`;
         return;
     }
     if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid desired annual production.</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid desired annual production.</p>`;
         return;
     }
     if (!fullAddress) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid address.</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid address.</p>`;
         return;
     }
     if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid Current Monthly Average Bill.</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid Current Monthly Average Bill.</p>`;
         return;
     }
     if (isNaN(batteryCount) || batteryCount < 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid battery count (must be a non-negative number).</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid battery count (must be a non-negative number).</p>`;
         return;
     }
     if (isNaN(systemCost) || systemCost < 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid system cost (must be a non-negative number).</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid system cost (must be a non-negative number).</p>`;
         return;
     }
     if (isNaN(monthlyCost) || monthlyCost < 0) {
-        resultsDiv.innerHTML = `<p style="color: red;">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
         return;
     }
 
@@ -150,26 +132,24 @@ async function generatePresentation() {
             `;
         } else {
             console.error("❌ PDF View URL Not Found in Response.");
-            downloadLinkDiv.innerHTML = `<p style="color: red;">Error: PDF could not be opened.</p>`;
+            downloadLinkDiv.innerHTML = `<p class="error">Error: PDF could not be opened.</p>`;
         }
     } catch (error) {
         console.error("❌ Error:", error);
-        resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
+        resultsDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
         downloadLinkDiv.innerHTML = "";
     }
 }
 
 // ✅ Initialize Autocomplete and Add Event Listener on Page Load
 window.onload = function () {
-    loadGoogleMapsApiKey().then(() => {
-        initializeAutocomplete();
+    initializeAutocomplete();
 
-        // Add event listener for the Calculate System button
-        const calculateButton = document.getElementById("calculateButton");
-        if (calculateButton) {
-            calculateButton.addEventListener("click", generatePresentation);
-        } else {
-            console.error("❌ Calculate button not found!");
-        }
-    });
+    // Add event listener for the Calculate System button
+    const calculateButton = document.getElementById("calculateButton");
+    if (calculateButton) {
+        calculateButton.addEventListener("click", generatePresentation);
+    } else {
+        console.error("❌ Calculate button not found!");
+    }
 };
