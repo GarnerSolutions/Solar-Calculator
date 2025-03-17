@@ -5,9 +5,7 @@ const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // �
 // const backendUrl = "http://localhost:3000";
 const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
-let googleMapsApiKey = "";
-
-// ✅ Google Places Autocomplete for Address Input (No API key fetch needed)
+// ✅ Google Places Autocomplete for Address Input
 function initializeAutocomplete() {
     const addressInput = document.getElementById("fullAddress");
     if (!addressInput) {
@@ -37,9 +35,10 @@ async function generatePresentation() {
     const panelDirection = document.getElementById("panelDirection")?.value;
     const currentMonthlyAverageBill = Number(document.getElementById("currentMonthlyAverageBill")?.value);
     const batteryCount = Number(document.getElementById("batteryCount")?.value) || 0;
+    const shading = document.getElementById("shading")?.value;
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
-    const systemCost = Number(document.getElementById("systemCost")?.value) || 0; // New input
-    const monthlyCost = Number(document.getElementById("monthlyCost")?.value) || 0; // New input
+    const systemCost = Number(document.getElementById("systemCost")?.value) || 0;
+    const monthlyCost = Number(document.getElementById("monthlyCost")?.value) || 0;
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
 
@@ -75,6 +74,10 @@ async function generatePresentation() {
         resultsDiv.innerHTML = `<p class="error">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
         return;
     }
+    if (!shading || !["light", "medium", "heavy"].includes(shading)) {
+        resultsDiv.innerHTML = `<p class="error">Please select a valid shading option.</p>`;
+        return;
+    }
 
     // ✅ **Debugging: Log the request payload before sending**
     const requestBody = {
@@ -83,9 +86,10 @@ async function generatePresentation() {
         panelDirection,
         batteryCount,
         currentMonthlyAverageBill,
+        shading, // New parameter
         fullAddress,
-        systemCost, // New parameter
-        monthlyCost // New parameter
+        systemCost,
+        monthlyCost
     };
     console.log("🚀 Sending Request Payload:", requestBody);
 
@@ -121,8 +125,8 @@ async function generatePresentation() {
             <h3>Pricing Breakdown:</h3>
             <p>Solar System Cost: <strong>$${Number(result.params.systemCost).toLocaleString()}</strong></p>
             <p>Battery Cost: <strong>$${Number(result.params.batteryCost).toLocaleString()}</strong></p>
-            <p><strong>Total Cost: $${Number(systemCost).toLocaleString()}</strong></p> <!-- Updated to use user input -->
-            <p><strong>Monthly Cost with Solar: $${Number(monthlyCost).toLocaleString()}</strong></p> <!-- New result -->
+            <p><strong>Total Cost: $${Number(systemCost).toLocaleString()}</strong></p>
+            <p><strong>Monthly Cost with Solar: $${Number(monthlyCost).toLocaleString()}</strong></p>
         `;
 
         // ✅ **Add Download Proposal Link**

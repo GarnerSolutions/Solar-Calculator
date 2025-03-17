@@ -56,7 +56,7 @@ console.log("🔑 GOOGLE_MAPS_API_KEY:", googleMapsApiKey ? "Loaded ✅" : "❌ 
 console.log("🔑 GOOGLE_PLACES_API_KEY:", googlePlacesApiKey ? "Loaded ✅" : "❌ NOT FOUND");
 console.log("🔑 NREL_API_KEY:", nrelApiKey ? "Loaded ✅" : "❌ NOT FOUND");
 
-// ✅ Provide the Google Maps API Key Securely to the Frontend
+// ✅ Provide the Google Maps API Key Securely to the Frontend (Kept for compatibility)
 app.get("/api/getGoogleMapsApiKey", (req, res) => {
     if (!googleMapsApiKey) {
         return res.status(500).json({ error: "Google Maps API Key not found" });
@@ -69,7 +69,7 @@ app.post("/api/process", async (req, res) => {
     try {
         console.log("🔍 Received Request Body:", req.body);
 
-        const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill, systemCost, monthlyCost } = req.body;
+        const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill, systemCost, monthlyCost, shading } = req.body;
 
         // ✅ Basic Validations
         if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
@@ -93,6 +93,9 @@ app.post("/api/process", async (req, res) => {
         if (isNaN(monthlyCost) || monthlyCost < 0) {
             return res.status(400).json({ error: "Monthly cost with solar must be a non-negative number." });
         }
+        if (!shading || !["light", "medium", "heavy"].includes(shading)) {
+            return res.status(400).json({ error: "Invalid shading value. Must be 'light', 'medium', or 'heavy'." });
+        }
         if (!googleMapsApiKey) {
             return res.status(500).json({ error: "Google Maps API Key is missing." });
         }
@@ -113,17 +116,28 @@ app.post("/api/process", async (req, res) => {
         console.log(`✅ Address Geocoded: Lat ${lat}, Lon ${lng}`);
 
         // ✅ Get Solar Irradiance
-        const solarIrradiance = await getSolarIrradiance(lat, lng);
-        if (!solarIrradiance) {
+        let originalSolarIrradiance = await getSolarIrradiance(lat, lng);
+        if (!originalSolarIrradiance) {
             return res.status(400).json({ error: "Could not retrieve solar data." });
         }
+        console.log(`🌞 Original Solar Irradiance: ${originalSolarIrradiance.toFixed(2)} kWh/m²/day`);
+
+        // ✅ Apply Shading Modifier to Solar Irradiance
+        const shadingFactors = {
+            "light": 0.95,    // 100% - 5% = 95%
+            "medium": 0.875,  // 100% - 12.5% = 87.5%
+            "heavy": 0.80     // 100% - 20% = 80%
+        };
+        const shadingFactor = shadingFactors[shading];
+        const adjustedSolarIrradiance = originalSolarIrradiance * shadingFactor;
+        console.log(`🌞 Adjusted Solar Irradiance after ${shading} shading (${(1 - shadingFactor) * 100}% reduction): ${adjustedSolarIrradiance.toFixed(2)} kWh/m²/day`);
 
         // ✅ Calculate Solar System Size
-        const solarSize = calculateSolarSize(desiredProduction, solarIrradiance, panelDirection);
-        console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW`);
+        const solarSize = calculateSolarSize(desiredProduction, adjustedSolarIrradiance, panelDirection);
+        console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW with adjusted irradiance`);
 
         // ✅ Calculate System Parameters
-        const params = calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost);
+        const params = calculateSystemParams(solarSize, adjustedSolarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost);
         console.log("✅ Final System Parameters:", params);
 
         // ✅ Generate PowerPoint
@@ -223,7 +237,7 @@ app.get("/download/pdf", (req, res) => {
     });
 });
 
-// Existing helper functions (updated)
+// Existing helper functions (unchanged)
 async function getSolarIrradiance(lat, lng) {
     try {
         const nrelUrl = `https://developer.nrel.gov/api/pvwatts/v6.json?api_key=${nrelApiKey}&lat=${lat}&lon=${lng}&system_capacity=1&module_type=1&losses=14&array_type=1&tilt=20&azimuth=180`;
@@ -295,7 +309,7 @@ function calculateSolarSize(desiredProduction, solarIrradiance, panelDirection) 
 
     let solarSize = desiredProduction / (solarIrradiance * 365 * performanceRatio * adjustmentFactor);
 
-    console.log(`⚡ Debug: Desired Production = ${desiredProduction}, Solar Irradiance = ${solarIrradiance}, Performance Ratio = ${performanceRatio}`);
+    console.log(`⚡ Debug: Desired Production = ${desiredProduction}, Solar Irradiance = ${solarIrradiance}, Performance Ratio = ${performanceRatio}, Adjustment Factor = ${adjustmentFactor}`);
     console.log(`⚡ Debug: Calculated Solar Size = ${solarSize.toFixed(2)} kW`);
 
     return solarSize;
