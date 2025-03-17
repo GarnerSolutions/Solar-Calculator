@@ -60,9 +60,7 @@ async function generatePresentation() {
     const downloadLinkDiv = document.getElementById("downloadLink");
 
     resultsDiv.innerHTML = "<p>Loading...</p>";
-    downloadLinkDiv.innerHTML = `
-    <p><a href="${result.pdfViewUrl}" target="_blank" class="download-proposal">Download Proposal</a></p>
-`;
+    downloadLinkDiv.innerHTML = "";
 
     // **✅ Input Validation - Convert Inputs to Numbers**
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
@@ -137,7 +135,6 @@ async function generatePresentation() {
             console.error("❌ PDF View URL Not Found in Response.");
             downloadLinkDiv.innerHTML = `<p style="color: red;">Error: PDF could not be opened.</p>`;
         }
-
     } catch (error) {
         console.error("❌ Error:", error);
         resultsDiv.innerHTML = `<p style="color: red;">Error: ${error.message}</p>`;
