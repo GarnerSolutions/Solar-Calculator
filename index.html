@@ -5,62 +5,198 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brighthouse Solar Calculator</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js" defer></script>
 </head>
 <body>
-    <!-- Optional Header -->
-    <div class="header">
-        <img src="logo.png" alt="Brighthouse Logo" style="height: 40px;">
+    <!-- Header Section -->
+    <header class="header">
+        <img src="logo.png" alt="Brighthouse Logo" class="logo">
+    </header>
+
+    <!-- Main Content Section -->
+    <main class="main-container">
+        <div class="content-wrapper">
+            <!-- Input Column (Collapsible) -->
+            <section class="input-column">
+                <div class="dropdown-header">
+                    <h2 class="dropdown-title">Energy and Solar Data</h2>
+                    <button class="dropdown-toggle" aria-expanded="true">
+                        <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="dropdown-content">
+                    <form id="solarForm" class="input-form">
+                        <div class="form-group">
+                            <label for="currentConsumption">Current Annual Consumption (kWh):</label>
+                            <input type="number" id="currentConsumption" placeholder="Enter current annual kWh">
+                            <small id="helpConsumptionText" class="help-text">Need help getting Annual Consumption?</small>
+                        </div>
+                        <div class="form-group">
+                            <label for="desiredProduction">Desired Annual Production (kWh):</label>
+                            <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh">
+                        </div>
+                        <div class="form-group">
+                            <label for="panelDirection">Panel Direction:</label>
+                            <select id="panelDirection">
+                                <option value="S">South</option>
+                                <option value="SE">Southeast</option>
+                                <option value="SW">Southwest</option>
+                                <option value="E">East</option>
+                                <option value="W">West</option>
+                                <option value="NE">Northeast</option>
+                                <option value="NW">Northwest</option>
+                                <option value="N">North</option>
+                                <option value="MIX">Mixed</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="shading">Shading:</label>
+                            <select id="shading">
+                                <option value="none" selected>None (0%)</option>
+                                <option value="light">Light (5%)</option>
+                                <option value="medium">Medium (12.5%)</option>
+                                <option value="heavy">Heavy (20%)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="fullAddress">Address:</label>
+                            <input type="text" id="fullAddress" placeholder="Start typing address...">
+                        </div>
+                        <!-- New Build System Button and System Size Display -->
+                        <button type="button" id="buildSystemButton" class="calculate-button">Build System</button>
+                        <div id="systemSizeDisplay" class="system-size"></div>
+                        <!-- Remaining Inputs -->
+                        <div class="form-group">
+                            <label for="batteryCount">Battery Count:</label>
+                            <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
+                            <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="systemCost">Total System Cost ($):</label>
+                            <input type="number" id="systemCost" placeholder="Enter total system cost" min="0" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="monthlyCost">Monthly Cost with Solar ($):</label>
+                            <input type="number" id="monthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01" required>
+                        </div>
+                        <button type="button" id="calculateButton" class="calculate-button">Calculate System</button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Results Column -->
+            <section id="resultsColumn" class="results-column">
+                <div id="results" class="results-section">
+                    <h2 class="results-title">Your Solar Results</h2>
+                    <p>Enter your data and click "Calculate System" to see your results.</p>
+                </div>
+                <div id="downloadLink" class="download-section"></div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal for Consumption Help -->
+    <div id="consumptionHelpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Estimate Your Annual Consumption</h3>
+            <p class="modal-intro">You can typically retrieve this data from your utility bill:</p>
+            <ul class="modal-steps">
+                <li>Approximate the average bill cost from the annual bar graph.</li>
+                <li>Approximate the rate from the Electricity Charges details page.</li>
+            </ul>
+            <div class="form-group">
+                <label for="modalMonthlyBill">Average Monthly Utility Bill ($):</label>
+                <input type="number" id="modalMonthlyBill" placeholder="Enter monthly bill" step="0.01" min="0">
+                <small id="helpMonthlyBillText" class="help-text">Don't know your average bill?</small>
+            </div>
+            <div class="form-group">
+                <label for="averageUtilityRate">Average Utility Rate ($/kWh):</label>
+                <input type="number" id="averageUtilityRate" placeholder="e.g., 0.45" step="0.01" min="0">
+                <small id="helpUtilityRateText" class="help-text">Don't know your rate?</small>
+            </div>
+            <div class="button-group">
+                <button type="button" id="calculateConsumptionButton" class="calculate-button">Calculate</button>
+                <button type="button" id="closeHelpModalButton" class="calculate-button close-button">Close</button>
+            </div>
+        </div>
     </div>
 
-    <div class="container">
-        <h1>Solar Calculator</h1>
-        <label for="currentConsumption">Current Annual Consumption (kWh):</label>
-        <input type="number" id="currentConsumption" placeholder="Enter current annual kWh">
+    <!-- Modal for Consumption Estimate Confirmation -->
+    <div id="consumptionEstimateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Consumption Estimate Complete</h3>
+            <p>Your estimated annual consumption has been calculated and filled in.</p>
+            <button type="button" id="closeEstimateModalButton" class="calculate-button">Close</button>
+        </div>
+    </div>
 
-        <label for="desiredProduction">Desired Annual Production (kWh):</label>
-        <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh">
+    <!-- Modal for Utility Rate Estimation -->
+    <div id="utilityRateHelpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Use Our Estimated Rates</h3>
+            <div class="form-group">
+                <label for="utilityProvider">Utility Provider:</label>
+                <select id="utilityProvider">
+                    <option value="PG&E">PG&E</option>
+                    <option value="SDG&E">SDG&E</option>
+                    <option value="SCE">SCE</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="careEnrollment">Enrolled in CARE?</label>
+                <select id="careEnrollment">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                </select>
+            </div>
+            <button type="button" id="estimateRateButton" class="calculate-button">Estimate Rate</button>
+            <button type="button" id="closeUtilityRateModalButton" class="calculate-button" style="background: #e53e3e;">Close</button>
+        </div>
+    </div>
 
-        <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
-        <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
+    <!-- Modal for Utility Rate Estimate Confirmation -->
+    <div id="utilityRateEstimateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Utility Rate has been Estimated</h3>
+            <p>Your estimated utility rate has been filled in.</p>
+            <button type="button" id="closeRateEstimateModalButton" class="calculate-button">Close</button>
+        </div>
+    </div>
 
-        <label for="systemCost">Total System Cost ($):</label>
-        <input type="number" id="systemCost" placeholder="Enter total system cost" min="0" step="0.01" required>
+    <!-- Modal for Monthly Bill Estimation -->
+    <div id="monthlyBillHelpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Estimate Your Monthly Bill</h3>
+            <div class="form-group">
+                <label for="summerBill">Average Summer Electricity Bills ($):</label>
+                <input type="number" id="summerBill" placeholder="Enter summer bill" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label for="winterBill">Average Winter Electricity Bills ($):</label>
+                <input type="number" id="winterBill" placeholder="Enter winter bill" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label for="fallSpringBill">Average Fall and Spring Bills ($):</label>
+                <input type="number" id="fallSpringBill" placeholder="Enter fall/spring bill" step="0.01" min="0">
+            </div>
+            <button type="button" id="estimateBillButton" class="calculate-button">Estimate Bill</button>
+            <button type="button" id="closeMonthlyBillModalButton" class="calculate-button" style="background: #e53e3e;">Close</button>
+        </div>
+    </div>
 
-        <label for="monthlyCost">Monthly Cost with Solar ($):</label>
-        <input type="number" id="monthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01" required>
-
-        <label for="batteryCount">Battery Count:</label>
-        <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0">
-
-        <label for="panelDirection">Panel Direction:</label>
-        <select id="panelDirection">
-            <option value="S">South</option>
-            <option value="SE">Southeast</option>
-            <option value="SW">Southwest</option>
-            <option value="E">East</option>
-            <option value="W">West</option>
-            <option value="NE">Northeast</option>
-            <option value="NW">Northwest</option>
-            <option value="N">North</option>
-            <option value="MIX">Mixed</option>
-        </select>
-
-        <label for="shading">Shading:</label>
-        <select id="shading">
-            <option value="none" selected>None (0%)</option>
-            <option value="light">Light (5%)</option>
-            <option value="medium">Medium (12.5%)</option>
-            <option value="heavy">Heavy (20%)</option>
-        </select>
-
-        <label for="fullAddress">Address:</label>
-        <input type="text" id="fullAddress" placeholder="Start typing address...">
-
-        <button id="calculateButton">Calculate System</button>
-
-        <div id="results"></div>
-        <div id="downloadLink"></div>
+    <!-- Modal for Monthly Bill Estimate Confirmation -->
+    <div id="monthlyBillEstimateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>We have Estimated Your Monthly Bill</h3>
+            <p>Your estimated monthly bill has been filled in.</p>
+            <button type="button" id="closeBillEstimateModalButton" class="calculate-button">Close</button>
+        </div>
     </div>
 
     <!-- Google Maps API Script with Hardcoded Key -->

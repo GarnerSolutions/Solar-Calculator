@@ -71,15 +71,12 @@ app.post("/api/process", async (req, res) => {
 
         const { desiredProduction, currentConsumption, panelDirection, batteryCount, fullAddress, currentMonthlyAverageBill, systemCost, monthlyCost, shading } = req.body;
 
-        // ✅ Basic Validations
+        // ✅ Basic Validations (Make cost-related fields optional)
         if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
             return res.status(400).json({ error: "Invalid desired annual kWh production." });
         }
         if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
             return res.status(400).json({ error: "Invalid current annual kWh consumption." });
-        }
-        if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
-            return res.status(400).json({ error: "Invalid current monthly average bill." });
         }
         if (!fullAddress) {
             return res.status(400).json({ error: "Full address is required." });
@@ -87,10 +84,15 @@ app.post("/api/process", async (req, res) => {
         if (isNaN(batteryCount) || batteryCount < 0) {
             return res.status(400).json({ error: "Battery count must be a non-negative number." });
         }
-        if (isNaN(systemCost) || systemCost < 0) {
+
+        // Optional validations for cost-related fields (only if provided and non-zero)
+        if (currentMonthlyAverageBill && (isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0)) {
+            return res.status(400).json({ error: "Invalid current monthly average bill." });
+        }
+        if (systemCost && (isNaN(systemCost) || systemCost < 0)) {
             return res.status(400).json({ error: "System cost must be a non-negative number." });
         }
-        if (isNaN(monthlyCost) || monthlyCost < 0) {
+        if (monthlyCost && (isNaN(monthlyCost) || monthlyCost < 0)) {
             return res.status(400).json({ error: "Monthly cost with solar must be a non-negative number." });
         }
 
@@ -139,44 +141,54 @@ app.post("/api/process", async (req, res) => {
         const solarSize = calculateSolarSize(desiredProduction, adjustedSolarIrradiance, panelDirection);
         console.log(`🔢 Calculated Solar System Size: ${solarSize.toFixed(2)} kW with adjusted irradiance`);
 
-        // ✅ Calculate System Parameters
-        const params = calculateSystemParams(solarSize, adjustedSolarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost);
-        console.log("✅ Final System Parameters:", params);
-
-        // ✅ Generate PowerPoint
-        const pptUrl = await generatePowerPoint(params);
-        console.log("📄 PowerPoint URL:", pptUrl);
-
-        // Initialize Google Drive API for PDF export
-        const auth = new google.auth.GoogleAuth({
-            keyFile: "credentials.json",
-            scopes: ["https://www.googleapis.com/auth/drive.readonly"],
-        });
-        const drive = google.drive({ version: "v3", auth });
-        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
-
-        const pdfResponse = await drive.files.export({
-            fileId: presentationId,
-            mimeType: "application/pdf",
-        }, { responseType: "arraybuffer" });
-
-        const pdfBuffer = Buffer.from(pdfResponse.data);
-        const fileId = uuidv4();
-        const pdfPath = path.join(tempDir, `${fileId}.pdf`);
-        await fs.promises.writeFile(pdfPath, pdfBuffer);
-        console.log("✅ PDF saved to:", pdfPath);
-
-        // Verify the file exists
-        if (!fs.existsSync(pdfPath)) {
-            console.error("❌ PDF file not found at:", pdfPath);
-            return res.status(500).json({ error: "Failed to save PDF file." });
+        // ✅ Calculate System Parameters (only if cost fields are provided)
+        let params;
+        if (currentMonthlyAverageBill || systemCost || monthlyCost) {
+            params = calculateSystemParams(solarSize, adjustedSolarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill || 0, systemCost || 0, monthlyCost || 0);
+            console.log("✅ Final System Parameters:", params);
+        } else {
+            // Minimal response for "Build System" button
+            params = { solarSize: solarSize.toFixed(1) };
+            console.log("✅ Minimal Parameters (solarSize only):", params);
         }
 
-        // Construct the full PDF view URL
-        const pdfViewUrl = `http://${req.get("host")}/view/pdf?fileId=${fileId}`; // Use http for local testing
-        console.log("✅ PDF View URL:", pdfViewUrl);
+        // ✅ Generate PowerPoint only if cost fields are provided (for full calculation)
+        let pptUrl, pdfViewUrl;
+        if (currentMonthlyAverageBill || systemCost || monthlyCost) {
+            pptUrl = await generatePowerPoint(params);
+            console.log("📄 PowerPoint URL:", pptUrl);
 
-        // Send response with the PDF view URL
+            // Initialize Google Drive API for PDF export
+            const auth = new google.auth.GoogleAuth({
+                keyFile: "credentials.json",
+                scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+            });
+            const drive = google.drive({ version: "v3", auth });
+            const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
+
+            const pdfResponse = await drive.files.export({
+                fileId: presentationId,
+                mimeType: "application/pdf",
+            }, { responseType: "arraybuffer" });
+
+            const pdfBuffer = Buffer.from(pdfResponse.data);
+            const fileId = uuidv4();
+            const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+            await fs.promises.writeFile(pdfPath, pdfBuffer);
+            console.log("✅ PDF saved to:", pdfPath);
+
+            // Verify the file exists
+            if (!fs.existsSync(pdfPath)) {
+                console.error("❌ PDF file not found at:", pdfPath);
+                return res.status(500).json({ error: "Failed to save PDF file." });
+            }
+
+            // Construct the full PDF view URL
+            pdfViewUrl = `http://${req.get("host")}/view/pdf?fileId=${fileId}`; // Use http for local testing
+            console.log("✅ PDF View URL:", pdfViewUrl);
+        }
+
+        // Send response
         res.json({ pptUrl, pdfViewUrl, params });
     } catch (error) {
         console.error("❌ Server Error:", error);
@@ -265,7 +277,7 @@ async function getSolarIrradiance(lat, lng) {
 function calculateSystemParams(solarSize, solarIrradiance, batteryCount, currentConsumption, desiredProduction, currentMonthlyAverageBill, systemCost, monthlyCost) {
     // Ensure batteryCount is a non-negative integer
     batteryCount = isNaN(parseInt(batteryCount)) ? 0 : parseInt(batteryCount);
-    batteryCount = Math.max(0, batteryCount); // Prevent negative values
+    batteryCount = Math.max(0, batteryCount);
 
     // Calculate batterySize directly from batteryCount (each battery is 16 kWh)
     const batterySize = batteryCount * 16;
@@ -275,7 +287,7 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryCount, current
     const calculatedSystemCost = Math.round(solarSize * 2000);
     const finalSystemCost = systemCost > 0 ? systemCost : calculatedSystemCost;
     const batteryCost = Math.round(batterySize * 1000);
-    const totalCost = finalSystemCost + batteryCost; // Use calculated total if no user input, otherwise use user-provided systemCost
+    const totalCost = finalSystemCost + batteryCost; // Correct total cost calculation
 
     const estimatedAnnualProduction = Math.round(solarSize * solarIrradiance * 365 * 0.70);
 
@@ -294,7 +306,7 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryCount, current
         panelCount,
         systemCost: finalSystemCost.toFixed(0),
         batteryCost: batteryCost.toFixed(0),
-        totalCost: totalCost.toFixed(0),
+        totalCost: totalCost.toFixed(0), // Add totalCost to the return object
         currentMonthlyBill: currentMonthlyAverageBill,
         monthlyWithSolar: finalMonthlyWithSolar.toFixed(0),
         estimatedAnnualProduction,
