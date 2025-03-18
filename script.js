@@ -126,8 +126,22 @@ function setupConsumptionHelp() {
         }
 
         const estimatedConsumption = Math.round((monthlyBill / utilityRate) * 12); // Annual consumption
-        document.getElementById("currentConsumption")?.value = estimatedConsumption;
-        document.getElementById("currentMonthlyAverageBill")?.value = monthlyBill.toFixed(2);
+
+        // Null check before assignment
+        const currentConsumptionInput = document.getElementById("currentConsumption");
+        const currentMonthlyAverageBillInput = document.getElementById("currentMonthlyAverageBill");
+
+        if (currentConsumptionInput) {
+            currentConsumptionInput.value = estimatedConsumption;
+        } else {
+            console.error("❌ Current Consumption input not found!");
+        }
+
+        if (currentMonthlyAverageBillInput) {
+            currentMonthlyAverageBillInput.value = monthlyBill.toFixed(2);
+        } else {
+            console.error("❌ Current Monthly Average Bill input not found!");
+        }
 
         helpModal.style.display = "none";
         estimateModal.style.display = "flex";
@@ -137,6 +151,7 @@ function setupConsumptionHelp() {
         estimateModal.style.display = "none";
     });
 }
+
 // ✅ Handle Utility Rate Estimation Modal
 function setupUtilityRateHelp() {
     const helpUtilityRateText = document.getElementById("helpUtilityRateText");
