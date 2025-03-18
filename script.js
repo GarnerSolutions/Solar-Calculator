@@ -9,7 +9,7 @@ const backendUrl = "https://solar-calculator-zb73.onrender.com";
 function initializeAutocomplete() {
     const addressInput = document.getElementById("fullAddress");
     if (!addressInput) {
-        console.error("Address input field not found!");
+        console.error("❌ Address input field not found!");
         return;
     }
 
@@ -21,7 +21,7 @@ function initializeAutocomplete() {
     autocomplete.addListener("place_changed", function () {
         const place = autocomplete.getPlace();
         if (!place.geometry) {
-            console.error("No details available for input:", place);
+            console.error("❌ No details available for input:", place);
             return;
         }
         console.log("📍 Selected Address:", place.formatted_address);
@@ -34,6 +34,11 @@ function setupDropdown() {
     const dropdownContent = document.querySelector(".dropdown-content");
     const dropdownToggle = document.querySelector(".dropdown-toggle");
     const resultsColumn = document.querySelector(".results-column");
+
+    if (!dropdownHeader || !dropdownContent || !dropdownToggle || !resultsColumn) {
+        console.error("❌ One or more dropdown elements not found!");
+        return;
+    }
 
     dropdownHeader.addEventListener("click", () => {
         const isExpanded = dropdownToggle.getAttribute("aria-expanded") === "true";
@@ -53,11 +58,21 @@ function setupDropdown() {
 // ✅ Display Energy Offset Chart
 function displayEnergyOffsetChart(energyOffset, currentConsumption, estimatedProduction) {
     const resultsDiv = document.getElementById("results");
+    if (!resultsDiv) {
+        console.error("❌ Results div not found!");
+        return;
+    }
+
     const chartContainer = document.createElement("div");
     chartContainer.innerHTML = `<canvas id="energyOffsetChart" style="max-width: 500px; margin: 20px auto;"></canvas>`;
     resultsDiv.appendChild(chartContainer);
 
-    const ctx = document.getElementById("energyOffsetChart").getContext("2d");
+    const ctx = document.getElementById("energyOffsetChart")?.getContext("2d");
+    if (!ctx) {
+        console.error("❌ Chart context not found!");
+        return;
+    }
+
     new Chart(ctx, {
         type: "bar",
         data: {
@@ -88,6 +103,11 @@ function setupConsumptionHelp() {
     const closeHelpModalButton = document.getElementById("closeHelpModalButton");
     const closeEstimateModalButton = document.getElementById("closeEstimateModalButton");
 
+    if (!helpText || !helpModal || !estimateModal || !calculateConsumptionButton || !closeHelpModalButton || !closeEstimateModalButton) {
+        console.error("❌ One or more consumption help elements not found!");
+        return;
+    }
+
     helpText.addEventListener("click", () => {
         helpModal.style.display = "flex";
     });
@@ -97,8 +117,8 @@ function setupConsumptionHelp() {
     });
 
     calculateConsumptionButton.addEventListener("click", () => {
-        const utilityRate = Number(document.getElementById("averageUtilityRate").value);
-        const monthlyBill = Number(document.getElementById("modalMonthlyBill").value);
+        const utilityRate = Number(document.getElementById("averageUtilityRate")?.value);
+        const monthlyBill = Number(document.getElementById("modalMonthlyBill")?.value);
 
         if (!utilityRate || utilityRate <= 0 || !monthlyBill || monthlyBill <= 0) {
             alert("Please enter valid values for Utility Rate and Monthly Bill.");
@@ -106,8 +126,8 @@ function setupConsumptionHelp() {
         }
 
         const estimatedConsumption = Math.round((monthlyBill / utilityRate) * 12); // Annual consumption
-        document.getElementById("currentConsumption").value = estimatedConsumption;
-        document.getElementById("currentMonthlyAverageBill").value = monthlyBill.toFixed(2);
+        document.getElementById("currentConsumption")?.value = estimatedConsumption;
+        document.getElementById("currentMonthlyAverageBill")?.value = monthlyBill.toFixed(2);
 
         helpModal.style.display = "none";
         estimateModal.style.display = "flex";
@@ -117,7 +137,6 @@ function setupConsumptionHelp() {
         estimateModal.style.display = "none";
     });
 }
-
 // ✅ Handle Utility Rate Estimation Modal
 function setupUtilityRateHelp() {
     const helpUtilityRateText = document.getElementById("helpUtilityRateText");
@@ -126,6 +145,11 @@ function setupUtilityRateHelp() {
     const estimateRateButton = document.getElementById("estimateRateButton");
     const closeUtilityRateModalButton = document.getElementById("closeUtilityRateModalButton");
     const closeRateEstimateModalButton = document.getElementById("closeRateEstimateModalButton");
+
+    if (!helpUtilityRateText || !utilityRateHelpModal || !utilityRateEstimateModal || !estimateRateButton || !closeUtilityRateModalButton || !closeRateEstimateModalButton) {
+        console.error("❌ One or more utility rate help elements not found!");
+        return;
+    }
 
     const rateTable = {
         "PG&E": { "No": 0.45, "Yes": 0.31 },
@@ -142,11 +166,16 @@ function setupUtilityRateHelp() {
     });
 
     estimateRateButton.addEventListener("click", () => {
-        const utilityProvider = document.getElementById("utilityProvider").value;
-        const careEnrollment = document.getElementById("careEnrollment").value;
+        const utilityProvider = document.getElementById("utilityProvider")?.value;
+        const careEnrollment = document.getElementById("careEnrollment")?.value;
         const estimatedUtilityRate = rateTable[utilityProvider][careEnrollment];
 
-        document.getElementById("averageUtilityRate").value = estimatedUtilityRate.toFixed(4);
+        const averageUtilityRateInput = document.getElementById("averageUtilityRate");
+        if (averageUtilityRateInput) {
+            averageUtilityRateInput.value = estimatedUtilityRate.toFixed(4);
+        } else {
+            console.error("❌ Average Utility Rate input not found!");
+        }
 
         utilityRateHelpModal.style.display = "none";
         utilityRateEstimateModal.style.display = "flex";
@@ -166,6 +195,11 @@ function setupMonthlyBillHelp() {
     const closeMonthlyBillModalButton = document.getElementById("closeMonthlyBillModalButton");
     const closeBillEstimateModalButton = document.getElementById("closeBillEstimateModalButton");
 
+    if (!helpMonthlyBillText || !monthlyBillHelpModal || !monthlyBillEstimateModal || !estimateBillButton || !closeMonthlyBillModalButton || !closeBillEstimateModalButton) {
+        console.error("❌ One or more monthly bill help elements not found!");
+        return;
+    }
+
     helpMonthlyBillText.addEventListener("click", () => {
         monthlyBillHelpModal.style.display = "flex";
     });
@@ -175,9 +209,9 @@ function setupMonthlyBillHelp() {
     });
 
     estimateBillButton.addEventListener("click", () => {
-        const summerBill = Number(document.getElementById("summerBill").value);
-        const winterBill = Number(document.getElementById("winterBill").value);
-        const fallSpringBill = Number(document.getElementById("fallSpringBill").value);
+        const summerBill = Number(document.getElementById("summerBill")?.value);
+        const winterBill = Number(document.getElementById("winterBill")?.value);
+        const fallSpringBill = Number(document.getElementById("fallSpringBill")?.value);
 
         if (!summerBill || summerBill < 0 || !winterBill || winterBill < 0 || !fallSpringBill || fallSpringBill < 0) {
             alert("Please enter valid values for all seasonal bills.");
@@ -185,7 +219,13 @@ function setupMonthlyBillHelp() {
         }
 
         const estimatedMonthlyBill = (summerBill * (3/12)) + (winterBill * (3/12)) + (fallSpringBill * (6/12));
-        document.getElementById("modalMonthlyBill").value = estimatedMonthlyBill.toFixed(2);
+
+        const modalMonthlyBillInput = document.getElementById("modalMonthlyBill");
+        if (modalMonthlyBillInput) {
+            modalMonthlyBillInput.value = estimatedMonthlyBill.toFixed(2);
+        } else {
+            console.error("❌ Modal Monthly Bill input not found!");
+        }
 
         monthlyBillHelpModal.style.display = "none";
         monthlyBillEstimateModal.style.display = "flex";
@@ -205,6 +245,11 @@ async function buildSystem() {
     const shading = shadingElement ? shadingElement.value.toLowerCase() : "none";
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const systemSizeDisplay = document.getElementById("systemSizeDisplay");
+
+    if (!systemSizeDisplay) {
+        console.error("❌ System Size Display not found!");
+        return;
+    }
 
     // Clear previous display
     systemSizeDisplay.innerHTML = "";
@@ -249,7 +294,8 @@ async function buildSystem() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || "Server error");
+            systemSizeDisplay.innerHTML = `<p class="error">Error: ${errorData.error || "Server error"}</p>`;
+            return;
         }
 
         const result = await response.json();
@@ -277,6 +323,11 @@ async function generatePresentation() {
     const dropdownContent = document.querySelector(".dropdown-content");
     const dropdownToggle = document.querySelector(".dropdown-toggle");
     const resultsColumn = document.querySelector(".results-column");
+
+    if (!resultsDiv || !downloadLinkDiv || !dropdownContent || !dropdownToggle || !resultsColumn) {
+        console.error("❌ One or more result elements not found!");
+        return;
+    }
 
     // Collapse the dropdown and center the results
     dropdownToggle.setAttribute("aria-expanded", "false");
@@ -344,7 +395,8 @@ async function generatePresentation() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.error || "Server error");
+            resultsDiv.innerHTML = `<p class="error">Error: ${errorData.error || "Server error"}</p>`;
+            return;
         }
 
         const result = await response.json();
@@ -398,13 +450,128 @@ async function generatePresentation() {
     }
 }
 
+// ✅ Handle Battery Sizing Help Modal
+function setupBatteryHelp() {
+    const helpBatteryText = document.getElementById("helpBatteryText");
+    const batteryHelpModal = document.getElementById("batteryHelpModal");
+    const applyBatteryRecommendationButton = document.getElementById("applyBatteryRecommendationButton");
+    const closeBatteryHelpModalButton = document.getElementById("closeBatteryHelpModalButton");
+    const recommendedBatteryCount = document.getElementById("recommendedBatteryCount");
+    const recommendedBatteryStorage = document.getElementById("recommendedBatteryStorage");
+    const systemSizeDisplay = document.getElementById("systemSizeDisplay");
+
+    if (!helpBatteryText || !batteryHelpModal || !applyBatteryRecommendationButton || !closeBatteryHelpModalButton || !recommendedBatteryCount || !recommendedBatteryStorage || !systemSizeDisplay) {
+        console.error("❌ One or more battery help elements not found!");
+        return;
+    }
+
+    helpBatteryText.addEventListener("click", () => {
+        // Extract solarSize from systemSizeDisplay (e.g., "System Size: 8.2 kW")
+        const systemSizeText = systemSizeDisplay.textContent;
+        const solarSizeMatch = systemSizeText.match(/System Size: (\d+\.\d+) kW/);
+        if (!solarSizeMatch) {
+            alert("Please calculate the system size first by clicking 'Build System'.");
+            return;
+        }
+
+        const solarSize = parseFloat(solarSizeMatch[1]);
+        if (isNaN(solarSize) || solarSize <= 0) {
+            alert("Invalid system size. Please ensure the system size is calculated correctly.");
+            return;
+        }
+
+        // Calculate recommended battery size
+        const targetBatteryStorage = solarSize * 2; // 1:2 ratio
+        const minBatteryStorage = solarSize * 1.9; // 1:1.9 minimum ratio
+        const X_min = Math.ceil(minBatteryStorage / 16); // Minimum number of batteries
+
+        // Target number of batteries before rounding
+        const X_target = targetBatteryStorage / 16;
+        const lowerMultiple = Math.floor(X_target) * 16;
+        const upperMultiple = Math.ceil(X_target) * 16;
+
+        // Apply 10% rule
+        let X;
+        if (targetBatteryStorage >= lowerMultiple * 0.9 && lowerMultiple >= minBatteryStorage) {
+            X = Math.floor(X_target); // Round down if within 10% and meets minimum
+        } else {
+            X = Math.ceil(X_target); // Round up otherwise
+        }
+
+        // Ensure X meets the minimum requirement
+        X = Math.max(X, X_min);
+
+        const Y = X * 16; // Total kWh
+
+        // Update modal with recommendations
+        recommendedBatteryCount.textContent = X;
+        recommendedBatteryStorage.textContent = Y;
+
+        batteryHelpModal.style.display = "flex";
+    });
+
+    applyBatteryRecommendationButton.addEventListener("click", () => {
+        const X = parseInt(recommendedBatteryCount.textContent);
+        const batteryCountInput = document.getElementById("batteryCount");
+        if (batteryCountInput) {
+            batteryCountInput.value = X;
+        } else {
+            console.error("❌ Battery Count input not found!");
+        }
+        batteryHelpModal.style.display = "none";
+    });
+
+    closeBatteryHelpModalButton.addEventListener("click", () => {
+        batteryHelpModal.style.display = "none";
+    });
+}
+
+// ✅ Handle Current Monthly Utility Bill Estimation Modal
+function setupCurrentMonthlyBillHelp() {
+    const helpMonthlyBillText = document.getElementById("helpMonthlyBillText");
+    const currentMonthlyBillHelpModal = document.getElementById("currentMonthlyBillHelpModal");
+    const estimateCurrentBillButton = document.getElementById("estimateCurrentBillButton");
+    const closeCurrentMonthlyBillModalButton = document.getElementById("closeCurrentMonthlyBillModalButton");
+    const currentMonthlyAverageBillInput = document.getElementById("currentMonthlyAverageBill");
+
+    if (!helpMonthlyBillText || !currentMonthlyBillHelpModal || !estimateCurrentBillButton || !closeCurrentMonthlyBillModalButton || !currentMonthlyAverageBillInput) {
+        console.error("❌ One or more current monthly bill help elements not found!");
+        return;
+    }
+
+    helpMonthlyBillText.addEventListener("click", () => {
+        currentMonthlyBillHelpModal.style.display = "flex";
+    });
+
+    closeCurrentMonthlyBillModalButton.addEventListener("click", () => {
+        currentMonthlyBillHelpModal.style.display = "none";
+    });
+
+    estimateCurrentBillButton.addEventListener("click", () => {
+        const summerBill = Number(document.getElementById("currentSummerBill")?.value);
+        const winterBill = Number(document.getElementById("currentWinterBill")?.value);
+        const fallSpringBill = Number(document.getElementById("currentFallSpringBill")?.value);
+
+        if (!summerBill || summerBill < 0 || !winterBill || winterBill < 0 || !fallSpringBill || fallSpringBill < 0) {
+            alert("Please enter valid values for all seasonal bills.");
+            return;
+        }
+
+        const estimatedMonthlyBill = (summerBill * (3/12)) + (winterBill * (3/12)) + (fallSpringBill * (6/12));
+        currentMonthlyAverageBillInput.value = estimatedMonthlyBill.toFixed(2);
+        currentMonthlyBillHelpModal.style.display = "none";
+    });
+}
+
 // ✅ Initialize Autocomplete and Add Event Listeners on Page Load
-window.onload = function () {
+document.addEventListener("DOMContentLoaded", function () {
     initializeAutocomplete();
     setupDropdown();
     setupConsumptionHelp();
     setupUtilityRateHelp();
     setupMonthlyBillHelp();
+    setupBatteryHelp();
+    setupCurrentMonthlyBillHelp();
 
     const calculateButton = document.getElementById("calculateButton");
     if (calculateButton) {
@@ -419,4 +586,4 @@ window.onload = function () {
     } else {
         console.error("❌ Build System button not found!");
     }
-};
+});

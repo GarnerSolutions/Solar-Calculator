@@ -72,10 +72,12 @@
                         <div class="form-group">
                             <label for="batteryCount">Battery Count:</label>
                             <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0">
+                            <small id="helpBatteryText" class="help-text">Need help sizing?</small>
                         </div>
                         <div class="form-group">
                             <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
                             <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
+                            <small id="helpMonthlyBillText" class="help-text">Don't know your average bill?</small>
                         </div>
                         <div class="form-group">
                             <label for="systemCost">Total System Cost ($):</label>
@@ -196,6 +198,27 @@
             <h3>We have Estimated Your Monthly Bill</h3>
             <p>Your estimated monthly bill has been filled in.</p>
             <button type="button" id="closeBillEstimateModalButton" class="calculate-button">Close</button>
+        </div>
+    </div>
+
+    <!-- New Modal for Current Monthly Utility Bill Estimation -->
+    <div id="currentMonthlyBillHelpModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <h3>Estimate Your Monthly Bill</h3>
+            <div class="form-group">
+                <label for="currentSummerBill">Average Summer Electricity Bills ($):</label>
+                <input type="number" id="currentSummerBill" placeholder="Enter summer bill" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label for="currentWinterBill">Average Winter Electricity Bills ($):</label>
+                <input type="number" id="currentWinterBill" placeholder="Enter winter bill" step="0.01" min="0">
+            </div>
+            <div class="form-group">
+                <label for="currentFallSpringBill">Average Fall and Spring Bills ($):</label>
+                <input type="number" id="currentFallSpringBill" placeholder="Enter fall/spring bill" step="0.01" min="0">
+            </div>
+            <button type="button" id="estimateCurrentBillButton" class="calculate-button">Estimate Bill</button>
+            <button type="button" id="closeCurrentMonthlyBillModalButton" class="calculate-button" style="background: #e53e3e;">Close</button>
         </div>
     </div>
 
