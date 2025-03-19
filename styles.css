@@ -1,7 +1,5 @@
 /* ===== Global Styles ===== */
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
 
 * {
     margin: 0;
@@ -26,6 +24,10 @@ body {
     position: sticky;
     top: 0;
     z-index: 10;
+}
+
+.logo-link {
+    text-decoration: none;
 }
 
 .logo {
@@ -74,6 +76,11 @@ body {
     padding: 20px;
     background: #f9fafb;
     cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.dropdown-header:hover {
+    background: #e5e7eb;
 }
 
 .dropdown-title {
@@ -119,8 +126,32 @@ body {
     gap: 20px;
 }
 
-.form-group {
-    text-align: left;
+fieldset.form-group {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 20px;
+    background: #f9fafb;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.3s ease;
+}
+
+fieldset.form-group:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+legend {
+    font-weight: 600;
+    color: #1e3a8a;
+    padding: 0 10px;
+    font-size: 18px;
+    text-transform: uppercase;
+    background: #ffffff;
+    border-radius: 5px;
+}
+
+.input-row {
+    margin-bottom: 15px;
 }
 
 label {
@@ -138,7 +169,7 @@ input, select {
     border-radius: 10px;
     font-size: 16px;
     font-family: 'Montserrat', sans-serif;
-    background-color: #f9fafb;
+    background-color: #ffffff;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -148,7 +179,20 @@ input:focus, select:focus {
     outline: none;
 }
 
+.read-only {
+    background-color: #e2e8f0;
+    color: #4a5568;
+    padding: 10px;
+}
+
 /* ===== Button Styles ===== */
+.button-group {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    flex-wrap: wrap;
+}
+
 .calculate-button {
     padding: 14px;
     background: linear-gradient(90deg, #3b82f6, #1e40af);
@@ -171,6 +215,13 @@ input:focus, select:focus {
     transform: translateY(0);
 }
 
+.calculate-button:disabled {
+    background-color: #cccccc;
+    color: #dddddd;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
 /* ===== Results Styles ===== */
 .results-section {
     background: #ffffff;
@@ -178,7 +229,10 @@ input:focus, select:focus {
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
     text-align: center;
-    transition: transform 0.5s ease;
+}
+
+.results-card {
+    padding: 20px;
 }
 
 .results-title {
@@ -189,31 +243,36 @@ input:focus, select:focus {
     margin-bottom: 20px;
 }
 
-.results-section .section-title {
+.result-section {
+    margin-bottom: 20px;
+}
+
+.result-section h3.section-title {
     color: #1e3a8a;
     font-size: 20px;
     font-weight: 600;
     text-transform: uppercase;
     margin: 20px 0 10px;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 2px solid #3b82f6;
     padding-bottom: 5px;
+    display: inline-block;
 }
 
-.results-section ul {
+.result-section ul {
     list-style: none;
     text-align: left;
     padding: 0 20px;
     margin: 10px 0;
 }
 
-.results-section li {
+.result-section li {
     font-size: 16px;
     color: #4a5568;
     margin: 8px 0;
     line-height: 1.5;
 }
 
-.results-section strong {
+.result-section strong {
     color: #1e3a8a;
     font-weight: 600;
 }
@@ -222,27 +281,6 @@ input:focus, select:focus {
 .download-section {
     text-align: center;
     display: none;
-}
-
-.download-proposal {
-    display: inline-block;
-    padding: 12px 24px;
-    background: linear-gradient(90deg, #3b82f6, #1e40af);
-    color: #ffffff;
-    text-decoration: none;
-    text-transform: uppercase;
-    font-weight: 600;
-    border-radius: 10px;
-    transition: transform 0.3s ease, background 0.3s ease;
-}
-
-.download-proposal:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(90deg, #1e40af, #3b82f6);
-}
-
-.download-proposal:active {
-    transform: translateY(0);
 }
 
 /* ===== Error Styles ===== */
@@ -265,6 +303,112 @@ input:focus, select:focus {
     100% { transform: translateX(0); }
 }
 
+/* ===== System Size Display ===== */
+.system-size {
+    margin: 15px 0;
+    padding: 10px;
+    font-size: 16px;
+    color: #1e3a8a;
+    font-weight: 600;
+    text-align: center;
+    background: #e5e7eb;
+    border-radius: 8px;
+}
+
+/* ===== Help Text Styles ===== */
+.help-text {
+    font-size: 12px;
+    color: #3b82f6;
+    text-decoration: none;
+    cursor: pointer;
+    margin-top: 5px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.help-text:hover {
+    color: #1e40af;
+    text-decoration: underline;
+}
+
+/* ===== Modal Styles ===== */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #f3f4f6;
+    padding: 20px 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    position: relative;
+}
+
+.modal-content h3 {
+    color: #1e3a8a;
+    font-size: 24px;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.modal-content p {
+    color: #374151;
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.modal-content p.modal-intro {
+    margin-top: 0;
+}
+
+.modal-content p strong {
+    color: #1e3a8a;
+    font-weight: 700;
+}
+
+.modal-content .form-group {
+    margin-bottom: 20px;
+}
+
+.modal-content .form-group label {
+    display: block;
+    color: #2d3748;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.modal-content .form-group input,
+.modal-content .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 16px;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    background-color: #ffffff;
+}
+
+.modal-content .form-group input:focus,
+.modal-content .form-group select:focus {
+    border-color: #3b82f6;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
 /* ===== Media Queries ===== */
 @media (max-width: 768px) {
     .main-container {
@@ -285,6 +429,10 @@ input:focus, select:focus {
         font-size: 20px;
     }
 
+    legend {
+        font-size: 16px;
+    }
+
     label {
         font-size: 14px;
         margin-bottom: 6px;
@@ -300,6 +448,11 @@ input:focus, select:focus {
         font-size: 14px;
     }
 
+    .system-size {
+        font-size: 14px;
+        padding: 8px;
+    }
+
     .results-section {
         padding: 20px;
     }
@@ -308,264 +461,24 @@ input:focus, select:focus {
         font-size: 24px;
     }
 
-    .results-section .section-title {
+    .result-section h3.section-title {
         font-size: 18px;
     }
 
-    .results-section li {
+    .result-section li {
         font-size: 14px;
         margin: 6px 0;
     }
 
-    .download-proposal {
-        padding: 10px 20px;
+    .modal-content {
+        padding: 15px;
+    }
+
+    .modal-content h3 {
+        font-size: 20px;
+    }
+
+    .modal-content p {
         font-size: 14px;
     }
-
-    .error {
-        font-size: 12px;
-        padding: 8px;
-    }
 }
-
-/* ===== Modal Styles ===== */
-.modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-}
-
-.modal-content {
-    background: #ffffff;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-    width: 90%;
-    max-width: 450px;
-    text-align: left;
-}
-
-.modal-content h3 {
-    color: #1e3a8a;
-    font-size: 24px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    text-align: center;
-}
-
-.modal-intro {
-    color: #4a5568;
-    font-size: 16px;
-    margin-bottom: 10px;
-}
-
-.modal-steps {
-    list-style-type: decimal;
-    padding-left: 20px;
-    margin-bottom: 20px;
-}
-
-.modal-steps li {
-    color: #4a5568;
-    font-size: 15px;
-    line-height: 1.5;
-    margin-bottom: 8px;
-}
-
-.modal-content .form-group {
-    margin-bottom: 20px;
-}
-
-.modal-content .form-group label {
-    display: block;
-    color: #2d3748;
-    font-weight: 600;
-    margin-bottom: 5px;
-}
-
-.modal-content .form-group input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 16px;
-    box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif; /* Match main form */
-    background-color: #f9fafb; /* Match main form */
-}
-
-.modal-content .form-group input:focus {
-    border-color: #3b82f6;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
-}
-
-.help-text {
-    font-size: 12px;
-    color: #3b82f6;
-    text-decoration: underline;
-    cursor: pointer;
-    margin-top: 5px;
-    display: block;
-}
-
-.help-text:hover {
-    color: #1e40af;
-}
-
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-}
-
-.modal-content .calculate-button {
-    flex: 1;
-    padding: 12px;
-    background: linear-gradient(90deg, #3b82f6, #1e40af); /* Match main button */
-    color: #ffffff;
-    border: none;
-    border-radius: 10px; /* Match main button */
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: transform 0.3s ease, background 0.3s ease; /* Match main button */
-}
-
-.modal-content .calculate-button:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(90deg, #1e40af, #3b82f6);
-}
-
-.modal-content .close-button {
-    background: #e53e3e;
-}
-
-.modal-content .close-button:hover {
-    transform: translateY(-2px);
-    background: #c53030;
-}
-
-/* ===== System Size Display ===== */
-.system-size {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #1e3a8a;
-    font-weight: 600;
-    text-align: center;
-}
-.modal-content p strong {
-    color: #1e3a8a; /* Match your theme's blue */
-    font-weight: 700;
-}
-/* ===== Modal Base Styles ===== */
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.modal-content {
-    background-color: #f3f4f6; /* Light gray background to match your theme */
-    padding: 20px 30px; /* Increased padding for better spacing */
-    border-radius: 10px; /* Rounded corners */
-    width: 90%; /* Responsive width */
-    max-width: 500px; /* Max width for larger screens */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    text-align: left; /* Left-align text for readability */
-    position: relative;
-}
-
-.modal-content h3 {
-    color: #1e3a8a; /* Theme blue for title */
-    font-size: 24px;
-    margin-bottom: 15px;
-    font-weight: 600;
-}
-
-.modal-content p {
-    color: #374151; /* Dark gray for text */
-    font-size: 16px;
-    line-height: 1.5;
-    margin-bottom: 15px;
-}
-
-.modal-content p.modal-intro {
-    margin-top: 0;
-}
-
-.modal-content p strong {
-    color: #1e3a8a; /* Blue for bolded recommendations */
-    font-weight: 700;
-}
-
-/* ===== Button Group Styles ===== */
-.button-group {
-    display: flex;
-    justify-content: space-between; /* Space between buttons */
-    margin-top: 20px; /* Space above buttons */
-}
-
-.calculate-button {
-    background-color: #1e3a8a; /* Theme blue */
-    color: white;
-    border: none;
-    padding: 10px 20px; /* Consistent padding */
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: 48%; /* Equal width for buttons */
-}
-
-.calculate-button:hover {
-    background-color: #163a6a; /* Darker blue on hover */
-}
-
-.close-button {
-    background-color: #e53e3e; /* Red for close button */
-}
-
-.close-button:hover {
-    background-color: #c53030; /* Darker red on hover */
-}
-
-/* ===== Help Text Styles ===== */
-.help-text {
-    color: #3b82f6; /* Lighter blue for help text */
-    font-size: 14px;
-    cursor: pointer;
-    display: block;
-    margin-top: 5px;
-}
-
-.help-text:hover {
-    text-decoration: underline;
-}
-
-/* ===== System Size Display ===== */
-.system-size {
-    margin-top: 10px;
-    font-size: 16px;
-    color: #1e3a8a;
-    font-weight: 600;
-    text-align: center;
-}
-
-/* ===== Existing Form and Layout Styles (Unchanged) ===== */
-/* Keep your existing .header, .main-container, .input-column, etc., styles */

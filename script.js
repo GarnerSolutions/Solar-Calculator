@@ -25,8 +25,17 @@ function initializeAutocomplete() {
             return;
         }
         console.log("📍 Selected Address:", place.formatted_address);
+        // Manually dispatch a change event to ensure button state updates
+        const changeEvent = new Event("change");
+        addressInput.dispatchEvent(changeEvent);
+        updateBuildSystemButtonState(); // Update button state when address changes
     });
 }
+
+// ✅ Callback function for Google Maps API
+window.initMap = function() {
+    initializeAutocomplete();
+};
 
 // ✅ Toggle Dropdown Functionality
 function setupDropdown() {
@@ -55,45 +64,6 @@ function setupDropdown() {
     });
 }
 
-// ✅ Display Energy Offset Chart
-function displayEnergyOffsetChart(energyOffset, currentConsumption, estimatedProduction) {
-    const resultsDiv = document.getElementById("results");
-    if (!resultsDiv) {
-        console.error("❌ Results div not found!");
-        return;
-    }
-
-    const chartContainer = document.createElement("div");
-    chartContainer.innerHTML = `<canvas id="energyOffsetChart" style="max-width: 500px; margin: 20px auto;"></canvas>`;
-    resultsDiv.appendChild(chartContainer);
-
-    const ctx = document.getElementById("energyOffsetChart")?.getContext("2d");
-    if (!ctx) {
-        console.error("❌ Chart context not found!");
-        return;
-    }
-
-    new Chart(ctx, {
-        type: "bar",
-        data: {
-            labels: ["Current Consumption", "Estimated Production"],
-            datasets: [{
-                label: "Energy (kWh)",
-                data: [currentConsumption, estimatedProduction],
-                backgroundColor: ["#1e3a8a", "#3b82f6"],
-            }]
-        },
-        options: {
-            scales: {
-                y: { beginAtZero: true, title: { display: true, text: "kWh" } }
-            },
-            plugins: {
-                title: { display: true, text: `Energy Offset: ${energyOffset}` }
-            }
-        }
-    });
-}
-
 // ✅ Handle Consumption Estimation Modal
 function setupConsumptionHelp() {
     const helpText = document.getElementById("helpConsumptionText");
@@ -104,7 +74,7 @@ function setupConsumptionHelp() {
     const closeEstimateModalButton = document.getElementById("closeEstimateModalButton");
 
     if (!helpText || !helpModal || !estimateModal || !calculateConsumptionButton || !closeHelpModalButton || !closeEstimateModalButton) {
-        console.error("❌ One or more consumption help elements not found!");
+        console.warn("⚠️ One or more consumption help elements not found! Help feature may be unavailable.");
         return;
     }
 
@@ -125,9 +95,8 @@ function setupConsumptionHelp() {
             return;
         }
 
-        const estimatedConsumption = Math.round((monthlyBill / utilityRate) * 12); // Annual consumption
+        const estimatedConsumption = Math.round((monthlyBill / utilityRate) * 12);
 
-        // Null check before assignment
         const currentConsumptionInput = document.getElementById("currentConsumption");
         const currentMonthlyAverageBillInput = document.getElementById("currentMonthlyAverageBill");
 
@@ -145,10 +114,14 @@ function setupConsumptionHelp() {
 
         helpModal.style.display = "none";
         estimateModal.style.display = "flex";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
     });
 
     closeEstimateModalButton.addEventListener("click", () => {
         estimateModal.style.display = "none";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
     });
 }
 
@@ -162,7 +135,7 @@ function setupUtilityRateHelp() {
     const closeRateEstimateModalButton = document.getElementById("closeRateEstimateModalButton");
 
     if (!helpUtilityRateText || !utilityRateHelpModal || !utilityRateEstimateModal || !estimateRateButton || !closeUtilityRateModalButton || !closeRateEstimateModalButton) {
-        console.error("❌ One or more utility rate help elements not found!");
+        console.warn("⚠️ One or more utility rate help elements not found! Help feature may be unavailable.");
         return;
     }
 
@@ -211,7 +184,7 @@ function setupMonthlyBillHelp() {
     const closeBillEstimateModalButton = document.getElementById("closeBillEstimateModalButton");
 
     if (!helpMonthlyBillText || !monthlyBillHelpModal || !monthlyBillEstimateModal || !estimateBillButton || !closeMonthlyBillModalButton || !closeBillEstimateModalButton) {
-        console.error("❌ One or more monthly bill help elements not found!");
+        console.warn("⚠️ One or more monthly bill help elements not found! Help feature may be unavailable.");
         return;
     }
 
@@ -251,7 +224,7 @@ function setupMonthlyBillHelp() {
     });
 }
 
-// ✅ Handle Build System Button (Calculate Solar Size Only)
+// ✅ Handle Build System Button (Calculate Solar Size)
 async function buildSystem() {
     const currentConsumption = Number(document.getElementById("currentConsumption")?.value);
     const desiredProduction = Number(document.getElementById("desiredProduction")?.value);
@@ -260,14 +233,17 @@ async function buildSystem() {
     const shading = shadingElement ? shadingElement.value.toLowerCase() : "none";
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const systemSizeDisplay = document.getElementById("systemSizeDisplay");
+    const addBatteriesButton = document.getElementById("addBatteriesButton");
+    const salesCommission = Number(document.getElementById("salesCommission")?.value) || 0;
 
-    if (!systemSizeDisplay) {
-        console.error("❌ System Size Display not found!");
+    if (!systemSizeDisplay || !addBatteriesButton) {
+        console.error("❌ System Size Display or Add Batteries Button not found!");
         return;
     }
 
     // Clear previous display
     systemSizeDisplay.innerHTML = "";
+    document.getElementById("totalBatterySizeDisplay").innerHTML = "";
 
     // Input Validation
     if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
@@ -293,10 +269,11 @@ async function buildSystem() {
         panelDirection,
         shading,
         fullAddress,
-        batteryCount: 0, // Default for initial calculation
-        currentMonthlyAverageBill: 0, // Placeholder
-        systemCost: 0, // Placeholder
-        monthlyCost: 0 // Placeholder
+        batteryCount: 0,
+        currentMonthlyAverageBill: 0,
+        systemCost: 0,
+        monthlyCost: 0,
+        salesCommission
     };
 
     try {
@@ -316,6 +293,13 @@ async function buildSystem() {
         const result = await response.json();
         const solarSize = result.params.solarSize;
         systemSizeDisplay.innerHTML = `System Size: ${solarSize} kW`;
+        const systemSizeInput = document.getElementById("systemSizeInput");
+        if (systemSizeInput) {
+            systemSizeInput.value = solarSize;
+        }
+        // Ensure Add Batteries button is enabled after successful build
+        addBatteriesButton.disabled = false;
+        console.log("Add Batteries Button State: Enabled after build");
     } catch (error) {
         systemSizeDisplay.innerHTML = `<p class="error">Error: ${error.message}</p>`;
     }
@@ -333,6 +317,7 @@ async function generatePresentation() {
     const fullAddress = document.getElementById("fullAddress")?.value.trim();
     const systemCost = Number(document.getElementById("systemCost")?.value) || 0;
     const monthlyCost = Number(document.getElementById("monthlyCost")?.value) || 0;
+    const salesCommission = Number(document.getElementById("salesCommission")?.value) || 0;
     const resultsDiv = document.getElementById("results");
     const downloadLinkDiv = document.getElementById("downloadLink");
     const dropdownContent = document.querySelector(".dropdown-content");
@@ -350,7 +335,7 @@ async function generatePresentation() {
     resultsColumn.style.margin = "0";
     resultsColumn.style.width = "100%";
 
-    // Show loading state
+    // Clear existing content and show loading state
     resultsDiv.innerHTML = "<p>Loading...</p>";
     downloadLinkDiv.innerHTML = "";
     downloadLinkDiv.style.display = "none";
@@ -376,6 +361,10 @@ async function generatePresentation() {
         resultsDiv.innerHTML = `<p class="error">Please enter a valid battery count (must be a non-negative number).</p>`;
         return;
     }
+    if (isNaN(salesCommission) || salesCommission < 0) {
+        resultsDiv.innerHTML = `<p class="error">Please enter a valid commission (must be a non-negative number).</p>`;
+        return;
+    }
     if (isNaN(systemCost) || systemCost < 0) {
         resultsDiv.innerHTML = `<p class="error">Please enter a valid system cost (must be a non-negative number).</p>`;
         return;
@@ -398,7 +387,8 @@ async function generatePresentation() {
         shading,
         fullAddress,
         systemCost,
-        monthlyCost
+        monthlyCost,
+        salesCommission
     };
 
     try {
@@ -415,47 +405,52 @@ async function generatePresentation() {
         }
 
         const result = await response.json();
+        const solarSize = result.params.solarSize;
+        const totalBatterySize = batteryCount * 16; // Assuming 16 kWh per battery
+        const salesRedline = Number(document.getElementById("salesRedline")?.value) || 0;
+        const adderCosts = Number(document.getElementById("adderCosts")?.value) || 0;
+
+        const solarCost = solarSize * salesRedline;
+        const batteryCost = totalBatterySize * 1000;
+        const totalCost = solarCost + batteryCost + adderCosts + salesCommission;
 
         resultsDiv.innerHTML = `
-            <h2 class="results-title">Your Solar Results</h2>
-            <div class="result-section">
-                <h3 class="section-title">System Overview</h3>
-                <ul>
-                    <li>Solar System Size: <strong>${result.params.solarSize} kW</strong></li>
-                    <li>Battery Size: <strong>${result.params.batterySize}</strong></li>
-                    <li>Number of Panels: <strong>${result.params.panelCount}</strong></li>
-                </ul>
-            </div>
-            <div class="result-section">
-                <h3 class="section-title">Production</h3>
-                <ul>
-                    <li>Estimated Annual Production: <strong>${Number(result.params.estimatedAnnualProduction).toLocaleString()} kWh</strong></li>
-                </ul>
-            </div>
-            <div class="result-section">
-                <h3 class="section-title">Energy Savings</h3>
-                <ul>
-                    <li>Energy Offset: <strong>${result.params.energyOffset}</strong></li>
-                </ul>
-            </div>
-            <div class="result-section">
-                <h3 class="section-title">Cost Summary</h3>
-                <ul>
-                    <li>Solar System Cost: <strong>$${Number(result.params.systemCost).toLocaleString()}</strong></li>
-                    <li>Battery Cost: <strong>$${Number(result.params.batteryCost).toLocaleString()}</strong></li>
-                    <li>Total Cost: <strong>$${Number(result.params.totalCost).toLocaleString()}</strong></li>
-                    <li>Monthly Cost with Solar: <strong>$${Number(monthlyCost).toLocaleString()}</strong></li>
-                </ul>
+            <div class="results-card">
+                <h2 class="results-title">Your Solar Results</h2>
+                <div class="result-section">
+                    <h3 class="section-title">System Overview</h3>
+                    <ul>
+                        <li>Solar System Size: <strong>${solarSize} kW</strong></li>
+                        <li>Battery Size: <strong>${totalBatterySize} kWh (${batteryCount} x 16 kWh)</strong></li>
+                        <li>Number of Panels: <strong>${result.params.panelCount}</strong></li>
+                    </ul>
+                </div>
+                <div class="result-section">
+                    <h3 class="section-title">Energy Overview</h3>
+                    <ul>
+                        <li>Estimated Annual Production: <strong>${Number(result.params.estimatedAnnualProduction).toLocaleString()} kWh</strong></li>
+                        <li>Annual Consumption Before Solar: <strong>${Number(currentConsumption).toLocaleString()} kWh</strong></li>
+                        <li>Energy Offset: <strong>${result.params.energyOffset}</strong></li>
+                    </ul>
+                </div>
+                <div class="result-section">
+                    <h3 class="section-title">Cost Summary</h3>
+                    <ul>
+                        <li>Solar Cost: <strong>$${Number(solarCost).toLocaleString()}</strong></li>
+                        <li>Battery Cost: <strong>$${Number(batteryCost).toLocaleString()}</strong></li>
+                        <li>Adders Cost: <strong>$${Number(adderCosts).toLocaleString()}</strong></li>
+                        <li>Commission: <strong>$${Number(salesCommission).toLocaleString()}</strong></li>
+                        <li>Total Cost: <strong>$${Number(totalCost).toLocaleString()}</strong></li>
+                        <li>Monthly Cost with Solar: <strong>$${Number(monthlyCost).toLocaleString()}</strong></li>
+                    </ul>
+                </div>
             </div>
         `;
 
-        displayEnergyOffsetChart(result.params.energyOffset, currentConsumption, result.params.estimatedAnnualProduction);
-
         if (result.pdfViewUrl) {
-            downloadLinkDiv.innerHTML = `
-                <a href="${result.pdfViewUrl}" target="_blank" class="download-proposal">Download Proposal</a>
-            `;
+            downloadLinkDiv.innerHTML = `<button id="downloadProposal" class="calculate-button">Download Proposal</button>`;
             downloadLinkDiv.style.display = "block";
+            document.getElementById("downloadProposal").addEventListener("click", () => window.open(result.pdfViewUrl, "_blank"));
         } else {
             downloadLinkDiv.innerHTML = `<p class="error">Error: PDF could not be opened.</p>`;
             downloadLinkDiv.style.display = "block";
@@ -469,19 +464,26 @@ async function generatePresentation() {
 function setupBatteryHelp() {
     const helpBatteryText = document.getElementById("helpBatteryText");
     const batteryHelpModal = document.getElementById("batteryHelpModal");
-    const applyBatteryRecommendationButton = document.getElementById("applyBatteryRecommendationButton");
-    const closeBatteryHelpModalButton = document.getElementById("closeBatteryHelpModalButton");
+    const applyRecommendationButton = document.getElementById("applyRecommendationButton");
+    const overwriteRecommendationButton = document.getElementById("overwriteRecommendationButton");
     const recommendedBatteryCount = document.getElementById("recommendedBatteryCount");
     const recommendedBatteryStorage = document.getElementById("recommendedBatteryStorage");
     const systemSizeDisplay = document.getElementById("systemSizeDisplay");
+    const batteryCountModal = document.getElementById("batteryCountModal");
+    const batteryQuantity = document.getElementById("batteryQuantity");
+    const totalStorage = document.getElementById("totalStorage");
+    const applyBatteriesButton = document.getElementById("applyBatteriesButton");
+    const batteryCountInput = document.getElementById("batteryCount");
+    const totalBatterySizeDisplay = document.getElementById("totalBatterySizeDisplay");
 
-    if (!helpBatteryText || !batteryHelpModal || !applyBatteryRecommendationButton || !closeBatteryHelpModalButton || !recommendedBatteryCount || !recommendedBatteryStorage || !systemSizeDisplay) {
-        console.error("❌ One or more battery help elements not found!");
+    if (!helpBatteryText || !batteryHelpModal || !applyRecommendationButton || !overwriteRecommendationButton || !recommendedBatteryCount || !recommendedBatteryStorage || !systemSizeDisplay || !batteryCountModal || !batteryQuantity || !totalStorage || !applyBatteriesButton || !batteryCountInput || !totalBatterySizeDisplay) {
+        console.warn("⚠️ One or more battery help elements not found! Add Batteries feature may be unavailable.");
         return;
     }
 
-    helpBatteryText.addEventListener("click", () => {
-        // Extract solarSize from systemSizeDisplay (e.g., "System Size: 8.2 kW")
+    // Function to open the battery help modal
+    const openBatteryHelpModal = () => {
+        // Check if system size is calculated
         const systemSizeText = systemSizeDisplay.textContent;
         const solarSizeMatch = systemSizeText.match(/System Size: (\d+\.\d+) kW/);
         if (!solarSizeMatch) {
@@ -496,26 +498,8 @@ function setupBatteryHelp() {
         }
 
         // Calculate recommended battery size
-        const targetBatteryStorage = solarSize * 2; // 1:2 ratio
-        const minBatteryStorage = solarSize * 1.9; // 1:1.9 minimum ratio
-        const X_min = Math.ceil(minBatteryStorage / 16); // Minimum number of batteries
-
-        // Target number of batteries before rounding
-        const X_target = targetBatteryStorage / 16;
-        const lowerMultiple = Math.floor(X_target) * 16;
-        const upperMultiple = Math.ceil(X_target) * 16;
-
-        // Apply 10% rule
-        let X;
-        if (targetBatteryStorage >= lowerMultiple * 0.9 && lowerMultiple >= minBatteryStorage) {
-            X = Math.floor(X_target); // Round down if within 10% and meets minimum
-        } else {
-            X = Math.ceil(X_target); // Round up otherwise
-        }
-
-        // Ensure X meets the minimum requirement
-        X = Math.max(X, X_min);
-
+        const targetBatteryStorage = solarSize * 2; // 2:1 ratio
+        const X = Math.ceil(targetBatteryStorage / 16); // Number of batteries (16 kWh each)
         const Y = X * 16; // Total kWh
 
         // Update modal with recommendations
@@ -523,38 +507,83 @@ function setupBatteryHelp() {
         recommendedBatteryStorage.textContent = Y;
 
         batteryHelpModal.style.display = "flex";
-    });
+    };
 
-    applyBatteryRecommendationButton.addEventListener("click", () => {
+    // Attach event listener to "Add Batteries" button
+    const addBatteriesButton = document.getElementById("addBatteriesButton");
+    if (addBatteriesButton) {
+        addBatteriesButton.addEventListener("click", openBatteryHelpModal);
+    } else {
+        console.error("❌ Add Batteries button not found!");
+    }
+
+    // Attach event listener to "Need help sizing?" link
+    helpBatteryText.addEventListener("click", openBatteryHelpModal);
+
+    applyRecommendationButton.addEventListener("click", () => {
         const X = parseInt(recommendedBatteryCount.textContent);
-        const batteryCountInput = document.getElementById("batteryCount");
         if (batteryCountInput) {
             batteryCountInput.value = X;
-        } else {
-            console.error("❌ Battery Count input not found!");
+            if (totalBatterySizeDisplay) {
+                totalBatterySizeDisplay.innerHTML = `Total Battery Size: ${X * 16} kWh`;
+            }
+            const batterySizeInput = document.getElementById("batterySizeInput");
+            if (batterySizeInput) {
+                batterySizeInput.value = X * 16;
+            }
+            window.cachedBatteryCount = X;
         }
         batteryHelpModal.style.display = "none";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
     });
 
-    closeBatteryHelpModalButton.addEventListener("click", () => {
+    overwriteRecommendationButton.addEventListener("click", () => {
         batteryHelpModal.style.display = "none";
+        batteryCountModal.style.display = "flex";
+        updateTotalStorage();
+    });
+
+    batteryQuantity.addEventListener("change", updateTotalStorage);
+
+    function updateTotalStorage() {
+        const quantity = parseInt(batteryQuantity.value) || 0;
+        totalStorage.textContent = quantity * 16;
+    }
+
+    applyBatteriesButton.addEventListener("click", () => {
+        const quantity = parseInt(batteryQuantity.value) || 0;
+        if (batteryCountInput) {
+            batteryCountInput.value = quantity;
+            if (totalBatterySizeDisplay) {
+                totalBatterySizeDisplay.innerHTML = `Total Battery Size: ${quantity * 16} kWh`;
+            }
+            const batterySizeInput = document.getElementById("batterySizeInput");
+            if (batterySizeInput) {
+                batterySizeInput.value = quantity * 16;
+            }
+            window.cachedBatteryCount = quantity;
+        }
+        batteryCountModal.style.display = "none";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
     });
 }
 
 // ✅ Handle Current Monthly Utility Bill Estimation Modal
 function setupCurrentMonthlyBillHelp() {
-    const helpMonthlyBillText = document.getElementById("helpMonthlyBillText");
+    const helpCurrentMonthlyBillText = document.getElementById("helpCurrentMonthlyBillText");
     const currentMonthlyBillHelpModal = document.getElementById("currentMonthlyBillHelpModal");
     const estimateCurrentBillButton = document.getElementById("estimateCurrentBillButton");
     const closeCurrentMonthlyBillModalButton = document.getElementById("closeCurrentMonthlyBillModalButton");
     const currentMonthlyAverageBillInput = document.getElementById("currentMonthlyAverageBill");
 
-    if (!helpMonthlyBillText || !currentMonthlyBillHelpModal || !estimateCurrentBillButton || !closeCurrentMonthlyBillModalButton || !currentMonthlyAverageBillInput) {
-        console.error("❌ One or more current monthly bill help elements not found!");
+    if (!helpCurrentMonthlyBillText || !currentMonthlyBillHelpModal || !estimateCurrentBillButton || !closeCurrentMonthlyBillModalButton || !currentMonthlyAverageBillInput) {
+        console.warn("⚠️ One or more current monthly bill help elements not found! Help feature may be unavailable.");
         return;
     }
 
-    helpMonthlyBillText.addEventListener("click", () => {
+    helpCurrentMonthlyBillText.addEventListener("click", () => {
         currentMonthlyBillHelpModal.style.display = "flex";
     });
 
@@ -575,18 +604,134 @@ function setupCurrentMonthlyBillHelp() {
         const estimatedMonthlyBill = (summerBill * (3/12)) + (winterBill * (3/12)) + (fallSpringBill * (6/12));
         currentMonthlyAverageBillInput.value = estimatedMonthlyBill.toFixed(2);
         currentMonthlyBillHelpModal.style.display = "none";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
     });
+}
+
+// ✅ Handle System Cost Calculator Modal
+function setupSystemCostHelp() {
+    const helpSystemCostText = document.getElementById("helpSystemCostText");
+    const systemCostHelpModal = document.getElementById("systemCostHelpModal");
+    const calculateSystemCostButton = document.getElementById("calculateSystemCostButton");
+    const closeSystemCostModalButton = document.getElementById("closeSystemCostModalButton");
+    const salesRedlineInput = document.getElementById("salesRedline");
+    const systemSizeInput = document.getElementById("systemSizeInput");
+    const batterySizeInput = document.getElementById("batterySizeInput");
+    const adderCostsInput = document.getElementById("adderCosts");
+    const salesCommissionInput = document.getElementById("salesCommissionModal");
+    const additionalNotesInput = document.getElementById("additionalNotes");
+    const systemCostInput = document.getElementById("systemCost");
+
+    if (!helpSystemCostText || !systemCostHelpModal || !calculateSystemCostButton || !closeSystemCostModalButton || !salesRedlineInput || !systemSizeInput || !batterySizeInput || !adderCostsInput || !salesCommissionInput || !additionalNotesInput || !systemCostInput) {
+        console.warn("⚠️ One or more system cost help elements not found! Help feature may be unavailable.");
+        return;
+    }
+
+    helpSystemCostText.addEventListener("click", () => {
+        systemCostHelpModal.style.display = "flex";
+    });
+
+    closeSystemCostModalButton.addEventListener("click", () => {
+        systemCostHelpModal.style.display = "none";
+    });
+
+    calculateSystemCostButton.addEventListener("click", () => {
+        const salesRedline = Number(salesRedlineInput.value) || 0;
+        const systemSize = Number(systemSizeInput.value) || 0;
+        const batterySize = Number(batterySizeInput.value) || 0;
+        const adderCosts = Number(adderCostsInput.value) || 0;
+        const salesCommission = Number(salesCommissionInput.value) || 0;
+        const additionalNotes = additionalNotesInput.value || "";
+
+        // Calculate battery cost: total battery size in kWh * 1000
+        const batteryCost = batterySize * 1000;
+        // Calculate system cost: (solarSize * salesRedline) + batteryCost + adderCosts + salesCommission
+        const baseCost = (systemSize * salesRedline) + batteryCost + adderCosts + salesCommission;
+        systemCostInput.value = baseCost.toFixed(2);
+
+        systemCostHelpModal.style.display = "none";
+        updateBuildSystemButtonState();
+        updateCalculateButtonState();
+    });
+}
+
+// ✅ Function to check if all required fields have values and enable/disable Calculate System button
+function updateCalculateButtonState() {
+    const calculateButton = document.getElementById("calculateButton");
+    const currentConsumption = document.getElementById("currentConsumption")?.value.trim();
+    const desiredProduction = document.getElementById("desiredProduction")?.value.trim();
+    const fullAddress = document.getElementById("fullAddress")?.value.trim();
+    const currentMonthlyAverageBill = document.getElementById("currentMonthlyAverageBill")?.value.trim();
+    const systemCost = document.getElementById("systemCost")?.value.trim();
+    const monthlyCost = document.getElementById("monthlyCost")?.value.trim();
+    const salesCommission = document.getElementById("salesCommission")?.value.trim();
+
+    const allFieldsFilled = 
+        currentConsumption && 
+        desiredProduction && 
+        fullAddress && 
+        currentMonthlyAverageBill && 
+        systemCost && 
+        monthlyCost && 
+        salesCommission;
+
+    if (calculateButton) {
+        calculateButton.disabled = !allFieldsFilled;
+        console.log("Calculate Button State:", !allFieldsFilled ? "Disabled" : "Enabled", {
+            currentConsumption,
+            desiredProduction,
+            fullAddress,
+            currentMonthlyAverageBill,
+            systemCost,
+            monthlyCost,
+            salesCommission
+        });
+    } else {
+        console.error("❌ Calculate button not found!");
+    }
+}
+
+// ✅ Function to check if all required fields have values and enable/disable Build System button
+function updateBuildSystemButtonState() {
+    const buildSystemButton = document.getElementById("buildSystemButton");
+    const currentConsumption = document.getElementById("currentConsumption")?.value.trim();
+    const desiredProduction = document.getElementById("desiredProduction")?.value.trim();
+    const fullAddress = document.getElementById("fullAddress")?.value.trim();
+    const salesCommission = document.getElementById("salesCommission")?.value.trim();
+
+    const allFieldsFilled = 
+        currentConsumption && 
+        desiredProduction && 
+        fullAddress && 
+        salesCommission;
+
+    if (buildSystemButton) {
+        buildSystemButton.disabled = !allFieldsFilled;
+        // Only log if the state changes to reduce console noise
+        if (buildSystemButton.disabled !== window.lastBuildSystemButtonState) {
+            console.log("Build System Button State:", !allFieldsFilled ? "Disabled" : "Enabled", {
+                currentConsumption,
+                desiredProduction,
+                fullAddress,
+                salesCommission
+            });
+            window.lastBuildSystemButtonState = buildSystemButton.disabled;
+        }
+    } else {
+        console.error("❌ Build System button not found!");
+    }
 }
 
 // ✅ Initialize Autocomplete and Add Event Listeners on Page Load
 document.addEventListener("DOMContentLoaded", function () {
-    initializeAutocomplete();
     setupDropdown();
     setupConsumptionHelp();
     setupUtilityRateHelp();
     setupMonthlyBillHelp();
     setupBatteryHelp();
     setupCurrentMonthlyBillHelp();
+    setupSystemCostHelp();
 
     const calculateButton = document.getElementById("calculateButton");
     if (calculateButton) {
@@ -601,4 +746,33 @@ document.addEventListener("DOMContentLoaded", function () {
     } else {
         console.error("❌ Build System button not found!");
     }
+
+    const requiredFields = [
+        "currentConsumption",
+        "desiredProduction",
+        "fullAddress",
+        "currentMonthlyAverageBill",
+        "systemCost",
+        "monthlyCost",
+        "salesCommission"
+    ];
+
+    requiredFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener("input", () => {
+                updateBuildSystemButtonState();
+                updateCalculateButtonState();
+            });
+            field.addEventListener("change", () => {
+                updateBuildSystemButtonState();
+                updateCalculateButtonState();
+            });
+        } else {
+            console.error(`❌ Required field ${fieldId} not found!`);
+        }
+    });
+
+    updateBuildSystemButtonState();
+    updateCalculateButtonState();
 });
