@@ -14,6 +14,14 @@ body {
     overflow-x: hidden;
 }
 
+/* Prevent background scrolling when modal is open */
+body.modal-open {
+    overflow: hidden;
+    height: 100vh;
+    position: fixed;
+    width: 100%;
+}
+
 /* ===== Header Styles ===== */
 .header {
     width: 100%;
@@ -343,6 +351,8 @@ input:focus, select:focus {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    overflow: hidden; /* Prevent the modal container from scrolling */
+    -webkit-overflow-scrolling: touch; /* Improve scrolling on iOS */
 }
 
 .modal-content {
@@ -351,9 +361,12 @@ input:focus, select:focus {
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
+    max-height: 80vh; /* Limit height to 80% of viewport height */
+    overflow-y: auto; /* Enable vertical scrolling for the modal content */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     text-align: left;
     position: relative;
+    -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
 }
 
 .modal-content h3 {
@@ -472,6 +485,8 @@ input:focus, select:focus {
 
     .modal-content {
         padding: 15px;
+        max-height: 70vh; /* Reduce max height on mobile */
+        width: 95%; /* Use more of the screen width */
     }
 
     .modal-content h3 {

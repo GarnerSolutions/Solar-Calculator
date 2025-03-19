@@ -96,10 +96,12 @@ function setupConsumptionHelp() {
 
     helpText.addEventListener("click", () => {
         helpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     });
 
     closeHelpModalButton.addEventListener("click", () => {
         helpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 
     calculateConsumptionButton.addEventListener("click", () => {
@@ -122,12 +124,14 @@ function setupConsumptionHelp() {
 
         helpModal.style.display = "none";
         estimateModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Keep modal-open for the new modal
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
 
     closeEstimateModalButton.addEventListener("click", () => {
         estimateModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
@@ -155,10 +159,12 @@ function setupUtilityRateHelp() {
 
     helpUtilityRateText.addEventListener("click", () => {
         utilityRateHelpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     });
 
     closeUtilityRateModalButton.addEventListener("click", () => {
         utilityRateHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 
     estimateRateButton.addEventListener("click", () => {
@@ -175,10 +181,12 @@ function setupUtilityRateHelp() {
 
         utilityRateHelpModal.style.display = "none";
         utilityRateEstimateModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Keep modal-open for the new modal
     });
 
     closeRateEstimateModalButton.addEventListener("click", () => {
         utilityRateEstimateModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 }
 
@@ -198,10 +206,12 @@ function setupMonthlyBillHelp() {
 
     helpMonthlyBillText.addEventListener("click", () => {
         monthlyBillHelpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     });
 
     closeMonthlyBillModalButton.addEventListener("click", () => {
         monthlyBillHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 
     estimateBillButton.addEventListener("click", () => {
@@ -225,10 +235,12 @@ function setupMonthlyBillHelp() {
 
         monthlyBillHelpModal.style.display = "none";
         monthlyBillEstimateModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Keep modal-open for the new modal
     });
 
     closeBillEstimateModalButton.addEventListener("click", () => {
         monthlyBillEstimateModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 }
 
@@ -557,6 +569,7 @@ function setupBatteryHelp() {
         recommendedBatteryStorage.textContent = Y;
 
         batteryHelpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     };
 
     // Attach event listener to "Add Batteries" button
@@ -584,6 +597,7 @@ function setupBatteryHelp() {
             window.cachedBatteryCount = X;
         }
         batteryHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
@@ -591,6 +605,7 @@ function setupBatteryHelp() {
     overwriteRecommendationButton.addEventListener("click", () => {
         batteryHelpModal.style.display = "none";
         batteryCountModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Keep modal-open for the new modal
         updateTotalStorage();
     });
 
@@ -615,6 +630,7 @@ function setupBatteryHelp() {
             window.cachedBatteryCount = quantity;
         }
         batteryCountModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
@@ -635,10 +651,12 @@ function setupCurrentMonthlyBillHelp() {
 
     helpCurrentMonthlyBillText.addEventListener("click", () => {
         currentMonthlyBillHelpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     });
 
     closeCurrentMonthlyBillModalButton.addEventListener("click", () => {
         currentMonthlyBillHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 
     estimateCurrentBillButton.addEventListener("click", () => {
@@ -654,6 +672,7 @@ function setupCurrentMonthlyBillHelp() {
         const estimatedMonthlyBill = (summerBill * (3/12)) + (winterBill * (3/12)) + (fallSpringBill * (6/12));
         currentMonthlyAverageBillInput.value = estimatedMonthlyBill.toFixed(2);
         currentMonthlyBillHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
@@ -696,10 +715,12 @@ function setupSystemCostHelp() {
         systemSizeInput.value = solarSize;
         batterySizeInput.value = Number(document.getElementById("batterySizeInput")?.value) || 0;
         systemCostHelpModal.style.display = "flex";
+        document.body.classList.add('modal-open'); // Prevent background scrolling
     });
 
     closeSystemCostModalButton.addEventListener("click", () => {
         systemCostHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
     });
 
     calculateSystemCostButton.addEventListener("click", () => {
@@ -725,6 +746,7 @@ function setupSystemCostHelp() {
         }
 
         systemCostHelpModal.style.display = "none";
+        document.body.classList.remove('modal-open'); // Re-enable background scrolling
         updateBuildSystemButtonState();
         updateCalculateButtonState();
     });
@@ -883,4 +905,24 @@ document.addEventListener("DOMContentLoaded", function () {
     updateBuildSystemButtonState();
     updateCalculateButtonState();
     window.lastBuildSystemButtonState = buildSystemButton.disabled; // Initialize the state tracker
+
+    // Prevent touchmove on the background when modal is open (for mobile)
+    document.addEventListener('touchmove', (e) => {
+        if (document.body.classList.contains('modal-open')) {
+            const modalContent = e.target.closest('.modal-content');
+            if (!modalContent) {
+                e.preventDefault();
+            }
+        }
+    }, { passive: false });
+
+    // Close modal when clicking outside the modal content
+    document.querySelectorAll('.modal').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+                document.body.classList.remove('modal-open');
+            }
+        });
+    });
 });
