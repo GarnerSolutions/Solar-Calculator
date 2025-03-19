@@ -8,7 +8,7 @@
     <link rel="icon" type="image/x-icon" href="/logo.ico">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="script.js" defer></script>
-    <!-- Inline CSS for modals (fallback) -->
+    <!-- Inline CSS for modals and tabs -->
     <style>
         .modal {
             display: none;
@@ -119,6 +119,38 @@
         .help-text:hover {
             text-decoration: underline;
         }
+
+        /* Tab Styles */
+        .tab-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            background: #f9f9f9;
+            cursor: pointer;
+            border-radius: 4px 4px 0 0;
+            font-size: 1rem;
+        }
+
+        .tab-button.active {
+            background: #fff;
+            font-weight: 600;
+            border-bottom: 1px solid #fff;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -141,98 +173,164 @@
                     </button>
                 </div>
                 <div class="dropdown-content">
-                    <form id="solarForm" class="input-form">
-                        <!-- Group 1: Consumption and Production -->
-                        <fieldset class="form-group">
-                            <legend>Consumption and Production</legend>
-                            <div class="input-row">
-                                <label for="currentConsumption">Current Annual Consumption (kWh):</label>
-                                <input type="number" id="currentConsumption" placeholder="Enter current annual kWh">
-                                <small id="helpConsumptionText" class="help-text">Need help getting Annual Consumption?</small>
-                            </div>
-                            <div class="input-row">
-                                <label for="desiredProduction">Desired Annual Production (kWh):</label>
-                                <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh">
-                            </div>
-                        </fieldset>
+                    <!-- Tab Navigation -->
+                    <div class="tab-nav">
+                        <button class="tab-button active" data-tab="solar-wizard">Solar Wizard</button>
+                        <button class="tab-button" data-tab="manual-entry">Manual Entry Mode</button>
+                    </div>
 
-                        <!-- Group 2: Panel Configuration -->
-                        <fieldset class="form-group">
-                            <legend>Panel Configuration</legend>
-                            <div class="input-row">
-                                <label for="panelDirection">Panel Direction:</label>
-                                <select id="panelDirection">
-                                    <option value="S">South</option>
-                                    <option value="SE">Southeast</option>
-                                    <option value="SW">Southwest</option>
-                                    <option value="E">East</option>
-                                    <option value="W">West</option>
-                                    <option value="NE">Northeast</option>
-                                    <option value="NW">Northwest</option>
-                                    <option value="N">North</option>
-                                    <option value="MIX">Mixed</option>
-                                </select>
-                            </div>
-                            <div class="input-row">
-                                <label for="shading">Shading:</label>
-                                <select id="shading">
-                                    <option value="none" selected>None (0%)</option>
-                                    <option value="light">Light (5%)</option>
-                                    <option value="medium">Medium (12.5%)</option>
-                                    <option value="heavy">Heavy (20%)</option>
-                                </select>
-                            </div>
-                            <div class="input-row">
-                                <label for="fullAddress">Address:</label>
-                                <input type="text" id="fullAddress" placeholder="Start typing address...">
-                            </div>
-                        </fieldset>
+                    <!-- Tab Content -->
+                    <div class="tab-content active" id="solar-wizard-tab">
+                        <form id="solarForm" class="input-form">
+                            <!-- Group 1: Consumption and Production -->
+                            <fieldset class="form-group">
+                                <legend>Consumption and Production</legend>
+                                <div class="input-row">
+                                    <label for="currentConsumption">Current Annual Consumption (kWh):</label>
+                                    <input type="number" id="currentConsumption" placeholder="Enter current annual kWh">
+                                    <small id="helpConsumptionText" class="help-text">Need help getting Annual Consumption?</small>
+                                </div>
+                                <div class="input-row">
+                                    <label for="desiredProduction">Desired Annual Production (kWh):</label>
+                                    <input type="number" id="desiredProduction" placeholder="Enter desired annual kWh">
+                                </div>
+                            </fieldset>
 
-                        <!-- System Size and Battery Size Display -->
-                        <div id="systemSizeDisplay" class="system-size"></div>
-                        <div id="totalBatterySizeDisplay" class="system-size"></div>
+                            <!-- Group 2: Panel Configuration -->
+                            <fieldset class="form-group">
+                                <legend>Panel Configuration</legend>
+                                <div class="input-row">
+                                    <label for="panelDirection">Panel Direction:</label>
+                                    <select id="panelDirection">
+                                        <option value="S">South</option>
+                                        <option value="SE">Southeast</option>
+                                        <option value="SW">Southwest</option>
+                                        <option value="E">East</option>
+                                        <option value="W">West</option>
+                                        <option value="NE">Northeast</option>
+                                        <option value="NW">Northwest</option>
+                                        <option value="N">North</option>
+                                        <option value="MIX">Mixed</option>
+                                    </select>
+                                </div>
+                                <div class="input-row">
+                                    <label for="shading">Shading:</label>
+                                    <select id="shading">
+                                        <option value="none" selected>None (0%)</option>
+                                        <option value="light">Light (5%)</option>
+                                        <option value="medium">Medium (12.5%)</option>
+                                        <option value="heavy">Heavy (20%)</option>
+                                    </select>
+                                </div>
+                                <div class="input-row">
+                                    <label for="fullAddress">Address:</label>
+                                    <input type="text" id="fullAddress" placeholder="Start typing address...">
+                                </div>
+                            </fieldset>
 
-                        <!-- Build Buttons -->
-                        <div class="button-group">
-                            <button type="button" id="buildSystemButton" class="calculate-button">Build System</button>
-                            <button type="button" id="addBatteriesButton" class="calculate-button" disabled>Add Batteries</button>
-                        </div>
+                            <!-- System Size and Battery Size Display -->
+                            <div id="systemSizeDisplay" class="system-size"></div>
+                            <div id="totalBatterySizeDisplay" class="system-size"></div>
 
-                        <!-- Group 3: Battery Details -->
-                        <fieldset class="form-group">
-                            <legend>Battery Details</legend>
-                            <div class="input-row">
-                                <label for="batteryCount">Battery Count:</label>
-                                <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0" readonly>
-                                <small id="helpBatteryText" class="help-text">Need help sizing?</small>
+                            <!-- Build Buttons -->
+                            <div class="button-group">
+                                <button type="button" id="buildSystemButton" class="calculate-button">Build System</button>
+                                <button type="button" id="addBatteriesButton" class="calculate-button" disabled>Add Batteries</button>
                             </div>
-                        </fieldset>
 
-                        <!-- Group 4: Cost Information -->
-                        <fieldset class="form-group">
-                            <legend>Cost Information</legend>
-                            <div class="input-row">
-                                <label for="salesCommission">Commission ($):</label>
-                                <input type="number" id="salesCommission" placeholder="Enter commission amount" min="0" step="0.01" required>
-                            </div>
-                            <div class="input-row">
-                                <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
-                                <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
-                                <small id="helpCurrentMonthlyBillText" class="help-text">Don't know your average bill?</small>
-                            </div>
-                            <div class="input-row">
-                                <label for="systemCost">Total System Cost ($):</label>
-                                <input type="number" id="systemCost" placeholder="Enter total system cost" min="0" step="0.01" required>
-                                <small id="helpSystemCostText" class="help-text">System Cost Calculator</small>
-                            </div>
-                            <div class="input-row">
-                                <label for="monthlyCost">Monthly Cost with Solar ($):</label>
-                                <input type="number" id="monthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01" required>
-                            </div>
-                        </fieldset>
+                            <!-- Group 3: Battery Details -->
+                            <fieldset class="form-group">
+                                <legend>Battery Details</legend>
+                                <div class="input-row">
+                                    <label for="batteryCount">Battery Count:</label>
+                                    <input type="number" id="batteryCount" placeholder="Enter number of batteries" step="1" min="0" value="0" readonly>
+                                    <small id="helpBatteryText" class="help-text">Need help sizing?</small>
+                                </div>
+                            </fieldset>
 
-                        <button type="button" id="calculateButton" class="calculate-button">Calculate System</button>
-                    </form>
+                            <!-- Group 4: Cost Information -->
+                            <fieldset class="form-group">
+                                <legend>Cost Information</legend>
+                                <div class="input-row">
+                                    <label for="currentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
+                                    <input type="number" id="currentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01">
+                                    <small id="helpCurrentMonthlyBillText" class="help-text">Don't know your average bill?</small>
+                                </div>
+                                <div class="input-row">
+                                    <label for="systemCost">Total System Cost ($):</label>
+                                    <input type="number" id="systemCost" placeholder="Enter total system cost" min="0" step="0.01" readonly>
+                                    <small id="helpSystemCostText" class="help-text">System Cost Calculator</small>
+                                </div>
+                                <div class="input-row">
+                                    <label for="monthlyCost">Monthly Cost with Solar ($):</label>
+                                    <input type="number" id="monthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01">
+                                </div>
+                            </fieldset>
+
+                            <button type="button" id="calculateButton" class="calculate-button">Calculate System</button>
+                        </form>
+                    </div>
+
+                    <!-- Manual Entry Mode Tab Content -->
+                    <div class="tab-content" id="manual-entry-tab">
+                        <form id="manualForm" class="input-form">
+                            <fieldset class="form-group">
+                                <legend>Manual Entry</legend>
+                                <div class="input-row">
+                                    <label for="manualCurrentConsumption">Current Annual Consumption (kWh):</label>
+                                    <input type="number" id="manualCurrentConsumption" placeholder="Enter current annual kWh" required>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualDesiredProduction">Desired Annual Production (kWh):</label>
+                                    <input type="number" id="manualDesiredProduction" placeholder="Enter desired annual kWh" required>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualPanelDirection">Panel Direction:</label>
+                                    <select id="manualPanelDirection">
+                                        <option value="S">South</option>
+                                        <option value="SE">Southeast</option>
+                                        <option value="SW">Southwest</option>
+                                        <option value="E">East</option>
+                                        <option value="W">West</option>
+                                        <option value="NE">Northeast</option>
+                                        <option value="NW">Northwest</option>
+                                        <option value="N">North</option>
+                                        <option value="MIX">Mixed</option>
+                                    </select>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualShading">Shading:</label>
+                                    <select id="manualShading">
+                                        <option value="none" selected>None (0%)</option>
+                                        <option value="light">Light (5%)</option>
+                                        <option value="medium">Medium (12.5%)</option>
+                                        <option value="heavy">Heavy (20%)</option>
+                                    </select>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualFullAddress">Address:</label>
+                                    <input type="text" id="manualFullAddress" placeholder="Start typing address...">
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualBatteryCount">Battery Count:</label>
+                                    <input type="number" id="manualBatteryCount" placeholder="Enter number of batteries" step="1" min="0" required>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualSystemCost">Total System Cost ($):</label>
+                                    <input type="number" id="manualSystemCost" placeholder="Enter total system cost" min="0" step="0.01" required>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualCurrentMonthlyAverageBill">Current Monthly Utility Bill ($):</label>
+                                    <input type="number" id="manualCurrentMonthlyAverageBill" placeholder="Enter monthly bill" min="0" step="0.01" required>
+                                </div>
+                                <div class="input-row">
+                                    <label for="manualMonthlyCost">Monthly Cost with Solar ($):</label>
+                                    <input type="number" id="manualMonthlyCost" placeholder="Enter monthly cost with solar" min="0" step="0.01" required>
+                                </div>
+                            </fieldset>
+                            <button type="button" id="manualCalculateButton" class="calculate-button">Calculate System</button>
+                        </form>
+                    </div>
                 </div>
             </section>
 
@@ -450,7 +548,8 @@
 
     <!-- Google Maps API Script with Hardcoded Key -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDyp3bPbVmleaQmGT0DlPpuZqpwMIUfz04&libraries=places&loading=async&callback=initMap" async defer></script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92280f373f754575',t:'MTc0MjMzNTgxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
-    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9228c7e23ca9454c',t:'MTc0MjM0MzM4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <!-- Temporarily comment out Cloudflare scripts to isolate the issue -->
+    <!-- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'92280f373f754575',t:'MTc0MjMzNTgxOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
+    <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9228c7e23ca9454c',t:'MTc0MjM0MzM4My4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script> -->
 </body>
 </html>
