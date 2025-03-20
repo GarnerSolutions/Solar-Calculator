@@ -9,8 +9,8 @@ import fetch from "node-fetch";
 import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -29,23 +29,26 @@ app.use(express.json());
 
 // ✅ Define Allowed Origins
 const allowedOrigins = [
-    "https://cool-yeot-0785e3.netlify.app",  // ✅ Netlify Frontend
-    "https://solar-calculator-zb73.onrender.com",  // ✅ Render Backend
-    "http://localhost:3000",  // ✅ Allow local testing
-    "http://127.0.0.1:5500"   // ✅ Allow local front-end (Live Server port)
+    "https://cool-yeot-0785e3.netlify.app", // ✅ Netlify Frontend
+    "https://solar-calculator-zb73.onrender.com", // ✅ Render Backend
+    "http://localhost:3000", // ✅ Allow local testing
+    "http://127.0.0.1:5500", // ✅ Allow local front-end (Live Server port)
+    "http://127.0.0.1:5501",
 ];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            console.error("❌ CORS Blocked Request from:", origin);
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
-    credentials: true,
-}));
+app.use(
+    cors({
+        origin: function (origin, callback) {
+            if (!origin || allowedOrigins.includes(origin)) {
+                callback(null, true);
+            } else {
+                console.error("❌ CORS Blocked Request from:", origin);
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true,
+    })
+);
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
 const googlePlacesApiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -64,7 +67,208 @@ app.get("/api/getGoogleMapsApiKey", (req, res) => {
     res.json({ apiKey: googleMapsApiKey });
 });
 
-// ✅ Corrected API Endpoint for Frontend Requests
+// ✅ Generate PowerPoint Function (Moved Before Endpoints)
+async function generatePowerPoint(params, auth) {
+    try {
+        console.log("📊 Updating Google Slides with:", params);
+
+        // ✅ Verify authentication
+        const authClient = await auth.getClient();
+        if (!authClient) {
+            console.error("❌ Authentication failed: No auth client returned");
+            throw new Error("Authentication with Google Slides API failed: No auth client returned");
+        }
+        console.log("✅ Successfully authenticated with Google Slides API");
+
+        const slides = google.slides({ version: "v1", auth });
+        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
+
+        // ✅ Verify the presentation exists and is accessible
+        try {
+            const presentation = await slides.presentations.get({ presentationId });
+            console.log("✅ Presentation found:", presentation.data.title);
+        } catch (error) {
+            console.error("❌ Failed to access presentation:", error.message);
+            if (error.response) {
+                console.error("API Response:", error.response.data);
+            }
+            throw new Error(`Failed to access presentation: ${error.message}`);
+        }
+
+        console.log("🔄 Sending API request to update slides...");
+
+        await slides.presentations.batchUpdate({
+            presentationId: presentationId,
+            requestBody: {
+                requests: [
+                    // 📜 Slide 4: System Overview
+                    { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i4",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i7",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p4_i10", text: `$${Number(params.systemCost).toLocaleString()}` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p4_i10",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 51, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    // 📜 Slide 5: System Details
+                    { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i6",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i7",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i8",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p5_i19", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i19", text: `$${Number(params.systemCost).toLocaleString()} financed` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i19",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p5_i20", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p5_i20", text: `$${params.monthlyWithSolar} monthly payments` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p5_i20",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: false,
+                                fontFamily: "Raleway",
+                                fontSize: { magnitude: 19, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    // 📜 Slide 6: Cost Comparison
+                    { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p6_i5",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 21.5, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                    { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
+                    { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
+                    {
+                        updateTextStyle: {
+                            objectId: "p6_i10",
+                            textRange: { type: "ALL" },
+                            style: {
+                                bold: true,
+                                fontFamily: "Comfortaa",
+                                fontSize: { magnitude: 21.5, unit: "PT" },
+                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
+                            },
+                            fields: "bold,fontFamily,fontSize,foregroundColor",
+                        },
+                    },
+                ],
+            },
+        });
+
+        console.log("✅ Google Slides updated successfully!");
+        return `https://docs.google.com/presentation/d/${presentationId}/edit?usp=sharing`;
+    } catch (error) {
+        console.error("❌ Detailed Google Slides Error:", error);
+        if (error.response) {
+            console.error("API Response:", error.response.data);
+        }
+        throw new Error(`Failed to generate PowerPoint: ${error.message || "Unknown error in Google Slides API"}`);
+    }
+}
+
 app.post("/api/process", async (req, res) => {
     try {
         console.log("🔍 Received Request Body:", req.body);
@@ -128,10 +332,10 @@ app.post("/api/process", async (req, res) => {
 
         // ✅ Apply Shading Modifier to Solar Irradiance
         const shadingFactors = {
-            "none": 1.0,      // 100% - 0% = 100%
-            "light": 0.95,    // 100% - 5% = 95%
-            "medium": 0.875,  // 100% - 12.5% = 87.5%
-            "heavy": 0.80     // 100% - 20% = 80%
+            none: 1.0, // 100% - 0% = 100%
+            light: 0.95, // 100% - 5% = 95%
+            medium: 0.875, // 100% - 12.5% = 87.5%
+            heavy: 0.80, // 100% - 20% = 80%
         };
         const shadingFactor = shadingFactors[validatedShading];
         const adjustedSolarIrradiance = originalSolarIrradiance * shadingFactor;
@@ -153,42 +357,70 @@ app.post("/api/process", async (req, res) => {
         }
 
         // ✅ Generate PowerPoint only if cost fields are provided (for full calculation)
-        let pptUrl, pdfViewUrl;
+        let pptUrl = null;
+        let pdfViewUrl = null;
         if (currentMonthlyAverageBill || systemCost || monthlyCost) {
-            pptUrl = await generatePowerPoint(params);
-            console.log("📄 PowerPoint URL:", pptUrl);
-
-            // Initialize Google Drive API for PDF export
+            // Create the auth object here
             const auth = new google.auth.GoogleAuth({
                 keyFile: "credentials.json",
-                scopes: ["https://www.googleapis.com/auth/drive.readonly"],
+                scopes: [
+                    "https://www.googleapis.com/auth/presentations",
+                    "https://www.googleapis.com/auth/drive",
+                    "https://www.googleapis.com/auth/drive.readonly",
+                ],
             });
-            const drive = google.drive({ version: "v3", auth });
-            const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
 
-            const pdfResponse = await drive.files.export({
-                fileId: presentationId,
-                mimeType: "application/pdf",
-            }, { responseType: "arraybuffer" });
-
-            const pdfBuffer = Buffer.from(pdfResponse.data);
-            const fileId = uuidv4();
-            const pdfPath = path.join(tempDir, `${fileId}.pdf`);
-            await fs.promises.writeFile(pdfPath, pdfBuffer);
-            console.log("✅ PDF saved to:", pdfPath);
-
-            // Verify the file exists
-            if (!fs.existsSync(pdfPath)) {
-                console.error("❌ PDF file not found at:", pdfPath);
-                return res.status(500).json({ error: "Failed to save PDF file." });
+            // Step 1: Generate the PowerPoint presentation
+            try {
+                pptUrl = await generatePowerPoint(params, auth);
+                console.log("📄 PowerPoint URL:", pptUrl);
+            } catch (error) {
+                console.error("⚠️ PowerPoint generation failed:", error.message, error.stack);
+                pptUrl = null; // Ensure pptUrl is null if generation fails
             }
 
-            // Construct the full PDF view URL
-            pdfViewUrl = `http://${req.get("host")}/view/pdf?fileId=${fileId}`; // Use http for local testing
-            console.log("✅ PDF View URL:", pdfViewUrl);
+            // Step 2: Export as PDF only if PowerPoint generation succeeded
+            if (pptUrl) {
+                try {
+                    const drive = google.drive({ version: "v3", auth });
+                    const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
+
+                    console.log("📄 Exporting presentation as PDF...");
+                    const pdfResponse = await drive.files.export(
+                        {
+                            fileId: presentationId,
+                            mimeType: "application/pdf",
+                        },
+                        { responseType: "arraybuffer" }
+                    );
+                    console.log("✅ PDF export successful, response length:", pdfResponse.data.length);
+
+                    const pdfBuffer = Buffer.from(pdfResponse.data);
+                    const fileId = uuidv4();
+                    const pdfPath = path.join(tempDir, `${fileId}.pdf`);
+                    await fs.promises.writeFile(pdfPath, pdfBuffer);
+                    console.log("✅ PDF saved to:", pdfPath);
+
+                    // Verify the file exists
+                    if (!fs.existsSync(pdfPath)) {
+                        console.error("❌ PDF file not found at:", pdfPath);
+                        throw new Error("Failed to save PDF file.");
+                    }
+
+                    // Construct the full PDF view URL
+                    pdfViewUrl = `http://${req.get("host")}/view/pdf?fileId=${fileId}`; // Use http for local testing
+                    console.log("✅ PDF View URL:", pdfViewUrl);
+                } catch (error) {
+                    console.error("⚠️ PDF export failed, proceeding with pptUrl:", error.message, error.stack);
+                    pdfViewUrl = null; // Only set pdfViewUrl to null, preserve pptUrl
+                }
+            } else {
+                console.warn("⚠️ Skipping PDF export because PowerPoint generation failed.");
+            }
         }
 
-        // Send response
+        // Send response even if PowerPoint/PDF generation fails
+        console.log("📤 Sending response:", { pptUrl, pdfViewUrl, params });
         res.json({ pptUrl, pdfViewUrl, params });
     } catch (error) {
         console.error("❌ Server Error:", error);
@@ -310,220 +542,31 @@ function calculateSystemParams(solarSize, solarIrradiance, batteryCount, current
         currentMonthlyBill: currentMonthlyAverageBill,
         monthlyWithSolar: finalMonthlyWithSolar.toFixed(0),
         estimatedAnnualProduction,
-        energyOffset
+        energyOffset,
     };
 }
 
 function calculateSolarSize(desiredProduction, solarIrradiance, panelDirection) {
     const adjustmentFactor = {
-        "S": 1.0, "SE": 0.90, "SW": 0.90,
-        "E": 0.80, "W": 0.80,
-        "NE": 0.70, "NW": 0.70,
-        "N": 0.60, "MIX": 0.85
+        S: 1.0,
+        SE: 0.90,
+        SW: 0.90,
+        E: 0.80,
+        W: 0.80,
+        NE: 0.70,
+        NW: 0.70,
+        N: 0.60,
+        MIX: 0.85,
     }[panelDirection] || 1.0;
 
     let solarSize = desiredProduction / (solarIrradiance * 365 * performanceRatio * adjustmentFactor);
 
-    console.log(`⚡ Debug: Desired Production = ${desiredProduction}, Solar Irradiance = ${solarIrradiance}, Performance Ratio = ${performanceRatio}, Adjustment Factor = ${adjustmentFactor}`);
+    console.log(
+        `⚡ Debug: Desired Production = ${desiredProduction}, Solar Irradiance = ${solarIrradiance}, Performance Ratio = ${performanceRatio}, Adjustment Factor = ${adjustmentFactor}`
+    );
     console.log(`⚡ Debug: Calculated Solar Size = ${solarSize.toFixed(2)} kW`);
 
     return solarSize;
-}
-
-async function generatePowerPoint(params) {
-    try {
-        console.log("📊 Updating Google Slides with:", params);
-
-        // 🔐 Authenticate with Google Slides API
-        const auth = new google.auth.GoogleAuth({
-            keyFile: "credentials.json",
-            scopes: ["https://www.googleapis.com/auth/presentations"],
-        });
-
-        const slides = google.slides({ version: "v1", auth });
-        const presentationId = "1tZF_Ax-e2BBeL3H7ZELy_rtzOUDwBjxFSoqQl13ygQc";
-
-        console.log("🔄 Sending API request to update slides...");
-
-        await slides.presentations.batchUpdate({
-            presentationId: presentationId,
-            requestBody: {
-                requests: [
-                    // 📜 Slide 4: System Overview
-                    // p4_i4: Solar System Size (e.g., "X.X kW")
-                    { deleteText: { objectId: "p4_i4", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p4_i4", text: `${params.solarSize} kW` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p4_i4",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: true,
-                                fontFamily: "Comfortaa",
-                                fontSize: { magnitude: 51, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p4_i7: Battery Size (e.g., "X kWh (Yx 16 kWh)")
-                    { deleteText: { objectId: "p4_i7", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p4_i7", text: `${params.batterySize}` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p4_i7",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: true,
-                                fontFamily: "Comfortaa",
-                                fontSize: { magnitude: 51, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p4_i10: Total Cost (e.g., "$XX,XXX") - Updated to use user-provided systemCost
-                    { deleteText: { objectId: "p4_i10", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p4_i10", text: `$${Number(params.systemCost).toLocaleString()}` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p4_i10",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: true,
-                                fontFamily: "Comfortaa",
-                                fontSize: { magnitude: 51, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-
-                    // 📜 Slide 5: System Details
-                    // p5_i6: System Size (e.g., "X.X kW system size")
-                    { deleteText: { objectId: "p5_i6", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i6", text: `${params.solarSize} kW system size` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p5_i6",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: false,
-                                fontFamily: "Raleway",
-                                fontSize: { magnitude: 19, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p5_i7: Energy Offset (e.g., "XX.X% Energy Offset")
-                    { deleteText: { objectId: "p5_i7", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i7", text: `${params.energyOffset} Energy Offset` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p5_i7",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: false,
-                                fontFamily: "Raleway",
-                                fontSize: { magnitude: 19, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p5_i8: Panel Count (e.g., "XX Jinko Solar panels")
-                    { deleteText: { objectId: "p5_i8", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i8", text: `${params.panelCount} Jinko Solar panels` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p5_i8",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: false,
-                                fontFamily: "Raleway",
-                                fontSize: { magnitude: 19, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p5_i19: Financed Amount (e.g., "$XX,XXX financed")
-                    { deleteText: { objectId: "p5_i19", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i19", text: `$${Number(params.systemCost).toLocaleString()} financed` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p5_i19",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: false,
-                                fontFamily: "Raleway",
-                                fontSize: { magnitude: 19, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p5_i20: Monthly Payments (e.g., "$XXX monthly payments") - Updated to use user-provided monthlyCost
-                    { deleteText: { objectId: "p5_i20", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p5_i20", text: `$${params.monthlyWithSolar} monthly payments` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p5_i20",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: false,
-                                fontFamily: "Raleway",
-                                fontSize: { magnitude: 19, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-
-                    // 📜 Slide 6: Cost Comparison
-                    // p6_i5: Monthly Cost with Solar (e.g., "$XXX")
-                    { deleteText: { objectId: "p6_i5", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p6_i5", text: `$${params.monthlyWithSolar}` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p6_i5",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: true,
-                                fontFamily: "Comfortaa",
-                                fontSize: { magnitude: 21.5, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                    // p6_i10: Current Monthly Bill (e.g., "$XXX")
-                    { deleteText: { objectId: "p6_i10", textRange: { type: "ALL" } } },
-                    { insertText: { objectId: "p6_i10", text: `$${params.currentMonthlyBill}` } },
-                    {
-                        updateTextStyle: {
-                            objectId: "p6_i10",
-                            textRange: { type: "ALL" },
-                            style: {
-                                bold: true,
-                                fontFamily: "Comfortaa",
-                                fontSize: { magnitude: 21.5, unit: "PT" },
-                                foregroundColor: { opaqueColor: { rgbColor: { red: 0.843, green: 0.831, blue: 0.8 } } },
-                            },
-                            fields: "bold,fontFamily,fontSize,foregroundColor",
-                        },
-                    },
-                ],
-            },
-        });
-
-        console.log("✅ Google Slides updated successfully!");
-        return `https://docs.google.com/presentation/d/${presentationId}/edit?usp=sharing`;
-    } catch (error) {
-        console.error("❌ Google Slides Error:", error);
-        throw new Error("Failed to generate PowerPoint");
-    }
 }
 
 // ✅ Start the Server

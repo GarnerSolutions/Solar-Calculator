@@ -1,9 +1,9 @@
 // 🌍 Switch between local and live backend by commenting/uncommenting the correct line:
-// const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
-const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
+const apiUrl = "http://localhost:3000/api/process";  // 🔧 Use for LOCAL TESTING
+// const apiUrl = "https://solar-calculator-zb73.onrender.com/api/process";  // 🌍 Use for LIVE SERVER
 
-// const backendUrl = "http://localhost:3000";
-const backendUrl = "https://solar-calculator-zb73.onrender.com";
+const backendUrl = "http://localhost:3000";
+//const backendUrl = "https://solar-calculator-zb73.onrender.com";
 
 // ✅ Google Places Autocomplete for Address Input
 function initializeAutocomplete() {
@@ -315,99 +315,131 @@ async function buildSystem() {
 }
 
 // ✅ Fetch Data and Generate Presentation (Full Calculation with PDF)
-async function generatePresentation() {
-    // Determine active tab
-    const activeTab = document.querySelector(".tab-button.active")?.dataset.tab;
-    const isManualMode = activeTab === "manual-entry";
-
-    // Get input values based on active tab
-    const currentConsumption = Number(isManualMode ? document.getElementById("manualCurrentConsumption")?.value : document.getElementById("currentConsumption")?.value);
-    const desiredProduction = Number(isManualMode ? document.getElementById("manualDesiredProduction")?.value : document.getElementById("desiredProduction")?.value);
-    const panelDirection = (isManualMode ? document.getElementById("manualPanelDirection") : document.getElementById("panelDirection"))?.value;
-    const currentMonthlyAverageBill = Number(isManualMode ? document.getElementById("manualCurrentMonthlyAverageBill")?.value : document.getElementById("currentMonthlyAverageBill")?.value);
-    const batteryCount = Number(isManualMode ? document.getElementById("manualBatteryCount")?.value : document.getElementById("batteryCount")?.value);
-    const shadingElement = isManualMode ? document.getElementById("manualShading") : document.getElementById("shading");
-    const shading = shadingElement ? shadingElement.value.toLowerCase() : "none";
-    const fullAddress = (isManualMode ? document.getElementById("manualFullAddress") : document.getElementById("fullAddress"))?.value.trim();
-    const systemCost = Number(isManualMode ? document.getElementById("manualSystemCost")?.value : document.getElementById("systemCost")?.value);
-    const monthlyCost = Number(isManualMode ? document.getElementById("manualMonthlyCost")?.value : document.getElementById("monthlyCost")?.value);
-    // Use salesCommission from the modal, default to 0 if not set
-    const salesCommission = Number(document.getElementById("salesCommissionModal")?.value) || 0;
-
-    const resultsDiv = document.getElementById("results");
-    const downloadLinkDiv = document.getElementById("downloadLink");
-    const dropdownContent = document.querySelector(".dropdown-content");
-    const dropdownToggle = document.querySelector(".dropdown-toggle");
-    const resultsColumn = document.querySelector(".results-column");
-
-    if (!resultsDiv || !downloadLinkDiv || !dropdownContent || !dropdownToggle || !resultsColumn) {
-        console.error("❌ One or more result elements not found!");
-        return;
+async function generatePresentation(event) {
+    if (event) {
+        event.preventDefault();
     }
-
-    // Collapse the dropdown and center the results
-    dropdownToggle.setAttribute("aria-expanded", "false");
-    dropdownContent.classList.add("hidden");
-    resultsColumn.style.margin = "0";
-    resultsColumn.style.width = "100%";
-
-    // Clear existing content and show loading state
-    resultsDiv.innerHTML = "<p>Loading...</p>";
-    downloadLinkDiv.innerHTML = "";
-    downloadLinkDiv.style.display = "none";
-
-    // Input Validation
-    if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid current annual consumption.</p>`;
-        return;
-    }
-    if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid desired annual production.</p>`;
-        return;
-    }
-    if (!fullAddress) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid address.</p>`;
-        return;
-    }
-    if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid Current Monthly Average Bill.</p>`;
-        return;
-    }
-    if (isNaN(batteryCount) || batteryCount < 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid battery count (must be a non-negative number).</p>`;
-        return;
-    }
-    if (isNaN(systemCost) || systemCost <= 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid total system cost (must be greater than 0).</p>`;
-        return;
-    }
-    if (isNaN(monthlyCost) || monthlyCost < 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
-        return;
-    }
-    if (isNaN(salesCommission) || salesCommission < 0) {
-        resultsDiv.innerHTML = `<p class="error">Please enter a valid commission (must be a non-negative number).</p>`;
-        return;
-    }
-    if (!shading || !["none", "light", "medium", "heavy"].includes(shading.toLowerCase())) {
-        resultsDiv.innerHTML = `<p class="error">Please select a valid shading option.</p>`;
-        return;
-    }
-
-    const requestBody = {
-        currentConsumption,
-        desiredProduction,
-        panelDirection,
-        batteryCount,
-        currentMonthlyAverageBill,
-        shading,
-        fullAddress,
-        systemCost,
-        monthlyCost,
-        salesCommission
-    };
-
+    console.log("Starting generatePresentation...");
     try {
+        // Determine active tab
+        const activeTab = document.querySelector(".tab-button.active")?.dataset.tab;
+        const isManualMode = activeTab === "manual-entry";
+
+        // Get input values based on active tab
+        const currentConsumption = Number(isManualMode ? document.getElementById("manualCurrentConsumption")?.value : document.getElementById("currentConsumption")?.value);
+        const desiredProduction = Number(isManualMode ? document.getElementById("manualDesiredProduction")?.value : document.getElementById("desiredProduction")?.value);
+        const panelDirection = (isManualMode ? document.getElementById("manualPanelDirection") : document.getElementById("panelDirection"))?.value;
+        const currentMonthlyAverageBill = Number(isManualMode ? document.getElementById("manualCurrentMonthlyAverageBill")?.value : document.getElementById("currentMonthlyAverageBill")?.value);
+        const batteryCount = Number(isManualMode ? document.getElementById("manualBatteryCount")?.value : document.getElementById("batteryCount")?.value);
+        const shadingElement = isManualMode ? document.getElementById("manualShading") : document.getElementById("shading");
+        const shading = shadingElement ? shadingElement.value.toLowerCase() : "none";
+        const fullAddress = (isManualMode ? document.getElementById("manualFullAddress") : document.getElementById("fullAddress"))?.value.trim();
+        const systemCost = Number(isManualMode ? document.getElementById("manualSystemCost")?.value : document.getElementById("systemCost")?.value);
+        const monthlyCost = Number(isManualMode ? document.getElementById("manualMonthlyCost")?.value : document.getElementById("monthlyCost")?.value);
+        // Use salesCommission from the modal, default to 0 if not set
+        const salesCommission = Number(document.getElementById("salesCommissionModal")?.value) || 0;
+
+        const resultsDiv = document.getElementById("results");
+        const downloadLinkDiv = document.getElementById("downloadLink");
+        const dropdownContent = document.querySelector(".dropdown-content");
+        const dropdownToggle = document.querySelector(".dropdown-toggle");
+        const resultsColumn = document.querySelector(".results-column");
+
+        if (!resultsDiv || !downloadLinkDiv || !dropdownContent || !dropdownToggle || !resultsColumn) {
+            console.error("❌ One or more result elements not found!");
+            return;
+        }
+
+        // Collapse the dropdown and center the results
+        dropdownToggle.setAttribute("aria-expanded", "false");
+        dropdownContent.classList.add("hidden");
+        resultsColumn.style.margin = "0";
+        resultsColumn.style.width = "100%";
+
+        // Clear existing content and show loading state
+        resultsDiv.innerHTML = "<p>Loading...</p>";
+        downloadLinkDiv.innerHTML = "";
+        downloadLinkDiv.style.display = "none";
+
+        // Input Validation with Upper Bounds
+        if (!currentConsumption || isNaN(currentConsumption) || currentConsumption <= 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid current annual consumption (greater than 0).</p>`;
+            return;
+        }
+        if (currentConsumption > 1000000) { // Example upper bound: 1,000,000 kWh
+            resultsDiv.innerHTML = `<p class="error">Current annual consumption is too large. Please enter a value less than 1,000,000 kWh.</p>`;
+            return;
+        }
+        if (!desiredProduction || isNaN(desiredProduction) || desiredProduction <= 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid desired annual production (greater than 0).</p>`;
+            return;
+        }
+        if (desiredProduction > 1000000) {
+            resultsDiv.innerHTML = `<p class="error">Desired annual production is too large. Please enter a value less than 1,000,000 kWh.</p>`;
+            return;
+        }
+        if (!fullAddress) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid address.</p>`;
+            return;
+        }
+        if (!currentMonthlyAverageBill || isNaN(currentMonthlyAverageBill) || currentMonthlyAverageBill <= 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid Current Monthly Average Bill (greater than 0).</p>`;
+            return;
+        }
+        if (currentMonthlyAverageBill > 10000) { // Example upper bound: $10,000
+            resultsDiv.innerHTML = `<p class="error">Current Monthly Average Bill is too large. Please enter a value less than $10,000.</p>`;
+            return;
+        }
+        if (isNaN(batteryCount) || batteryCount < 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid battery count (must be a non-negative number).</p>`;
+            return;
+        }
+        if (batteryCount > 100) { // Example upper bound: 100 batteries
+            resultsDiv.innerHTML = `<p class="error">Battery count is too large. Please enter a value less than 100.</p>`;
+            return;
+        }
+        if (isNaN(systemCost) || systemCost <= 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid total system cost (must be greater than 0).</p>`;
+            return;
+        }
+        if (systemCost > 1000000) { // Example upper bound: $1,000,000
+            resultsDiv.innerHTML = `<p class="error">Total system cost is too large. Please enter a value less than $1,000,000.</p>`;
+            return;
+        }
+        if (isNaN(monthlyCost) || monthlyCost < 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid monthly cost with solar (must be a non-negative number).</p>`;
+            return;
+        }
+        if (monthlyCost > 10000) {
+            resultsDiv.innerHTML = `<p class="error">Monthly cost with solar is too large. Please enter a value less than $10,000.</p>`;
+            return;
+        }
+        if (isNaN(salesCommission) || salesCommission < 0) {
+            resultsDiv.innerHTML = `<p class="error">Please enter a valid commission (must be a non-negative number).</p>`;
+            return;
+        }
+        if (salesCommission > 100000) { // Example upper bound: $100,000
+            resultsDiv.innerHTML = `<p class="error">Commission is too large. Please enter a value less than $100,000.</p>`;
+            return;
+        }
+        if (!shading || !["none", "light", "medium", "heavy"].includes(shading.toLowerCase())) {
+            resultsDiv.innerHTML = `<p class="error">Please select a valid shading option.</p>`;
+            return;
+        }
+
+        const requestBody = {
+            currentConsumption,
+            desiredProduction,
+            panelDirection,
+            batteryCount,
+            currentMonthlyAverageBill,
+            shading,
+            fullAddress,
+            systemCost,
+            monthlyCost,
+            salesCommission
+        };
+
         const response = await fetch(apiUrl, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -416,7 +448,8 @@ async function generatePresentation() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            resultsDiv.innerHTML = `<p class="error">Error: ${errorData.error || "Server error"}</p>`;
+            console.error("❌ Server error:", errorData);
+            resultsDiv.innerHTML = `<p class="error">Unable to process your request due to a server error. Please try again later.</p>`;
             return;
         }
 
@@ -457,6 +490,7 @@ async function generatePresentation() {
         const percentageOfOriginalCost = (monthlyCost / currentMonthlyAverageBill) * 100;
         const remainingPercentageText = `${percentageOfOriginalCost.toFixed(2)}%`;
 
+        // Display results even if PDF generation fails
         resultsDiv.innerHTML = `
             <div class="results-card">
                 <h2 class="results-title">Your Solar Results</h2>
@@ -497,17 +531,26 @@ async function generatePresentation() {
             </div>
         `;
 
+        // Handle PDF link (or lack thereof)
         if (result.pdfViewUrl) {
             downloadLinkDiv.innerHTML = `<button id="downloadProposal" class="calculate-button">Download Proposal</button>`;
             downloadLinkDiv.style.display = "block";
             document.getElementById("downloadProposal").addEventListener("click", () => window.open(result.pdfViewUrl, "_blank"));
+        } else if (result.pptUrl) {
+            console.warn("⚠️ PDF generation failed, but PowerPoint URL is available.");
+            downloadLinkDiv.innerHTML = `<p class="warning">Proposal PDF is unavailable at this time, but you can view the presentation here: <a href="${result.pptUrl}" target="_blank">Open Presentation</a></p>`;
+            downloadLinkDiv.style.display = "block";
         } else {
-            downloadLinkDiv.innerHTML = `<p class="error">Error: PDF could not be opened.</p>`;
+            console.warn("⚠️ Both PDF and PowerPoint generation failed.");
+            downloadLinkDiv.innerHTML = `<p class="warning">Proposal PDF and presentation are unavailable at this time, but your results are shown above.</p>`;
             downloadLinkDiv.style.display = "block";
         }
     } catch (error) {
-        resultsDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+        console.error("❌ Error in generatePresentation:", error);
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = `<p class="error">An unexpected error occurred. Please try again later or contact support.</p>`;
     }
+    console.log("generatePresentation completed successfully.");
 }
 
 // ✅ Handle Battery Sizing Help Modal
@@ -846,41 +889,95 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const calculateButton = document.getElementById("calculateButton");
     if (calculateButton) {
-        calculateButton.addEventListener("click", generatePresentation);
+        calculateButton.addEventListener("click", (event) => {
+            console.log("Calculate button clicked, preventing default...");
+            event.preventDefault(); // Prevent any default behavior
+            generatePresentation(event);
+        });
     } else {
         console.error("❌ Calculate button not found!");
     }
-
+    
     const manualCalculateButton = document.getElementById("manualCalculateButton");
     if (manualCalculateButton) {
-        manualCalculateButton.addEventListener("click", generatePresentation);
+        manualCalculateButton.addEventListener("click", (event) => {
+            console.log("Manual Calculate button clicked, preventing default...");
+            event.preventDefault(); // Prevent any default behavior
+            generatePresentation(event);
+        });
     } else {
         console.error("❌ Manual Calculate button not found!");
     }
 
     const buildSystemButton = document.getElementById("buildSystemButton");
     if (buildSystemButton) {
-        buildSystemButton.addEventListener("click", buildSystem);
+        buildSystemButton.addEventListener("click", (event) => {
+            console.log("Build System button clicked, preventing default...");
+            event.preventDefault(); // Prevent any default behavior
+            buildSystem();
+        });
     } else {
         console.error("❌ Build System button not found!");
     }
 
-    requiredFields.forEach(fieldId => {
+    // Prevent form submission on Enter key or button click by adding submit event listeners
+    const solarForm = document.getElementById("solarForm");
+    const manualForm = document.getElementById("manualForm");
+
+    if (solarForm) {
+        solarForm.addEventListener("submit", (event) => {
+            console.log("Solar Form submission prevented.");
+            event.preventDefault(); // Prevent form submission
+        });
+
+        // Existing Enter key handler for Solar Wizard tab
+        solarForm.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !calculateButton.disabled) {
+                console.log("Enter key pressed in Solar Form, triggering calculateButton click...");
+                event.preventDefault(); // Prevent form submission
+                calculateButton.click();
+            }
+        });
+    } else {
+        console.error("❌ Solar Form not found!");
+    }
+
+    if (manualForm) {
+        manualForm.addEventListener("submit", (event) => {
+            console.log("Manual Form submission prevented.");
+            event.preventDefault(); // Prevent form submission
+        });
+
+        // Existing Enter key handler for Manual Entry tab
+        manualForm.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" && !manualCalculateButton.disabled) {
+                console.log("Enter key pressed in Manual Form, triggering manualCalculateButton click...");
+                event.preventDefault(); // Prevent form submission
+                manualCalculateButton.click();
+            }
+        });
+    } else {
+        console.error("❌ Manual Form not found!");
+    }
+
+    // Add change/input event listeners to update button states dynamically
+    const inputsToWatch = [
+        "currentConsumption", "desiredProduction", "fullAddress", "currentMonthlyAverageBill",
+        "systemCost", "monthlyCost", "manualCurrentConsumption", "manualDesiredProduction",
+        "manualFullAddress", "manualCurrentMonthlyAverageBill", "manualSystemCost", "manualMonthlyCost"
+    ];
+
+    inputsToWatch.forEach(fieldId => {
         const field = document.getElementById(fieldId);
         if (field) {
-            field.addEventListener("input", () => {
-                updateBuildSystemButtonState();
-                updateCalculateButtonState();
-            });
-            field.addEventListener("change", () => {
-                updateBuildSystemButtonState();
-                updateCalculateButtonState();
-            });
+            field.addEventListener("input", updateCalculateButtonState);
+            field.addEventListener("change", updateCalculateButtonState);
+            field.addEventListener("input", updateBuildSystemButtonState);
+            field.addEventListener("change", updateBuildSystemButtonState);
         }
     });
 
-    // Initialize button states after DOM is fully loaded
-    updateBuildSystemButtonState();
+    // Initial button state update
     updateCalculateButtonState();
-    window.lastBuildSystemButtonState = buildSystemButton.disabled; // Initialize the state tracker
+    updateBuildSystemButtonState();
 });
